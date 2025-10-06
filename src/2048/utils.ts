@@ -406,14 +406,18 @@ constructor() {
 async getBestScore() {
   const response = await fetch('http://localhost:5000/getBestScore');
   if (response.ok) {
-	  const bestScore = await response.json();
+      const bestScore = await response.text();
       return bestScore || 0;
   }
   return 0;
 }
 
 async setBestScore(score) {
-  await fetch(`http://localhost:5000/setBestScore?bestScore=${score}`);
+  const response = await fetch(`http://localhost:5000/setBestScore?bestScore=${score}`);
+  if (response.ok) {
+	  const { matched_count, modified_count } = await response.json();
+	  console.log(`best score modified: ${modified_count}, matched: ${matched_count}`);
+  }
 }
 
 // Game state getters/setters and clearing
