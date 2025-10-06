@@ -1,9 +1,8 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { animframe_polyfill } from './js/animframe_polyfill';
 import { classlist_polyfill } from './js/classlist_polyfill';
-import { GameManager } from './utils';
+import { GameManager, LocalStorageManager } from './utils';
 import HTMLActuator from './HTMLActuator';
-import { LocalStorageManager } from './js/local_storage_manager';
 import './style/main.css';
 
 // bind_polyfill.js

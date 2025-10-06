@@ -151,8 +151,8 @@ export class GameManager {
     }
 
     // Set up the game
-    setup() {
-      var previousState = this.storageManager.getGameState();
+    async setup() {
+      var previousState = await this.storageManager.getGameState();
 
       // Reload the game from a previous game if present
       if (previousState) {
@@ -195,8 +195,9 @@ export class GameManager {
     }
 
     // Sends the updated grid to the actuator
-    actuate() {
-      if (this.storageManager.getBestScore() < this.score) {
+    async actuate() {
+      const bestScore = await this.storageManager.getBestScore();
+      if (bestScore < this.score) {
         this.storageManager.setBestScore(this.score);
       }
 
@@ -211,7 +212,7 @@ export class GameManager {
         score:      this.score,
         over:       this.over,
         won:        this.won,
-        bestScore:  this.storageManager.getBestScore(),
+        bestScore,
         terminated: this.isGameTerminated()
       });
 
@@ -390,4 +391,47 @@ export class GameManager {
     positionsEqual(first, second) {
       return first.x === second.x && first.y === second.y;
     }
+};
+
+
+
+
+export class LocalStorageManager {
+constructor() {
+  this.bestScoreKey     = "bestScore";
+  this.gameStateKey     = "gameState";
+
+}
+
+// Best score getters/setters
+async getBestScore() {
+  const response = await fetch('http://localhost:5000/getBestScore');
+  if (response.ok) {
+	  const bestScore = await response.json();
+      return bestScore || 0;
+  }
+  return 0;
+}
+
+async setBestScore(score) {
+  await fetch(`http://localhost:5000/setBestScore?bestScore=${score}`);
+}
+
+// Game state getters/setters and clearing
+async getGameState() {
+  const response = await fetch('http://localhost:5000/getGameState');
+  if (response.ok) {
+     const gameState = await response.json();
+     return gameState ?? null;
+  }
+}
+
+async setGameState(gameState) {
+  const response = await fetch(`http://localhost:5000/setGameState`, { method: 'POST', body: JSON.stringify(gameState), headers: {'Content-type': 'application/json'} });
+	  console.log(response);
+}
+
+async clearGameState() {
+  await fetch(`http://localhost:5000/clearGameState`);
+}
 };
