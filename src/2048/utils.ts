@@ -250,7 +250,6 @@ export class GameManager {
     move(direction) {
       // 0: up, 1: right, 2: down, 3: left
       var self = this;
-      console.log(`XXX_grid ${direction}`, this.grid.serialize());
 
       if (this.isGameTerminated()) return; // Don't do anything if the game's over
 
@@ -428,10 +427,17 @@ async getGameState() {
 
 async setGameState(gameState) {
   const response = await fetch(`http://localhost:5000/setGameState`, { method: 'POST', body: JSON.stringify(gameState), headers: {'Content-type': 'application/json'} });
-	  console.log(response);
+  if (response.ok) {
+	  const id = await response.text();
+	      console.log(`inserted document with id ${id}`);
+  }
 }
 
 async clearGameState() {
-  await fetch(`http://localhost:5000/clearGameState`);
+  const response = await fetch(`http://localhost:5000/clearGameState`);
+	  if (response.ok) {
+	  const count = await response.text();
+	  console.log(`${count} documents deleted`);
+  }
 }
 };
