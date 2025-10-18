@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "vite --host",
+    "setcap": "sudo setcap 'cap_net_bind_service=+ep' $(which node)",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
