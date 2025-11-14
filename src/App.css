@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+ul.link-list {
+    list-style-type: none;
+}
+
+ul.link-list li {
+    float: left;
+    padding: 1rem;
+}
