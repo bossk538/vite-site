@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router';
+import { Link } from 'react-router';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -26,10 +26,10 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
 	<ul className="link-list">
-          <li><NavLink to="/2048">2048</NavLink></li>
-          <li><NavLink to="/canvas">Canvas</NavLink></li>
-          <li><NavLink to="/svg">SVG</NavLink></li>
-          <li><NavLink to="/liquid-glass">Liquid Glass</NavLink></li>
+          <li><Link to="/2048">2048</Link></li>
+          <li><Link to="/canvas">Canvas</Link></li>
+          <li><Link to="/svg">SVG</Link></li>
+          <li><Link to="/liquid-glass">Liquid Glass</Link></li>
 	</ul>
       </div>
       <p className="read-the-docs">
