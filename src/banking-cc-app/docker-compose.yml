@@ -1,0 +1,48 @@
+version: "3.9"
+
+networks:
+  bank-net:
+    driver: bridge
+
+volumes:
+  mongo-data:
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: bankdemo-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - bank-net
+
+  backend:
+    build: ./backend
+    container_name: bankdemo-backend
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      MONGO_URI: mongodb://mongo:27017/bankdemo
+      JWT_SECRET: ${JWT_SECRET:-dev_super_secret_change_me}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+    depends_on:
+      - mongo
+    ports:
+      - "4000:4000"
+    networks:
+      - bank-net
+
+  frontend:
+    build: ./frontend
+    container_name: bankdemo-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:4000}
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    networks:
+      - bank-net
