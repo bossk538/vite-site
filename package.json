@@ -14,11 +14,13 @@
   "dependencies": {
     "@react-router/dev": "^7.9.3",
     "@react-router/node": "^7.9.3",
+    "axios": "^1.20.0",
     "d3": "^7.9.0",
     "isbot": "^5",
     "liquid-glass-react": "^1.1.1",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.18.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

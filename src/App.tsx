@@ -31,6 +31,7 @@ function App() {
           <li><Link to="/svg">SVG</Link></li>
           <li><Link to="/liquid-glass">Liquid Glass</Link></li>
           <li><Link to="/tic-tac-toe2">Tic-tac-toe II</Link></li>
+          <li><Link to="/banking-cc-app">Credit Card App</Link></li>
 	</ul>
       </div>
       <p className="read-the-docs">
