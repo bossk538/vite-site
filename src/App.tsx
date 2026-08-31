@@ -30,6 +30,7 @@ function App() {
           <li><Link to="/canvas">Canvas</Link></li>
           <li><Link to="/svg">SVG</Link></li>
           <li><Link to="/liquid-glass">Liquid Glass</Link></li>
+          <li><Link to="/tic-tac-toe2">Tic-tac-toe II</Link></li>
 	</ul>
       </div>
       <p className="read-the-docs">

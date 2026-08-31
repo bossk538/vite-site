@@ -26,8 +26,12 @@ export const CanvasApp = () => {
         return () => window.cancelAnimationFrame(animationFrameId);
     }, []);
 
+    const video = 'public/Big_Buck_Bunny_360_10s_1MB.mp4'
     return (
+    <div>
+    <video id="video" src={video} controls crossorigin="anonymous"></video>
     <canvas ref={canvasRef} width="400" height="200" style={{ border: '1px solid #000000' }}>
 </canvas>
+</div>
     );
 };
