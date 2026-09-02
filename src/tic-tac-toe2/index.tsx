@@ -16,7 +16,6 @@ export const TicTacToe2 = () => {
     newGrid[row][col] = player;
     setGrid(newGrid);
     setPlayer((player + 1) % players.length);
-    //console.log(isBoardFull(newGrid))
     const s = findLongestSequence(newGrid)
     const winner = s.findIndex(l => l >= seqSize);
     if (winner >= 0) {
