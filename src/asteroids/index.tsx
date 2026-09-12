@@ -27,7 +27,7 @@ const wrap = (value, max) => {
 const Asteroid = ({ x, y, path, angle }) => {
   return ( 
     <g transform={`translate(${x} ${y})`}>
-      <polygon points={`${path}`} stroke="black" fill="none"  transform={`rotate(${angle})`} />
+      <polygon points={`${path}`} stroke="rgb(255,255,200)" fill="none"  transform={`rotate(${angle})`} />
     </g>
   );
 };
@@ -83,9 +83,10 @@ export default function Asteroids({ size = 1000, color = 'steelblue' }) {
   const viewSize = size * 1.5; // extra space so rotation doesn't clip
   const center = viewSize / 2;
   const half = size / 2;
+  const foo = useRef(null);
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height}>
+    <svg xmlns="http://www.w3.org/2000/svg" width={'100vw'} height={'100vh'} viewVbox={`0 0 ${width} ${height}`} style={{ backgroundColor: 'black' }}>
       { asteroids.map(asteroid => (<Asteroid x={asteroid.x} y={asteroid.y} path={asteroid.path} angle={asteroid.angle} />)) }
     </svg>
   );
