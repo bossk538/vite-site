@@ -25,14 +25,15 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
-	<ul className="link-list">
+        <ul className="link-list">
           <li><Link to="/2048">2048</Link></li>
           <li><Link to="/canvas">Canvas</Link></li>
           <li><Link to="/svg">SVG</Link></li>
           <li><Link to="/liquid-glass">Liquid Glass</Link></li>
           <li><Link to="/tic-tac-toe2">Tic-tac-toe II</Link></li>
           <li><Link to="/banking-cc-app-purchase">Simulate Purchase</Link></li>
-	</ul>
+          <li><Link to="/asteroids">Asteroids</Link></li>
+        </ul>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
