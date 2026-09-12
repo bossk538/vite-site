@@ -5,7 +5,6 @@ const createOutline = () => {
   const ary = Array.from({ length: nSides }, () => Math.random() * 360);
   ary.sort((a, b) => a - b);
   const coords = [];
-  console.log(ary);
   for (const degrees of ary) {
     const radians = degrees * Math.PI / 180;
     const radius = Math.random() * 50 + 50;
@@ -35,7 +34,7 @@ const Asteroid = ({ x, y, path, angle }) => {
 
 const createAsteroid = (width, height) => {
   return {
-    degreesPerSecond: 50 * (Math.random()- .5),
+    degreesPerSecond: 100 * (Math.random()- .5),
     angle: Math.random() * 360,
     x: Math.random() * width,
     y: Math.random() * height,
@@ -44,6 +43,10 @@ const createAsteroid = (width, height) => {
     path: createOutline(),
   };
 };
+
+const createAsteroids = (width, height, n) => {
+  return Array.from({ length: n > 0 ? n : Math.trunc(Math.random() * 10 + 1) }, () => createAsteroid(width, height));
+}
 
 const updateAsteroid = (asteroid, deltaSeconds, width, height) => {
     const { x, y, deltaX, deltaY, angle, degreesPerSecond } = asteroid;
@@ -60,13 +63,13 @@ export default function Asteroids({ size = 1000, color = 'steelblue' }) {
   const height = 500;
   const lastTimeRef = useRef(null);
   const frameRef = useRef(null);
-  const [asteroid, setAsteroid] = useState(() => createAsteroid(width, height));
+  const [asteroids, setAsteroids] = useState(() => createAsteroids(width, height));
 
   useEffect(() => {
     const animate = (time) => {
       if (lastTimeRef.current !== null) {
         const deltaSeconds = (time - lastTimeRef.current) / 1000;
-        setAsteroid(prev => updateAsteroid(prev, deltaSeconds, width, height));
+        setAsteroids(prev => prev.map(asteroid => updateAsteroid(asteroid, deltaSeconds, width, height)));
       }
       lastTimeRef.current = time;
       frameRef.current = requestAnimationFrame(animate);
@@ -83,7 +86,7 @@ export default function Asteroids({ size = 1000, color = 'steelblue' }) {
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height}>
-      <Asteroid x={asteroid.x} y={asteroid.y} path={asteroid.path} angle={asteroid.angle} />
+      { asteroids.map(asteroid => (<Asteroid x={asteroid.x} y={asteroid.y} path={asteroid.path} angle={asteroid.angle} />)) }
     </svg>
   );
 }
