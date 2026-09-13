@@ -1,37 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import CanvasGrid from './CanvasGrid';
 
+const defaultState = {
+  width: 1200,
+  height: 800,
+  rows: 160,
+  columns: 240,
+  nColors: 20,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'width':
+      return { ...state, width: action.payload };
+    case 'height':
+      return { ...state, height: action.payload };
+    case 'rows':
+      return { ...state, rows: action.payload };
+    case 'columns':
+      return { ...state, columns: action.payload };
+    case 'nColumns':
+      return { ...state, nColumns: action.payload };
+    default:
+      throw new Error(`Unknown action type: ${action.type}`);
+  }
+};
 
 function CellularAutomata() {
-  const [width, setWidth] = useState(1200);
-  const [height, setHeigth] = useState(800);
-  const [rows, setRows] = useState(80);
-  const [columns, setColumns] = useState(120);
-  const [nColors, setNColors] = useState(8);
+  const [state, dispatch] = useReducer(reducer, defaultState);
 
   return (
     <div style={{ width: '99vw' }}> 
       <form>
         <ul style={{ listStyleType: 'none', textAlign: 'left' }}>
           <li>
-            <label>Grid Width (pixels):<input value={width} onChange={e => setWidth(e.target.value)} /></label>
+            <label>Grid Width (pixels):
+              <input value={state.width} onChange={e => dispatch({ type: 'width', payload: e.target.value})} />
+            </label>
           </li>
           <li>
-            <label>Grid Height (pixels):<input value={height} onChange={e => setHeight(e.target.value)} /></label>
+            <label>Grid Height (pixels):
+              <input value={state.height} onChange={e => dispatch({type: 'height', payload: e.target.value})} />
+            </label>
           </li>
           <li>
-            <label>Number of rows:<input value={rows} onChange={e => setRows(e.target.value)} /></label>
+            <label>Number of rows:
+              <input value={state.rows} onChange={e => dispatch({ type: 'rows', payload: e.target.value})} />
+            </label>
           </li>
           <li>
-            <label>Number of columns:<input value={columns} onChange={e => setColumns(e.target.value)} /></label>
+            <label>Number of columns:
+              <input value={state.columns} onChange={e => dispatch({ type: 'columns', payload: e.target.value})} />
+            </label>
           </li>
           <li>
-            <label>Number of values per cell:<input value={nColors} onChange={e => setNColors(e.target.value)} /></label>
+            <label>Number of values per cell:
+              <input value={state.nColors} onChange={e => dispatch({ type: 'nColors', payload: e.target.value})} />
+            </label>
           </li>
         </ul>
       </form>
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-        <CanvasGrid width={width} height={height} rows={rows} columns={columns} nColors={nColors} />
+        <CanvasGrid width={state.width} height={state.height} rows={state.rows} columns={state.columns} nColors={state.nColors} />
       </div>
     </div>
   );
