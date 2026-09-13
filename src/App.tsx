@@ -28,7 +28,6 @@ function App() {
         <ul className="link-list">
           <li><Link to="/2048">2048</Link></li>
           <li><Link to="/canvas">Canvas</Link></li>
-          <li><Link to="/svg">SVG</Link></li>
           <li><Link to="/liquid-glass">Liquid Glass</Link></li>
           <li><Link to="/tic-tac-toe2">Tic-tac-toe II</Link></li>
           <li><Link to="/banking-cc-app-purchase">Simulate Purchase</Link></li>
