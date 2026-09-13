@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import './index.css';
 
 const createOutline = () => {
   const nSides = Math.trunc(Math.random() * 10 + 3);
@@ -59,8 +60,8 @@ const updateAsteroid = (asteroid, deltaSeconds, width, height) => {
 };
 
 export default function Asteroids({ size = 1000, color = 'steelblue' }) {
-  const width = 1000;
-  const height = 500;
+  const width = window.screen.availWidth;
+  const height = window.screen.availHeight;
   const lastTimeRef = useRef(null);
   const frameRef = useRef(null);
   const [asteroids, setAsteroids] = useState(() => createAsteroids(width, height));
@@ -86,7 +87,7 @@ export default function Asteroids({ size = 1000, color = 'steelblue' }) {
   const foo = useRef(null);
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={'100vw'} height={'100vh'} viewVbox={`0 0 ${width} ${height}`} style={{ backgroundColor: 'black' }}>
+    <svg xmlns="http://www.w3.org/2000/svg" width={'99vw'} height={'99vh'} style={{ backgroundColor: 'black' }}>
       { asteroids.map(asteroid => (<Asteroid x={asteroid.x} y={asteroid.y} path={asteroid.path} angle={asteroid.angle} />)) }
     </svg>
   );
