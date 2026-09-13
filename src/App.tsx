@@ -32,6 +32,7 @@ function App() {
           <li><Link to="/tic-tac-toe2">Tic-tac-toe II</Link></li>
           <li><Link to="/banking-cc-app-purchase">Simulate Purchase</Link></li>
           <li><Link to="/asteroids">Asteroids</Link></li>
+          <li><Link to="/cellular-automata">Cellular Automata</Link></li>
         </ul>
       </div>
       <p className="read-the-docs">

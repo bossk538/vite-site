@@ -7,6 +7,7 @@ import { LGR } from './liquid-glass';
 import { CanvasApp } from './canvas';
 import { TicTacToe2 } from './tic-tac-toe2';
 import Asteroids from './asteroids';
+import CellularAutomata from './cellular-automata';
 import { SimulatePurchase } from './banking-cc-app-purchase';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/tic-tac-toe2" element={<TicTacToe2 />} />
         <Route path="/banking-cc-app-purchase" element={<SimulatePurchase />} />
         <Route path="/asteroids" element={<Asteroids />} />
+        <Route path="/cellular-automata" element={<CellularAutomata />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
