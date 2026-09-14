@@ -44,7 +44,8 @@ const nextMatrix = (grid, rows, cols, nColors, w, h) => {
   return newGrid;
 };
 
-function CanvasGrid({ width, height, rows, columns, nColors, interval, w, h, m }) {
+function CanvasGrid({ state }) {
+  const { width, height, rows, columns, nColors, interval, w, h, m } = state;
   const [colorMap, setColorMap] = useState(() => makeRandomColorMap(nColors));
   const canvasRef = useRef(null);
 
@@ -67,14 +68,20 @@ function CanvasGrid({ width, height, rows, columns, nColors, interval, w, h, m }
   useEffect(() => {
     workerRef.current = new Worker(new URL('./worker.ts', import.meta.url));
     workerRef.current.onmessage = (e) => {
+       console.log(`FROM WORKER`, e);
        setGrid(e.data);
     };
-    workerRef.current.postMessage({ action: 'start', grid, rows, columns, nColors, interval, w, h, m });
   }, []);
 
   useEffect(() => {
-    workerRef.current.postMessage({ action: 'update' });
-  }, [width, height, rows, columns, nColors]);
+    const newGrid = randomMatrixN(rows, columns, nColors);
+    workerRef.current.postMessage({ action: 'begin', grid: newGrid, state, rows, columns, nColors, interval, w, h, m });
+    const intervalId = setInterval(() => {
+      console.log(`INTERVAL`);
+      workerRef.current.postMessage({ action: 'continue', state, rows, columns, nColors, interval, w, h, m });
+    }, interval);
+    return () => clearInterval(intervalId);
+  }, [width, height, rows, columns, nColors, w, h, m, interval]);
 
   // Draw whenever grid or dimensions change
   useEffect(() => {
@@ -91,7 +98,8 @@ function CanvasGrid({ width, height, rows, columns, nColors, interval, w, h, m }
         ctx.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
       }
     }
-  }, [grid, width, height, rows, columns, cellWidth, cellHeight]);
+  //}, [grid, width, height, rows, columns, cellWidth, cellHeight]);
+  }, [grid]);
 
   // Example interaction: click a tile to randomize its color
   const handleClick = useCallback(

@@ -40,6 +40,7 @@ const reducer = (state, action) => {
 
 function CellularAutomata() {
   const [state, dispatch] = useReducer(reducer, defaultState);
+  const handleReset = () => {};
 
   return (
     <div style={{ width: '99vw' }}> 
@@ -99,9 +100,10 @@ function CellularAutomata() {
             </ul>
           </div>
         </div>
+        <div><button type="button" onClick={handleReset}>Reset</button></div>
       </form>
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-        <CanvasGrid width={state.width} height={state.height} w={state.w} h={state.h} m={state.m} rows={state.rows} columns={state.columns} nColors={state.nColors} interval={state.interval} />
+        <CanvasGrid state={state} />
       </div>
     </div>
   );

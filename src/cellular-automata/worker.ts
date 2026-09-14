@@ -28,26 +28,26 @@ const nextMatrix = (grid, rows, cols, nColors, w, h, m) => {
   return newGrid;
 };
 
-let intervalId;
+const randomMatrixN = (rows, columns, nColors) => {
+  return Array.from({ length: rows }, () =>
+    Array.from({ length: columns }, () => Math.floor(Math.random() * nColors))
+  );
+};
+
+let _grid;
+let _state;
 
 onmessage = (e) => {
-        console.log(`ON MESSAGE`, e.data);
-  const { action, grid, rows, columns, nColors, interval, w, h, m } = e.data;
-  if (action === 'update') {
-    console.log(`INTERVAL ID`, intervalId);
-  } else if (action === 'cancel') {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = undefined;
-    }
-  } else if (action === 'start') {
-    let newGrid = grid;
-    if (intervalId) {
-        clearInterval(intervalId);
-    }
-    intervalId = setInterval(() => {
-      newGrid = nextMatrix(newGrid, rows, columns, nColors, w, h, m);
-      postMessage(newGrid);
-    }, interval);
+  console.log(`FROM APP`, e.data);
+  const { action, grid, rows, columns, nColors, interval, w, h, m, state } = e.data;
+  if (action === 'begin') {
+    _grid = randomMatrixN(state.rows, state.columns, state.nColors);
+    _state = state;
+    postMessage(_grid);
+  } else if (action === 'continue') {
+    _grid = nextMatrix(_grid, _state.rows, _state.columns, _state.nColors, _state.w, _state.h, _state.m);
+    postMessage(_grid);
+  } else {
+    throw new Error(`Undefined action: ${action}`);
   }
 };
