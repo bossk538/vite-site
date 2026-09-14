@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const CATEGORIES = ["groceries", "dining", "travel", "entertainment", "utilities", "shopping", "other"];
 
-export const SumulatePurchase = () => {
+export const SimulatePurchase = () => {
   const [merchant, setMerchant] = useState("");
   const [category, setCategory] = useState("groceries");
   const [amount, setAmount] = useState("");
