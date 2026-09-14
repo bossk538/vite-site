@@ -10,7 +10,7 @@ function* makeIterator(grid, w, h, row, column) {
   }
 }
 
-const nextMatrix = (grid, rows, cols, nColors) => {
+const nextMatrix = (grid, rows, cols, nColors, w, h) => {
   const newGrid = Array.from({ length: rows }, () => Array.from({ length: cols }));
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
@@ -31,15 +31,23 @@ const nextMatrix = (grid, rows, cols, nColors) => {
 let intervalId;
 
 onmessage = (e) => {
-  console.log(`WORKER RECEIVE: `, e.data);
-  const { action, grid, rows, columns, nColors } = e.data;
+        console.log(`ON MESSAGE`, e.data);
+  const { action, grid, rows, columns, nColors, interval, w, h } = e.data;
   if (action === 'update') {
-          console.log(`INTERVAL ID`, intervalId);
-  } else {
+    console.log(`INTERVAL ID`, intervalId);
+  } else if (action === 'cancel') {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = undefined;
+    }
+  } else if (action === 'start') {
     let newGrid = grid;
+    if (intervalId) {
+        clearInterval(intervalId);
+    }
     intervalId = setInterval(() => {
-      newGrid = nextMatrix(newGrid, rows, columns, nColors);
+      newGrid = nextMatrix(newGrid, rows, columns, nColors, w, h);
       postMessage(newGrid);
-    }, 1000);
+    }, interval);
   }
 };

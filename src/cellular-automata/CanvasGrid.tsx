@@ -26,11 +26,11 @@ const makeRandomColorMap = (nColors) => {
   ]);
 };
 
-const nextMatrix = (grid, rows, cols, nColors) => {
+const nextMatrix = (grid, rows, cols, nColors, w, h) => {
   const newGrid = Array.from({ length: rows }, () => Array.from({ length: cols }));
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      const it = makeIterator(grid, 2, 2, row, col);
+      const it = makeIterator(grid, w, h, row, col);
       const counts = Array.from({ length: nColors }, () => 0);
 
       for (const i of it) {
@@ -44,7 +44,7 @@ const nextMatrix = (grid, rows, cols, nColors) => {
   return newGrid;
 };
 
-function CanvasGrid({ width = 800, height = 800, rows = 80, columns = 80, nColors = 10 }) {
+function CanvasGrid({ width, height, rows, columns, nColors, interval, w, h }) {
   const [colorMap, setColorMap] = useState(() => makeRandomColorMap(nColors));
   const canvasRef = useRef(null);
 
@@ -69,7 +69,7 @@ function CanvasGrid({ width = 800, height = 800, rows = 80, columns = 80, nColor
     workerRef.current.onmessage = (e) => {
        setGrid(e.data);
     };
-    workerRef.current.postMessage({ action: 'start', grid, rows, columns, nColors});
+    workerRef.current.postMessage({ action: 'start', grid, rows, columns, nColors, interval, w, h });
   }, []);
 
   useEffect(() => {
