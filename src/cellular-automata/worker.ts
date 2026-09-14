@@ -10,18 +10,45 @@ function* makeIterator(grid, w, h, row, column) {
   }
 }
 
+const aut1 = (it, nColors, orig, m) => {
+  const counts = Array.from({ length: nColors }, () => 0);
+
+  for (const i of it) {
+    counts[i]++;
+  }
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]); // sort from largest to smallest
+  return Number(sorted[m][0]); // 2nd most common value in neighborhood
+};
+
+const autB = (it, nColors, orig, m) => {
+	let total = 0;
+	let match = 0;
+	let last;
+  for (const i of it) {
+	total++;
+	last = i;
+	if (i === orig) { match++ }
+  }
+  if (match/total > .25 && match/total <.5) {
+	  return orig;
+  } else {
+	  return last;
+  }
+};
+
 const nextMatrix = (grid, rows, cols, nColors, w, h, m) => {
   const newGrid = Array.from({ length: rows }, () => Array.from({ length: cols }));
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      const it = makeIterator(grid, 2, 2, row, col);
-      const counts = Array.from({ length: nColors }, () => 0);
-
-      for (const i of it) {
-        counts[i]++;
+      const it = makeIterator(grid, w, h, row, col);
+      const orig = grid[row][col];
+      let value;
+      if (m < 2) {
+        value = aut1(it, nColors, orig, m);
+      } else {
+        value = autB(it, nColors, orig, m);
       }
-      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]); // sort from largest to smallest
-      newGrid[row][col] = sorted[m][0]; // 2nd most common value in neighborhood
+      newGrid[row][col] = aut1(it, nColors, grid[row][col], m);
     }
   }
 
@@ -38,8 +65,7 @@ let _grid;
 let _state;
 
 onmessage = (e) => {
-  console.log(`FROM APP`, e.data);
-  const { action, grid, rows, columns, nColors, interval, w, h, m, state } = e.data;
+  const { action, state } = e.data;
   if (action === 'begin') {
     _grid = randomMatrixN(state.rows, state.columns, state.nColors);
     _state = state;
