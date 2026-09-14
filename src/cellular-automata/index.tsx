@@ -2,14 +2,15 @@ import React, { useState, useReducer } from 'react';
 import CanvasGrid from './CanvasGrid';
 
 const defaultState = {
-  width: 1200,
+  width: 1600,
   height: 800,
   rows: 200,
-  columns: 300,
-  nColors: 10,
+  columns: 400,
+  nColors: 50,
   interval: 500,
-  w: 4,
+  w: 3,
   h: 3,
+  m: 2,
 };
 
 const reducer = (state, action) => {
@@ -30,6 +31,8 @@ const reducer = (state, action) => {
       return { ...state, w: action.payload };
     case 'nhdVert':
       return { ...state, h: action.payload };
+    case 'm':
+      return { ...state, m: action.payload };
     default:
       throw new Error(`Unknown action type: ${action.type}`);
   }
@@ -88,12 +91,17 @@ function CellularAutomata() {
                   <input value={state.h} onChange={e => dispatch({ type: 'nhdVert', payload: e.target.value})} />
                 </label>
               </li>
+              <li>
+                <label>Mth most common neighbor Automaton:
+                  <input value={state.m} onChange={e => dispatch({ type: 'm', payload: e.target.value})} />
+                </label>
+              </li>
             </ul>
           </div>
         </div>
       </form>
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-        <CanvasGrid width={state.width} height={state.height} w={state.w} h={state.h} rows={state.rows} columns={state.columns} nColors={state.nColors} interval={state.interval} />
+        <CanvasGrid width={state.width} height={state.height} w={state.w} h={state.h} m={state.m} rows={state.rows} columns={state.columns} nColors={state.nColors} interval={state.interval} />
       </div>
     </div>
   );

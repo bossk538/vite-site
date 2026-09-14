@@ -44,7 +44,7 @@ const nextMatrix = (grid, rows, cols, nColors, w, h) => {
   return newGrid;
 };
 
-function CanvasGrid({ width, height, rows, columns, nColors, interval, w, h }) {
+function CanvasGrid({ width, height, rows, columns, nColors, interval, w, h, m }) {
   const [colorMap, setColorMap] = useState(() => makeRandomColorMap(nColors));
   const canvasRef = useRef(null);
 
@@ -69,7 +69,7 @@ function CanvasGrid({ width, height, rows, columns, nColors, interval, w, h }) {
     workerRef.current.onmessage = (e) => {
        setGrid(e.data);
     };
-    workerRef.current.postMessage({ action: 'start', grid, rows, columns, nColors, interval, w, h });
+    workerRef.current.postMessage({ action: 'start', grid, rows, columns, nColors, interval, w, h, m });
   }, []);
 
   useEffect(() => {
