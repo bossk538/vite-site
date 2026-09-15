@@ -1,18 +1,19 @@
 import React, { useRef, useState, useReducer, useEffect } from 'react';
 import CanvasGrid from './CanvasGrid';
 import { generateBalancedColors } from './utils';
+import automata from './automata';
 
 const defaultState = {
   width: 1600,
   height: 800,
-  rows: 2,
-  columns: 4,
+  rows: 200,
+  columns: 400,
   nColors: 3,
   interval: 1000,
   w: 3,
   h: 3,
-  m: 1,
-  colorMap: [[255,0,0],[0,255,0],[0,0,255]],
+  automaton: 'mc1',
+  colorMap: ['rgb(255,0,0)', 'rgb(0,255,0)', 'rgb(0,0,255)'],
 };
 
 const updateState = (state, type, payload) => {
@@ -33,8 +34,8 @@ const updateState = (state, type, payload) => {
       return { ...state, w: payload };
     case 'nhdVert':
       return { ...state, h: payload };
-    case 'm':
-      return { ...state, m: payload };
+    case 'automaton':
+      return { ...state, automaton: payload };
     case 'grid':
       return { ...state, grid: payload };
     default:
@@ -93,7 +94,7 @@ function CellularAutomata() {
 
 
   useEffect(() => {
-    workerRef.current = new Worker(new URL('./worker.ts', import.meta.url));
+    workerRef.current = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
     workerRef.current.onmessage = (e) => {
        console.log(`FROM WORKER`, e);
        setGrid(e.data);
@@ -151,8 +152,10 @@ function CellularAutomata() {
                 </label>
               </li>
               <li>
-                <label>Mth most common neighbor Automaton:
-                  <input value={state.m} onChange={e => dispatch({ type: 'm', payload: e.target.value})} />
+                <label>Automaton:
+		  <select value={state.automaton} onChange={e => dispatch({ type: 'automaton', payload: e.target.value})}>
+		    { Object.entries(automata).map(a => (<option key={a[0]} value={a[0]}>{a[1].description}</option>)) }
+	          </select>
                 </label>
               </li>
             </ul>
@@ -167,9 +170,6 @@ function CellularAutomata() {
         </div>
       </form>
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-      {/*
-      { JSON.stringify(grid) }
-        */}
         <CanvasGrid state={currState} grid={grid} />
       </div>
     </div>

@@ -1,3 +1,5 @@
+import automata from './automata';
+
 function* makeIterator(grid, w, h, row, column) {
   const gridRows = grid.length;
   const gridCols = grid[0].length;
@@ -7,51 +9,19 @@ function* makeIterator(grid, w, h, row, column) {
     for (let j = -h; j <= h; j++) {
       const r = (rowOffset + i) % gridRows;
       const c = (colOffset + j) % gridCols;
-      yield grid[r][c];
+      yield [grid[r][c], i, j];
     }
   }
 }
 
-const aut1 = (it, nColors, orig, m) => {
-  const counts = Array.from({ length: nColors }, () => 0);
-
-  for (const i of it) {
-    counts[i]++;
-  }
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]); // sort from largest to smallest
-  return Number(sorted[m][0]); // 2nd most common value in neighborhood
-};
-
-const autB = (it, nColors, orig, m) => {
-  let total = 0;
-  let match = 0;
-  let last;
-  for (const i of it) {
-    total++;
-    last = i;
-    if (i === orig) {
-      match++;
-    }
-  }
-  if (match/total > .25 && match/total <.5) {
-    return orig;
-  } else {
-    return last;
-  }
-};
-
-const nextMatrix = (grid, rows, cols, nColors, w, h, m) => {
+const nextMatrix = (grid, rows, cols, nColors, w, h, name) => {
   const newGrid = Array.from({ length: rows }, () => Array.from({ length: cols }));
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       const it = makeIterator(grid, w, h, row, col);
       const orig = grid[row][col];
       let value;
-      if (m < 2) {
-        value = aut1(it, nColors, orig, m);
-      } else {
-        value = autB(it, nColors, orig, m);
-      }
+      value = automata[name].impl(it, nColors, orig);
       newGrid[row][col] = value;
     }
   }
@@ -75,7 +45,7 @@ onmessage = (e) => {
     _state = state;
     postMessage(_grid);
   } else if (action === 'continue') {
-    _grid = nextMatrix(_grid, _state.rows, _state.columns, _state.nColors, _state.w, _state.h, _state.m);
+    _grid = nextMatrix(_grid, _state.rows, _state.columns, _state.nColors, _state.w, _state.h, _state.automaton);
     postMessage(_grid);
   } else {
     throw new Error(`Undefined action: ${action}`);
