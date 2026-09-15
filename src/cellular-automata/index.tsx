@@ -35,7 +35,7 @@ const updateState = (state, type, payload) => {
     case 'nhdVert':
       return { ...state, h: payload };
     case 'automaton':
-      return { ...state, automaton: payload };
+      return { ...state, ...automata[payload].config, automaton: payload };
     case 'grid':
       return { ...state, grid: payload };
     default:

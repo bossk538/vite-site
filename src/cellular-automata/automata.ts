@@ -11,22 +11,24 @@ const aut1 = (it, nColors, orig, m) => {
   return Number(sorted[m][0]); // 2nd most common value in neighborhood
 };
 
-const autB = (it, nColors, orig, m) => {
-  let total = 0;
-  let match = 0;
-  let last;
+const gol = (it, n, orig) => {
+  let nLive = 0;
+  let nDead = 0;
   for (const i of it) {
-    const [v] = i;
-    total++;
-    last = v;
-    if (v === orig) {
-      match++;
+    const [value, row, col] = i;
+    if (row === 0 && col === 0) {
+      continue;
+    }
+    if (value === 0) {
+      nDead++;
+    } else {
+      nLive++;
     }
   }
-  if (match/total > .25 && match/total <.5) {
-    return orig;
+  if (orig === 0) {
+    return nLive === 2 || nLive === 3 ? 1 : 0;
   } else {
-    return last;
+    return nLive === 3 ? 1 : 0;
   }
 };
 
@@ -34,7 +36,7 @@ const automata = {
   CGoL: {
     description: `Conway's Game of Life`,
     config: { w: 1, h: 1, nColors: 2, colorMap: ['rgb(255,255,255)', 'rgb(0,0,0)'] },
-    impl: () => 0,
+    impl: gol,
   },
   mc1: {
     description: 'Most common value',
