@@ -1,4 +1,4 @@
-import React, { useRef, useState, useReducer, useEffect } from 'react';
+import React, { useRef, useState, useReducer, useEffect, useCallback } from 'react';
 import CanvasGrid from './CanvasGrid';
 import { generateBalancedColors } from './utils';
 import automata from './automata';
@@ -27,7 +27,8 @@ const updateState = (state, type, payload) => {
     case 'columns':
       return { ...state, columns: payload };
     case 'nColors':
-      return { ...state, nColors: payload };
+      const colorMap = generateBalancedColors(payload);
+      return { ...state, nColors: payload, colorMap };
     case 'interval':
       return { ...state, interval: payload };
     case 'nhdHoriz':
@@ -46,8 +47,6 @@ const updateState = (state, type, payload) => {
 
 const reducer = (state, action) => {
     const newState = updateState(state, action.type, action.payload);
-    //newState.grid = randomMatrixN(newState.rows, newState.columns, newState.nColors);
-    newState.colorMap = generateBalancedColors(newState.nColors);
     return newState;
 };
 
@@ -102,12 +101,7 @@ function CellularAutomata() {
   }, []);
 
   const onClickCell = (row, col) => {
-    setGrid((prev) => {
-      const next = prev.map(r => r.slice());
-      next[row] = next[row].slice();
-      next[row][col] = (next[row][col] + 1) % state.nColors;
-      return next;
-    });
+    workerRef.current.postMessage({ action: 'update', row, col });
   };
 
   return (

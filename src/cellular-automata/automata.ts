@@ -25,7 +25,7 @@ const gol = (it, n, orig) => {
       nLive++;
     }
   }
-  if (orig === 0) {
+  if (orig === 1) {
     return nLive === 2 || nLive === 3 ? 1 : 0;
   } else {
     return nLive === 3 ? 1 : 0;
@@ -35,7 +35,7 @@ const gol = (it, n, orig) => {
 const automata = {
   CGoL: {
     description: `Conway's Game of Life`,
-    config: { w: 1, h: 1, nColors: 2, colorMap: ['rgb(255,255,255)', 'rgb(0,0,0)'] },
+    config: { w: 1, h: 1, nColors: 2, colorMap: ['#fff', '#000'] },
     impl: gol,
   },
   mc1: {
