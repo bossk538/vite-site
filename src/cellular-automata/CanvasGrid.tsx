@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
-function CanvasGrid({ state, grid }) {
+function CanvasGrid({ state, grid, onClickCell }) {
   const { colorMap, width, height, rows, columns, nColors, interval, w, h, m } = state;
   const canvasRef = useRef(null);
 
@@ -25,7 +25,18 @@ function CanvasGrid({ state, grid }) {
     }
   }, [grid]);
 
-  const handleClick = (e) => {};
+  const handleClick = useCallback(
+    (e) => {
+      const rect = canvasRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const col = Math.floor(x / cellWidth);
+      const row = Math.floor(y / cellHeight);
+      if (row < 0 || row >= rows || col < 0 || col >= columns) return;
+      onClickCell(row, col);
+    },
+    [cellWidth, cellHeight, rows, columns]
+  );
 
   return (
     <canvas

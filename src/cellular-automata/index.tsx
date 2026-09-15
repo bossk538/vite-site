@@ -101,6 +101,15 @@ function CellularAutomata() {
     };
   }, []);
 
+  const onClickCell = (row, col) => {
+    setGrid((prev) => {
+      const next = prev.map(r => r.slice());
+      next[row] = next[row].slice();
+      next[row][col] = (next[row][col] + 1) % state.nColors;
+      return next;
+    });
+  };
+
   return (
     <div style={{ width: '99vw' }}> 
       <form>
@@ -153,9 +162,9 @@ function CellularAutomata() {
               </li>
               <li>
                 <label>Automaton:
-		  <select value={state.automaton} onChange={e => dispatch({ type: 'automaton', payload: e.target.value})}>
-		    { Object.entries(automata).map(a => (<option key={a[0]} value={a[0]}>{a[1].description}</option>)) }
-	          </select>
+                  <select value={state.automaton} onChange={e => dispatch({ type: 'automaton', payload: e.target.value})}>
+                    { Object.entries(automata).map(a => (<option key={a[0]} value={a[0]}>{a[1].description}</option>)) }
+                  </select>
                 </label>
               </li>
             </ul>
@@ -170,7 +179,7 @@ function CellularAutomata() {
         </div>
       </form>
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-        <CanvasGrid state={currState} grid={grid} />
+        <CanvasGrid state={currState} grid={grid} onClickCell={onClickCell} />
       </div>
     </div>
   );
