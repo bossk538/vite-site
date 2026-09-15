@@ -1,5 +1,6 @@
 import React, { useRef, useState, useReducer, useEffect } from 'react';
 import CanvasGrid from './CanvasGrid';
+import { generateBalancedColors } from './utils';
 
 const defaultState = {
   width: 1600,
@@ -42,20 +43,10 @@ const updateState = (state, type, payload) => {
   
 };
 
-
-const makeRandomColorMap = (nColors) => {
-  return Array.from({ length: nColors }, () => [
-    Math.floor(Math.random() * 256),
-    Math.floor(Math.random() * 256),
-    Math.floor(Math.random() * 256),
-  ]);
-};
-
-
 const reducer = (state, action) => {
     const newState = updateState(state, action.type, action.payload);
     //newState.grid = randomMatrixN(newState.rows, newState.columns, newState.nColors);
-    newState.colorMap = makeRandomColorMap(newState.nColors);
+    newState.colorMap = generateBalancedColors(newState.nColors);
     return newState;
 };
 

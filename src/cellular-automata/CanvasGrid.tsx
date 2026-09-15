@@ -18,8 +18,8 @@ function CanvasGrid({ state, grid }) {
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
-        const [r, g, b] = colorMap[grid[row][col]];
-        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        const value = grid[row][col];
+        ctx.fillStyle = colorMap[value];
         ctx.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
       }
     }
