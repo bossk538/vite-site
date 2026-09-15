@@ -1,10 +1,12 @@
 function* makeIterator(grid, w, h, row, column) {
   const gridRows = grid.length;
   const gridCols = grid[0].length;
+  const rowOffset = Math.ceil(h / gridRows) * gridRows + row;
+  const colOffset = Math.ceil(w / gridCols) * gridCols + column;
   for (let i = -w; i <= w; i++) {
     for (let j = -h; j <= h; j++) {
-      const r = (gridRows + row + i) % gridRows;
-      const c = (gridCols + column + j) % gridCols;
+      const r = (rowOffset + i) % gridRows;
+      const c = (colOffset + j) % gridCols;
       yield grid[r][c];
     }
   }
@@ -21,18 +23,20 @@ const aut1 = (it, nColors, orig, m) => {
 };
 
 const autB = (it, nColors, orig, m) => {
-	let total = 0;
-	let match = 0;
-	let last;
+  let total = 0;
+  let match = 0;
+  let last;
   for (const i of it) {
-	total++;
-	last = i;
-	if (i === orig) { match++ }
+    total++;
+    last = i;
+    if (i === orig) {
+      match++;
+    }
   }
   if (match/total > .25 && match/total <.5) {
-	  return orig;
+    return orig;
   } else {
-	  return last;
+    return last;
   }
 };
 
@@ -48,7 +52,7 @@ const nextMatrix = (grid, rows, cols, nColors, w, h, m) => {
       } else {
         value = autB(it, nColors, orig, m);
       }
-      newGrid[row][col] = aut1(it, nColors, grid[row][col], m);
+      newGrid[row][col] = value;
     }
   }
 

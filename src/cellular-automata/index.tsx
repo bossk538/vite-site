@@ -4,13 +4,13 @@ import CanvasGrid from './CanvasGrid';
 const defaultState = {
   width: 1600,
   height: 800,
-  rows: 200,
-  columns: 400,
+  rows: 2,
+  columns: 4,
   nColors: 3,
   interval: 1000,
   w: 3,
   h: 3,
-  m: 2,
+  m: 1,
   colorMap: [[255,0,0],[0,255,0],[0,0,255]],
 };
 
@@ -96,7 +96,7 @@ function CellularAutomata() {
       }, state.interval);
       return () => clearInterval(intervalId);
     } else if (status === 'stopped') {
-//	    setGrid(null);
+//    setGrid(null);
     }
   }, [status]);
 
@@ -168,12 +168,17 @@ function CellularAutomata() {
           </div>
         </div>
         <div>
-	  <button type="button" onClick={handleStart}>{ status === 'running' ? 'Start Over' : 'Start' }</button>
-	  { status === 'running' ? (<button type="button" onClick={handleStop}>Pause</button>) :
-	    (<button type="button" onClick={handleContinue}>Continue</button>) }
-	</div>
+          <button type="button" onClick={handleStart}>{ status === 'running' ? 'Start Over' : 'Start' }</button>
+          { status === 'running' ?
+            (<button type="button" onClick={handleStop}>Pause</button>) :
+            (<button type="button" onClick={handleContinue}>Continue</button>)
+          }
+        </div>
       </form>
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+      {/*
+      { JSON.stringify(grid) }
+        */}
         <CanvasGrid state={currState} grid={grid} />
       </div>
     </div>
