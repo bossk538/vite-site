@@ -13,8 +13,7 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: '80',
-    allowedHosts: ['goodzeit.com']
+    allowedHosts: ['goodzeit.com', 'www.goodzeit.com']
   },
   test: {
     projects: [{
