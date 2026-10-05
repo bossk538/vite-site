@@ -19,6 +19,9 @@ const hslToRgb = (text) => {
       Math.round(255 * f(8)),
       Math.round(255 * f(4))
     ];
+  } else if (/^rgb\(/.test(text)) {
+    let [r, g, b] = text.match(/[\d.]+/g).map(Number);
+    return [Math.floor(r), Math.floor(g), Math.floor(b)];
   } else if (/^#/.test(text)) {
     return text.replace(/^#?([a-f\d])([a-f\d])([a-f\d])\$/i, (_, r, g, b) => `#${r}${r}${g}${g}${b}${b}`)
       .replace(/^#/, '')
@@ -79,7 +82,7 @@ const centroidsToRGB = (centroids) => {
   return centroids.map(([ r, g, b]) => `rgb(${Math.floor(r)},${Math.floor(g)},${Math.floor(b)})`);
 };
 
-export const InitialStates = ({ state, dispatch, grid, setGrid }) => {
+export const InitialStates = ({ state, dispatch, updateGrid }) => {
   const [videoFile, setVideoFile] = useState(null);
 
   const frameSelection = async (file) => {
@@ -94,7 +97,7 @@ export const InitialStates = ({ state, dispatch, grid, setGrid }) => {
         const rows = frame.pixels.length;
         const cols = frame.pixels[0].length;
         const newGrid = mapPixelsToGrid({ ...state, pixels: frame.pixels })
-        setGrid(newGrid);
+        updateGrid(newGrid);
       }
 
     }

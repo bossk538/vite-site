@@ -5,7 +5,7 @@ import { Playback } from './Playback';
 
 export const Controls = ({ state, dispatch, updateGrid, running, handleStart, handleStop, handleContinue }) => {
   const accordion = [
-    { label: 'Setup', content: <TabsControl state={state} dispatch={dispatch} setGrid={updateGrid} /> },
+    { label: 'Setup', content: <TabsControl state={state} dispatch={dispatch} updateGrid={updateGrid} /> },
     { label: 'Playback', content: <Playback running={running} handleStart={handleStart} handleStop={handleStop} handleContinue={handleContinue} /> },
   ];
 
