@@ -1,9 +1,10 @@
 import React from 'react';
+import './Tabs.css';
+
 // type = automatic | manual
 export const Tabs = ({ title, tabs }) => {
   const [selected, setSelected] = React.useState(0); 
-  return (
-<div className="tabs">
+  return (<div className="tabs">
   <h3 id="tablist-1">
     { title }
   </h3>
@@ -14,11 +15,10 @@ export const Tabs = ({ title, tabs }) => {
         </span>
       </button>)) }
   </div>
-  { tabs.map(({ Panel }, idx) => (
-    <div key={`tabpanel-${idx}`} id={`tabpanel-${idx}`} role="tabpanel" tabindex="0" aria-labelledby={`tab-${idx}`} className={selected === idx ? null : 'is-hidden' }>
-      <Panel />
+  { tabs.map(({ content }, idx) => (
+    <div key={`tabpanel-${idx}`} id={`tabpanel-${idx}`} role="tabpanel" tabIndex="0" aria-labelledby={`tab-${idx}`} className={selected === idx ? null : 'is-hidden' }>
+      { content }
     </div>
   )) }
-</div>
-  );
+  </div>);
 };

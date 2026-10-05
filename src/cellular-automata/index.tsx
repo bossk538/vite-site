@@ -2,19 +2,21 @@ import React, { useRef, useState, useReducer, useEffect, useCallback } from 'rea
 import CanvasGrid from './CanvasGrid';
 import { generateBalancedColors } from './utils';
 import automata from './automata';
+import { Controls } from './Accordion';
+import './style.css';
 
 const defaultState = {
   width: 1600,
   height: 800,
-  rows: 200,
-  columns: 400,
-  nColors: 3,
+  rows: 800,
+  columns: 1600,
+  nColors: 16,
   interval: 1000,
   w: 3,
   h: 3,
   automaton: 'mc1',
-  colorMap: ['rgb(255,0,0)', 'rgb(0,255,0)', 'rgb(0,0,255)'],
 };
+defaultState.colorMap = generateBalancedColors(defaultState.nColors);
 
 const updateState = (state, type, payload) => {
   switch (type) {
@@ -58,120 +60,53 @@ const randomMatrixN = (rows, columns, nColors) => {
 
 let intervalId;
 let count = 0;
+const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
 
 function CellularAutomata() {
   const [state, dispatch] = useReducer(reducer, defaultState);
   const [currState, setCurrState] = useState(state);
-  const workerRef = useRef();
-  const [status, setStatus] = useState('stopped');// running, stopped, paused
+  const [running, setRunning] = useState(false);
   const [grid, setGrid] = useState(null);
+
   const handleReset = () => {};
+
   const handleStart = () => {
-    setStatus('start');
+    setRunning(true);
+    worker.postMessage({ action: 'begin', state, });
+    setCurrState(state);
   };
+
   const handleStop = () => {
-    setStatus('stopped');
+    setRunning(false);
   };
   const handleContinue = () => {
-    setStatus('running');
+    setRunning(true);
   };
 
+  const lastTime = useRef<number | null>(null);
   useEffect(() => {
-    if (status === 'start') {
-      workerRef.current.postMessage({ action: 'begin', state, });
-      setStatus('running');
-      setCurrState(state);
-    } else if (status === 'running') {
-      const intervalId = setInterval(() => {
-        workerRef.current.postMessage({ action: 'continue' });
-      }, state.interval);
-      return () => clearInterval(intervalId);
-    } else if (status === 'stopped') {
-//    setGrid(null);
-    }
-  }, [status]);
-
-
-  useEffect(() => {
-    workerRef.current = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
-    workerRef.current.onmessage = (e) => {
+    worker.onmessage = (e) => {
        console.log(`FROM WORKER`, e);
-       setGrid(e.data);
+       requestAnimationFrame((time) => {
+         console.log(`elapsed tiem`, time);
+         if (lastTime.current === null || time - lastTime.current >= state.interval) {
+           setGrid(e.data);
+           if (running) {
+             worker.postMessage({ action: 'continue' });
+           }
+           lastTime.current = time;
+         }
+       });
     };
-  }, []);
+  }, [running]);
 
   const onClickCell = (row, col) => {
-    workerRef.current.postMessage({ action: 'update', row, col });
+    worker.postMessage({ action: 'update', row, col });
   };
 
   return (
-    <div style={{ width: '99vw' }}> 
-      <form>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-          <div>
-            <ul style={{ listStyleType: 'none', textAlign: 'left' }}>
-              <li>
-                <label>Grid Width (pixels):
-                  <input value={state.width} onChange={e => dispatch({ type: 'width', payload: e.target.value})} />
-                </label>
-              </li>
-              <li>
-                <label>Grid Height (pixels):
-                  <input value={state.height} onChange={e => dispatch({type: 'height', payload: e.target.value})} />
-                </label>
-              </li>
-              <li>
-                <label>Number of rows:
-                  <input value={state.rows} onChange={e => dispatch({ type: 'rows', payload: e.target.value})} />
-                </label>
-              </li>
-              <li>
-                <label>Number of columns:
-                  <input value={state.columns} onChange={e => dispatch({ type: 'columns', payload: e.target.value})} />
-                </label>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <ul style={{ listStyleType: 'none', textAlign: 'left' }}>
-              <li>
-                <label>Number of values per cell:
-                  <input value={state.nColors} onChange={e => dispatch({ type: 'nColors', payload: e.target.value})} />
-                </label>
-              </li>
-              <li>
-                <label>Interval between redraws (ms):
-                  <input value={state.interval} onChange={e => dispatch({ type: 'interval', payload: e.target.value})} />
-                </label>
-              </li>
-              <li>
-                <label>Neighborhood horizontal range:
-                  <input value={state.w} onChange={e => dispatch({ type: 'nhdHoriz', payload: e.target.value})} />
-                </label>
-              </li>
-              <li>
-                <label>Neighborhood vertical range:
-                  <input value={state.h} onChange={e => dispatch({ type: 'nhdVert', payload: e.target.value})} />
-                </label>
-              </li>
-              <li>
-                <label>Automaton:
-                  <select value={state.automaton} onChange={e => dispatch({ type: 'automaton', payload: e.target.value})}>
-                    { Object.entries(automata).map(a => (<option key={a[0]} value={a[0]}>{a[1].description}</option>)) }
-                  </select>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <button type="button" onClick={handleStart}>{ status === 'running' ? 'Start Over' : 'Start' }</button>
-          { status === 'running' ?
-            (<button type="button" onClick={handleStop}>Pause</button>) :
-            (<button type="button" onClick={handleContinue}>Continue</button>)
-          }
-        </div>
-      </form>
+    <div className="cellular-automata-screen"> 
+      <Controls state={state} dispatch={dispatch} running={running} handleStart={handleStart} handleStop={handleStop} handleReset={handleReset} handleContinue={handleContinue} />
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
         <CanvasGrid state={currState} grid={grid} onClickCell={onClickCell} />
       </div>

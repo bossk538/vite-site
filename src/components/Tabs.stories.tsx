@@ -1,7 +1,6 @@
 // src/components/Tabs.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs } from './Tabs';
-import './Tabs.css';
 
 // 1. Default export configures the component metadata
 const meta: Meta<typeof Tabs> = {
@@ -46,10 +45,10 @@ const P3 = () => (
 );
 
 const tabs = [
-    { label: 'Maria Ahlefeldt', Panel: P0 },
-    { label: 'Carl Andersen', Panel: P1 },
-    { label: 'Ida da Fonseca', Panel: P2 },
-    { label: 'Peter Müller', Panel: P3 },
+    { label: 'Maria Ahlefeldt', content: <P0 /> },
+    { label: 'Carl Andersen', content: <P1 /> },
+    { label: 'Ida da Fonseca', content: <P2 /> },
+    { label: 'Peter Müller', content: <P3 /> },
 ];
 
 const title = 'Danish Composers';

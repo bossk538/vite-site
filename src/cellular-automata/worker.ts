@@ -40,6 +40,7 @@ let _state;
 
 onmessage = (e) => {
   const { action, state, row, col } = e.data;
+  console.log(`WORKER RECEIVE`, e.data);
   if (action === 'begin') {
     _grid = randomMatrixN(state.rows, state.columns, state.nColors);
     _state = state;
