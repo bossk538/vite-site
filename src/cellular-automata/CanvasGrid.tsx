@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { memo, useEffect, useRef, useState, useCallback } from "react";
 
 function CanvasGrid({ state, grid, onClickCell }) {
   const { colorMap, width, height, rows, columns, nColors, interval, w, h, m } = state;
@@ -6,6 +6,7 @@ function CanvasGrid({ state, grid, onClickCell }) {
 
   const cellWidth = width / columns;
   const cellHeight = height / rows;
+  console.log(`CanvasGrid`);
 
   // Draw whenever grid or dimensions change
   useEffect(() => {
@@ -49,4 +50,4 @@ function CanvasGrid({ state, grid, onClickCell }) {
   );
 }
 
-export default CanvasGrid;
+export default memo(CanvasGrid);

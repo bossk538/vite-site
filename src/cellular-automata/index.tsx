@@ -21,26 +21,28 @@ defaultState.colorMap = generateBalancedColors(defaultState.nColors);
 const updateState = (state, type, payload) => {
   switch (type) {
     case 'width':
-      return { ...state, width: payload };
+      return { ...state, width: Number(payload) };
     case 'height':
-      return { ...state, height: payload };
+      return { ...state, height: Number(payload) };
     case 'rows':
-      return { ...state, rows: payload };
+      return { ...state, rows: Number(payload) };
     case 'columns':
-      return { ...state, columns: payload };
+      return { ...state, columns: Number(payload) };
     case 'nColors':
       const colorMap = generateBalancedColors(payload);
-      return { ...state, nColors: payload, colorMap };
+      return { ...state, nColors: Number(payload), colorMap };
     case 'interval':
-      return { ...state, interval: payload };
+      return { ...state, interval: Number(payload) };
     case 'nhdHoriz':
-      return { ...state, w: payload };
+      return { ...state, w: Number(payload) };
     case 'nhdVert':
-      return { ...state, h: payload };
+      return { ...state, h: Number(payload) };
     case 'automaton':
       return { ...state, ...automata[payload].config, automaton: payload };
     case 'grid':
       return { ...state, grid: payload };
+    case 'colorMap':
+      return { ...state, colorMap: payload, nColors: payload.length };
     default:
       throw new Error(`Unknown action type: ${type}`);
   }
@@ -79,34 +81,46 @@ function CellularAutomata() {
   const handleStop = () => {
     setRunning(false);
   };
+
   const handleContinue = () => {
     setRunning(true);
+    worker.postMessage({ action: 'continue' });
   };
 
   const lastTime = useRef<number | null>(null);
   useEffect(() => {
-    worker.onmessage = (e) => {
-       console.log(`FROM WORKER`, e);
-       requestAnimationFrame((time) => {
-         console.log(`elapsed tiem`, time);
-         if (lastTime.current === null || time - lastTime.current >= state.interval) {
-           setGrid(e.data);
-           if (running) {
-             worker.postMessage({ action: 'continue' });
-           }
-           lastTime.current = time;
-         }
-       });
-    };
-  }, [running]);
+    if (running) {
+      let start = null;
+      let lastTime = 0;
+      let animationId = null;
+      worker.onmessage = (e) => {
+        const step = (timestamp) => {
+          if (!start || timestamp - start >= state.interval) {
+            start = timestamp;
+            setGrid(e.data);
+            worker.postMessage({ action: 'continue' });
+          } else {
+            requestAnimationFrame(step);
+          }
+        };
+        requestAnimationFrame(step);
+      };
+    } else {
+      worker.onmessage = null;
+    }
+  }, [running, state.interval]);
 
   const onClickCell = (row, col) => {
-    worker.postMessage({ action: 'update', row, col });
+    worker.postMessage({ action: 'draw', row, col });
+  };
+
+  const updateGrid = (grid) => {
+    worker.postMessage({ action: 'update', payload: grid });
   };
 
   return (
     <div className="cellular-automata-screen"> 
-      <Controls state={state} dispatch={dispatch} running={running} handleStart={handleStart} handleStop={handleStop} handleReset={handleReset} handleContinue={handleContinue} />
+      <Controls state={state} dispatch={dispatch} updateGrid={updateGrid} running={running} handleStart={handleStart} handleStop={handleStop} handleReset={handleReset} handleContinue={handleContinue} />
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
         <CanvasGrid state={currState} grid={grid} onClickCell={onClickCell} />
       </div>
