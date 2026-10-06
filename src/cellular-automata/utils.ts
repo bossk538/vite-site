@@ -55,3 +55,36 @@ function hslToHex(h, s, l) {
   const toHex = x => Math.round(x * 255).toString(16).padStart(2, '0');
   return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
 }
+
+export function imageToPixelArray(imageSrc) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    // Enable CORS if loading an image from an external domain
+    img.crossOrigin = "Anonymous"; 
+    
+    img.onload = () => {
+      // 1. Create an off-screen canvas matching the image size
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      
+      const ctx = canvas.getContext('2d');
+      
+      // 2. Draw the image onto the canvas
+      ctx.drawImage(img, 0, 0);
+      
+      // 3. Extract the image data
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      
+      // imageData.data is a Uint8ClampedArray
+      resolve({
+        pixels: imageData.data, 
+        width: img.width,
+        height: img.height
+      });
+    };
+
+    img.onerror = (err) => reject(err);
+    img.src = imageSrc;
+  });
+}

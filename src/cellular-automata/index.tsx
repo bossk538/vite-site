@@ -111,7 +111,7 @@ function CellularAutomata() {
   }, [running, state.interval]);
 
   const onClickCell = (row, col) => {
-    worker.postMessage({ action: 'draw', row, col });
+  //  worker.postMessage({ action: 'draw', row, col });
   };
 
   const updateGrid = (grid) => {
