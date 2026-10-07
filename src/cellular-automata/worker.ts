@@ -1,4 +1,5 @@
 import automata from './automata';
+import type { HexColor } from './types';
 
 function* makeIterator(grid, w, h, row, column) {
   const gridRows = grid.length;

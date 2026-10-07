@@ -4,6 +4,7 @@ import { GridSetup } from './Panel1';
 import { NeighborhoodSetup } from './Panel2';
 import { AutomataSetup } from './Panel3';
 import { InitialStates } from './InitialStates';
+import type { HexColor } from './types';
 
 export const TabsControl = ({ state, dispatch, updateGrid }) => {
   const tabs = [

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { HexColor } from './types';
 
 export const Playback = ({ running, handleStart, handleStop, handleContinue, handleReset }) => {
   return (

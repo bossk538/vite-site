@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { extractVideoFrames } from '/src/utils/extractVideoFrames';
 import { ColorMap } from './ColorMap';
+import type { HexColor } from './types';
 
 export const InitialStates = ({ state, dispatch, updateGrid }) => {
   const [videoFile, setVideoFile] = useState(null);

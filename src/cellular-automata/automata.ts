@@ -1,4 +1,4 @@
-// GOES HERE
+import type { HexColor } from './types';
 
 const aut1 = (it, nColors, orig, m) => {
   const counts = Array.from({ length: nColors }, () => 0);

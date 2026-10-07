@@ -3,6 +3,7 @@ import CanvasGrid from './CanvasGrid';
 import { generateBalancedColors } from './utils';
 import automata from './automata';
 import { Controls } from './Accordion';
+import type { HexColor } from './types';
 import './style.css';
 
 const defaultState = {

@@ -1,11 +1,12 @@
 import { kmeans } from 'ml-kmeans'
+import type { HexColor } from './types';
 
-const centroidsToRGB = (centroids) => {
+const centroidsToRGB = (centroids: RGBArray[]): RGBColor[] => {
   return centroids.map(([ r, g, b]) => `rgb(${Math.floor(r)},${Math.floor(g)},${Math.floor(b)})`);
 };
 
 
-const rgbDistSquared = (rgb1, rgb2) => {
+const rgbDistSquared = (rgb1: RGBArray, rgb2: RGBArray): number => {
   return (rgb1[0] - rgb2[0]) ** 2 + (rgb1[1] - rgb2[1]) ** 2 + (rgb1[2] - rgb2[2]) ** 2;
 };
 
@@ -56,6 +57,13 @@ const hslToRgb = (text) => {
   }
 };
 
+const hexToRgb = (hex: HexColor): RGBArray => {
+  return hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])\$/i, (_, r, g, b) => `#${r}${r}${g}${g}${b}${b}`)
+    .replace(/^#/, '')
+    .match(/.{2}/g)
+    .map(x => parseInt(x, 16));
+};
+
 const mapPixelsToGrid = ({
   height,
   width,
@@ -65,7 +73,7 @@ const mapPixelsToGrid = ({
   const newGrid = Array.from({ length: height }, () => Array.from({ length: width }));
   const pRows = pixels.length;
   const pCols = pixels[0].length;
-  const colorMapRGB = colorMap.map(hslToRgb);
+  const colorMapRGB = colorMap.map(hexToRgb);
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
       if (row < pRows && col < pCols) {

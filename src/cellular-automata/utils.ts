@@ -1,3 +1,5 @@
+import type { HSLColor, HexColor } from './types';
+
 /**
  * Generates an array of `count` balanced, visually distinct colors.
  * Uses evenly spaced hues on the color wheel with randomized
@@ -11,11 +13,11 @@
  * @param {string} [options.format='hsl'] - 'hsl' or 'hex'
  * @returns {string[]} array of color strings
  */
-export function generateBalancedColors(count, options = {}) {
+export function generateBalancedColors(count: number, options = {}): HSLColor | HexColor {
   const {
     saturation = [60, 80],
     lightness = [45, 65],
-    format = 'hsl',
+    format = 'hex',
   } = options;
 
   const randBetween = (min, max) => Math.random() * (max - min) + min;

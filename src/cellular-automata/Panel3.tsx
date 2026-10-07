@@ -1,5 +1,6 @@
 import React from 'react';
 import automata from './automata';
+import type { HexColor } from './types';
 
 export const AutomataSetup = ({ state, dispatch }) => {
   return (<form>

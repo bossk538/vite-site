@@ -1,3 +1,4 @@
+import type { HexColor } from './types';
 
 export const NeighborhoodSetup = ({ state, dispatch }) => {
   return (<form>

@@ -1,6 +1,7 @@
 import React from 'react';
 import automata from './automata';
 import { ColorMap } from './ColorMap';
+import type { HexColor } from './types';
 
 export const GridSetup = ({ state, dispatch }) => {
   return (

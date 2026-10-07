@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState, useCallback } from "react";
+import type { HexColor } from './types';
 
 function CanvasGrid({ state, grid, onClickCell }) {
   const { colorMap, width, height, rows, columns, nColors, interval, w, h, m } = state;
