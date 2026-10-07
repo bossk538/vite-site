@@ -7,19 +7,21 @@ import type { HexColor } from './types';
 export const InitialStates = ({ state, dispatch, updateGrid }) => {
   const [videoFile, setVideoFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const [clusterColors, setClusterColors] = useState(true);
+  const [clusterColors, setClusterColors] = useState(false);
+  const localState = useRef(state);
   const workerRef = useRef(null);
 
   useEffect(() => {
     workerRef.current = new Worker(new URL('./worker-2.ts', import.meta.url), { type: 'module' });
     workerRef.current.onmessage = (e) => {
-      let colorMap = state.colorMap;
+      let colorMap = localState.current.colorMap;
       if (e.data.type === 'colorMap') {
-        dispatch({ type: 'colorMap', payload: e.data.payload });
         colorMap = e.data.payload;
+        localState.current.colorMap = colorMap;
+        localState.current.nColors = colorMap.length;
         workerRef.current.postMessage({ action: 'mapPixels', colorMap });
       } else if (e.data.type === 'newGrid') {
-        updateGrid(e.data.payload, { colorMap });
+        updateGrid(e.data.payload, localState.current);
       }
     };
     return () => {
@@ -33,24 +35,22 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
       //console.log(`Frame ${frame.index} @ ${frame.time.toFixed(2)}s`, frame.pixels);
       // frame.pixels[y][x] => [r, g, b]
       if (frame.index === 0) {
-        console.log(`FRAME`, frame, state); // frame.width frame.height
-        dispatch({ type: 'width', payload: frame.width });
-        dispatch({ type: 'height', payload: frame.height });
-        dispatch({ type: 'rows', payload: frame.height });
-        dispatch({ type: 'columns', payload: frame.width });
+        console.log(`FRAME`, frame, localState); // frame.width frame.height
+        localState.current.width = frame.width;
+        localState.current.columns = frame.width;
+        localState.current.height = frame.height;
+        localState.current.rows = frame.height;
+
         if (clusterColors) {
-          workerRef.current.postMessage({ action: 'clusterColors', frame, colorMap: state.colorMap });
+          workerRef.current.postMessage({ action: 'clusterColors', frame, colorMap: localState.current.colorMap });
         } else {
-          workerRef.current.postMessage({ action: 'mapPixels', frame, colorMap: state.colorMap });
+          workerRef.current.postMessage({ action: 'mapPixels', frame, colorMap: localState.current.colorMap });
         }
       }
     }
   };
 
   const imageLoad = async (file) => {
-    console.log(`IMAGE FILE`, file);
-    //const out = await imageToPixelArray(file);
-    //console.log(`IMAGE`, out);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (e) => {
@@ -63,12 +63,11 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
 
-        // 3. Draw image to canvas and extract pixel data
         ctx.drawImage(img, 0, 0);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const { data, width, height } = imageData;
 
-        // 'pixels' is a Uint8ClampedArray containing RGBA values: [R, G, B, A, R, G, B, A...]
+        // 'data' is a Uint8ClampedArray containing RGBA values: [R, G, B, A, R, G, B, A...]
         const pixels = [];
         for (let j = 0; j < data.length; j += 4 * width) {
           const row = [];
@@ -78,25 +77,20 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
           pixels.push(row);
         }
         console.log(`IMAGE DATA`, imageData);
-        dispatch({ type: 'width', payload: width });
-        dispatch({ type: 'height', payload: height });
-        dispatch({ type: 'rows', payload: height });
-        dispatch({ type: 'columns', payload: width });
+        localState.current.width = width;
+        localState.current.columns = width;
+        localState.current.height = height;
+        localState.current.rows = height;
         const frame = {
           width,
           height,
           pixels,
         };
         if (clusterColors) {
-          workerRef.current.postMessage({ action: 'clusterColors', frame , colorMap: state.colorMap });
+          workerRef.current.postMessage({ action: 'clusterColors', frame , colorMap: localState.current.colorMap });
         } else {
-          workerRef.current.postMessage({ action: 'mapPixels', frame , colorMap: state.colorMap });
+          workerRef.current.postMessage({ action: 'mapPixels', frame , colorMap: localState.current.colorMap });
         }
-        /*
-        const pixels = imageData.data;
-        console.log("Raw pixel array length:", pixels.length);
-        console.log("First pixel RGBA:", pixels[0], pixels[1], pixels[2], pixels[3]);
-        */
       };
     };
   };
@@ -126,6 +120,10 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
     console.warn('not implemented');
   };
 
+  const handleColorMapUpdate = (colorMap) => {
+    localState.current.colorMap = colorMap;
+  };
+
   return (<form className="initial-states-form">
     <label>Choose a Video
       <input type="file" accept="video/*" onChange={handleFileChange} />
@@ -136,7 +134,7 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
     <label>Cluster image colors
       <input type="checkbox" checked={clusterColors} onChange={e => setClusterColors(e.target.checked)} />
     </label>
-    <ColorMap colorMap={state.colorMap} dispatch={dispatch} />
+    <ColorMap colorMap={localState.current.colorMap} handleUpdate={handleColorMapUpdate} />
     <button type="button" onClick={handleGrayscale}>Create Grayscale</button>
     <button type="button" onClick={handleCluster}>Cluster Colors</button>
   </form>);

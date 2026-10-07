@@ -54,7 +54,7 @@ onmessage = (e) => {
     postMessage(_grid);
   } else if (action === 'update') {
     _grid = structuredClone(grid);
-    _state = state;
+    _state = structuredClone(state);
     postMessage(_grid);
   } else if (action === 'updateState') {
     _state = {..._state, ...state};

@@ -11,7 +11,7 @@ const defaultState = {
   height: 800,
   rows: 800,
   columns: 1600,
-  nColors: 16,
+  nColors: 10,
   interval: 1000,
   w: 3,
   h: 3,
@@ -47,7 +47,6 @@ const updateState = (state, type, payload) => {
     default:
       throw new Error(`Unknown action type: ${type}`);
   }
-  
 };
 
 const reducer = (state, action) => {
@@ -95,6 +94,7 @@ function CellularAutomata() {
       let lastTime = 0;
       let animationId = null;
       worker.onmessage = (e) => {
+        console.log(`ONMESSAGE`, e);
         const step = (timestamp) => {
           if (!start || timestamp - start >= state.interval) {
             start = timestamp;
@@ -116,9 +116,11 @@ function CellularAutomata() {
   };
 
   const updateGrid = (grid, stateUpdates = {}) => {
-  console.log(`UPDATE GRID`, grid);
-    setCurrState(state);
-    worker.postMessage({ action: 'update', state: { ...state, ...stateUpdates }, grid });
+    const newState = {...currState, ...stateUpdates};
+    console.log(`UPDATE GRID`, grid, newState);
+    setCurrState(newState);
+    setGrid(grid);
+    worker.postMessage({ action: 'update', state: newState, grid });
   };
 
   return (

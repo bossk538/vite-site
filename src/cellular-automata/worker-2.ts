@@ -64,12 +64,18 @@ const hexToRgb = (hex: HexColor): RGBArray => {
     .map(x => parseInt(x, 16));
 };
 
+type GridProps = {
+  height: number;
+  width: number;
+  colorMap: HexColor[];
+  pixels: any;
+};
 const mapPixelsToGrid = ({
   height,
   width,
   colorMap,
   pixels,
-}) => {
+}: GridProps) => {
   const newGrid = Array.from({ length: height }, () => Array.from({ length: width }));
   const pRows = pixels.length;
   const pCols = pixels[0].length;
@@ -98,8 +104,10 @@ const generateGrayScale = (n) => {
 
 let _frame = null;
 
+const saturated = ['#000', '#00f', '#0f0', '#0ff', '#f00', '#f0f', '#ff0', '#fff'];
+
 onmessage = (e) => {
-  const { action, state, frame, colorMap } = e.data;
+  const { action, frame, colorMap } = e.data;
 
   if (frame) {
     _frame = frame;
@@ -110,6 +118,9 @@ onmessage = (e) => {
   if (action === 'clusterColors') {
     //const ans = kmeans(pixels.flat(), colorMap.length);
     //const newColorMap = centroidsToRGB(ans.centroids);
+    const newColorMap = saturated;
+    postMessage({ type: 'colorMap', payload: newColorMap });
+  } else if (action === 'grayscaleColors') {
     const newColorMap = generateGrayScale(colorMap.length);
     postMessage({ type: 'colorMap', payload: newColorMap });
   } else if (action === 'mapPixels') {

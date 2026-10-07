@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { HexColor } from './types';
 import './style.css';
 
-export const ColorMap = ({ colorMap, dispatch }) => {
+export const ColorMap = ({ colorMap, handleUpdate }) => {
   const [draft, setDraft] = useState([...colorMap]);
 
   const handleColorChange = (e, idx) => {
@@ -11,12 +11,8 @@ export const ColorMap = ({ colorMap, dispatch }) => {
     setDraft(newColorMap);
   };
 
-  const handleUpdate = () => {
-    dispatch({ type: 'colorMap', payload: draft });
-  };
-
   return (<div className="color-map">
     { draft.map((color, idx) => (<input key={idx} type="color" value={color} onChange={e => handleColorChange(e, idx)} />)) }
-    <button type="button" onClick={handleUpdate}>Update</button>
+    <button type="button" onClick={() => handleUpdate(draft)}>Update</button>
   </div>);
 };

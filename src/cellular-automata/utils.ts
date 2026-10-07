@@ -1,4 +1,4 @@
-import type { HSLColor, HexColor } from './types';
+import type { RGBColor, HSLColor, HexColor } from './types';
 
 /**
  * Generates an array of `count` balanced, visually distinct colors.
@@ -15,8 +15,8 @@ import type { HSLColor, HexColor } from './types';
  */
 export function generateBalancedColors(count: number, options = {}): HSLColor | HexColor {
   const {
-    saturation = [60, 80],
-    lightness = [45, 65],
+    saturation = [20, 80],
+    lightness = [15, 85],
     format = 'hex',
   } = options;
 
@@ -57,6 +57,12 @@ function hslToHex(h: number, s: number, l: number): HexColor {
   const toHex = x => Math.round(x * 255).toString(16).padStart(2, '0');
   return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
 }
+
+const rgbToHex = (string: RGBColor): HexColor => {
+  const match = string.match(/\d+/g);
+  const [r, g, b] = mathch;
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+};
 
 export function imageToPixelArray(imageSrc) {
   return new Promise((resolve, reject) => {
