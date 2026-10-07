@@ -6,7 +6,6 @@ function CanvasGrid({ state, grid, onClickCell }) {
 
   const cellWidth = width / columns;
   const cellHeight = height / rows;
-  console.log(`CanvasGrid`);
 
   // Draw whenever grid or dimensions change
   useEffect(() => {
@@ -17,8 +16,8 @@ function CanvasGrid({ state, grid, onClickCell }) {
 
     ctx.clearRect(0, 0, width, height);
 
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < columns; col++) {
+    for (let row = 0; row < grid.length; row++) {
+      for (let col = 0; col < grid[row].length; col++) {
         const value = grid[row][col];
         ctx.fillStyle = colorMap[value];
         ctx.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);

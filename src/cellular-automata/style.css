@@ -16,3 +16,19 @@ body {
   width: 99vw;
   height: 99vh;
 }
+
+.color-map {
+  display: flex;
+  gap: 1px;
+}
+.color-map input {
+  padding: 0;
+  width: 20px;
+  appearance: none;
+}
+.color-map input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.color-map input::-webkit-color-swatch {
+  border: none;
+}

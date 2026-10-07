@@ -114,15 +114,17 @@ function CellularAutomata() {
   //  worker.postMessage({ action: 'draw', row, col });
   };
 
-  const updateGrid = (grid) => {
-    worker.postMessage({ action: 'update', payload: grid });
+  const updateGrid = (grid, stateUpdates = {}) => {
+  console.log(`UPDATE GRID`, grid);
+    setCurrState(state);
+    worker.postMessage({ action: 'update', state: { ...state, ...stateUpdates }, grid });
   };
 
   return (
     <div className="cellular-automata-screen"> 
       <Controls state={state} dispatch={dispatch} updateGrid={updateGrid} running={running} handleStart={handleStart} handleStop={handleStop} handleReset={handleReset} handleContinue={handleContinue} />
       <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-        <CanvasGrid state={currState} grid={grid} onClickCell={onClickCell} />
+        <CanvasGrid state={state} grid={grid} onClickCell={onClickCell} worker={worker} />
       </div>
     </div>
   );

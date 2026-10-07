@@ -57,17 +57,17 @@ const hslToRgb = (text) => {
 };
 
 const mapPixelsToGrid = ({
-  rows,
-  columns,
+  height,
+  width,
   colorMap,
   pixels,
 }) => {
-  const newGrid = Array.from({ length: rows }, () => Array.from({ length: columns }));
+  const newGrid = Array.from({ length: height }, () => Array.from({ length: width }));
   const pRows = pixels.length;
   const pCols = pixels[0].length;
   const colorMapRGB = colorMap.map(hslToRgb);
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < columns; col++) {
+  for (let row = 0; row < height; row++) {
+    for (let col = 0; col < width; col++) {
       if (row < pRows && col < pCols) {
         const rgb = pixels[row][col];
         const d = distSqArr(colorMapRGB, rgb);
@@ -80,18 +80,32 @@ const mapPixelsToGrid = ({
   return newGrid;
 };
 
+const generateGrayScale = (n) => {
+  return Array.from({ length: n }, (_, idx) => {
+    const value = Math.floor(255 * idx / ( n - 1));
+    const hex = ('0' + value.toString(16)).slice(-2);
+    return '#' + hex + hex + hex;
+  });
+};
+
+let _frame = null;
+
 onmessage = (e) => {
-  const { action, pixels, state } = e.data;
-  console.log(`WORKER`,  action, pixels, state );
+  const { action, state, frame, colorMap } = e.data;
 
-  if (action === 'start') {
-    const ans = kmeans(pixels.flat(), Number(state.nColors)); // make sure nColors is a number not string
-    const colorMap = centroidsToRGB(ans.centroids);
-    postMessage({ type: 'colorMap', payload: colorMap });
+  if (frame) {
+    _frame = frame;
+  }
 
-    const rows = pixels.length;
-    const cols = pixels[0].length;
-    const newGrid = mapPixelsToGrid({ ...state, pixels })
+  const { pixels, width, height } = _frame;
+
+  if (action === 'clusterColors') {
+    //const ans = kmeans(pixels.flat(), colorMap.length);
+    //const newColorMap = centroidsToRGB(ans.centroids);
+    const newColorMap = generateGrayScale(colorMap.length);
+    postMessage({ type: 'colorMap', payload: newColorMap });
+  } else if (action === 'mapPixels') {
+    const newGrid = mapPixelsToGrid({ pixels, width, height, colorMap })
     postMessage({ type: 'newGrid', payload: newGrid });
   }
 };

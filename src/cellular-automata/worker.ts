@@ -39,8 +39,8 @@ let _grid;
 let _state;
 
 onmessage = (e) => {
-  const { action, state, row, col, payload } = e.data;
-  console.log(`WORKER RECEIVE`, e.data);
+  const { action, state, row, col, payload, grid } = e.data;
+  console.log(`WORKER RECEIVE`, e.data, _state);
   if (action === 'begin') {
     _grid = randomMatrixN(state.rows, state.columns, state.nColors);
     _state = state;
@@ -52,8 +52,11 @@ onmessage = (e) => {
     _grid[row][col] = (_grid[row][col] + 1) % _state.nColors;
     postMessage(_grid);
   } else if (action === 'update') {
-    _grid = structuredClone(payload);
+    _grid = structuredClone(grid);
+    _state = state;
     postMessage(_grid);
+  } else if (action === 'updateState') {
+    _state = {..._state, ...state};
   } else {
     throw new Error(`Undefined action: ${action}`);
   }

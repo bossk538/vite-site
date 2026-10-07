@@ -1,5 +1,6 @@
 import React from 'react';
 import automata from './automata';
+import { ColorMap } from './ColorMap';
 
 export const GridSetup = ({ state, dispatch }) => {
   return (
@@ -41,8 +42,9 @@ export const GridSetup = ({ state, dispatch }) => {
                   <input value={state.interval} onChange={e => dispatch({ type: 'interval', payload: e.target.value})} />
                 </label>
               </li>
-
-
+              <li>
+                <ColorMap colorMap={state.colorMap} dispatch={dispatch} />
+              </li>
             </ul>
           </div>
         </div>
