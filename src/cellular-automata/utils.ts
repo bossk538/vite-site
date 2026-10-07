@@ -47,7 +47,7 @@ export function generateBalancedColors(count: number, options = {}): HSLColor | 
 }
 
 // Helper: convert HSL to hex string
-function hslToHex(h, s, l) {
+function hslToHex(h: number, s: number, l: number): HexColor {
   s /= 100;
   l /= 100;
   const k = n => (n + h / 30) % 12;

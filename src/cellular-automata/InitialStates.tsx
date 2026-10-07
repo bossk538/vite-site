@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { extractVideoFrames } from '/src/utils/extractVideoFrames';
+import { imageToPixelArray } from './utils';
 import { ColorMap } from './ColorMap';
 import type { HexColor } from './types';
 
 export const InitialStates = ({ state, dispatch, updateGrid }) => {
   const [videoFile, setVideoFile] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [clusterColors, setClusterColors] = useState(true);
   const workerRef = useRef(null);
 
@@ -45,6 +47,60 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
     }
   };
 
+  const imageLoad = async (file) => {
+    console.log(`IMAGE FILE`, file);
+    //const out = await imageToPixelArray(file);
+    //console.log(`IMAGE`, out);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      console.log(`LOAD IMAGE`, e);
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+
+        // 3. Draw image to canvas and extract pixel data
+        ctx.drawImage(img, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const { data, width, height } = imageData;
+
+        // 'pixels' is a Uint8ClampedArray containing RGBA values: [R, G, B, A, R, G, B, A...]
+        const pixels = [];
+        for (let j = 0; j < data.length; j += 4 * width) {
+          const row = [];
+          for (let i = j; i < j + 4 * width; i += 4) {
+            row.push([data[i], data[i+1], data[i+2]]);
+          }
+          pixels.push(row);
+        }
+        console.log(`IMAGE DATA`, imageData);
+        dispatch({ type: 'width', payload: width });
+        dispatch({ type: 'height', payload: height });
+        dispatch({ type: 'rows', payload: height });
+        dispatch({ type: 'columns', payload: width });
+        const frame = {
+          width,
+          height,
+          pixels,
+        };
+        if (clusterColors) {
+          workerRef.current.postMessage({ action: 'clusterColors', frame , colorMap: state.colorMap });
+        } else {
+          workerRef.current.postMessage({ action: 'mapPixels', frame , colorMap: state.colorMap });
+        }
+        /*
+        const pixels = imageData.data;
+        console.log("Raw pixel array length:", pixels.length);
+        console.log("First pixel RGBA:", pixels[0], pixels[1], pixels[2], pixels[3]);
+        */
+      };
+    };
+  };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     const [type, format] = file.type.split('/');
@@ -54,10 +110,20 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
         frameSelection(file);
         break;
       case 'image':
+        setImageFile(file);
+        imageLoad(file);
         break;
       default:
         throw new Error(`Invalid file type ${type}`);
     }
+  };
+
+  const handleGrayscale = () => {
+    console.warn('not implemented');
+  };
+
+  const handleCluster = () => {
+    console.warn('not implemented');
   };
 
   return (<form className="initial-states-form">
@@ -71,5 +137,7 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
       <input type="checkbox" checked={clusterColors} onChange={e => setClusterColors(e.target.checked)} />
     </label>
     <ColorMap colorMap={state.colorMap} dispatch={dispatch} />
+    <button type="button" onClick={handleGrayscale}>Create Grayscale</button>
+    <button type="button" onClick={handleCluster}>Cluster Colors</button>
   </form>);
 };
