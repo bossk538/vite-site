@@ -1,9 +1,9 @@
 import { memo, useEffect, useRef, useState, useCallback } from "react";
 import type { HexColor } from './types';
 
-function CanvasGrid({ state, grid, onClickCell }) {
-  const { colorMap, width, height, rows, columns, nColors, interval, w, h, m } = state;
+function CanvasGrid({ colorMap, width, height, rows, columns, grid, onClickCell }) {
   const canvasRef = useRef(null);
+  console.log(`CanvasGrid`, { colorMap, width, height, rows, columns, grid, onClickCell });
 
   const cellWidth = width / columns;
   const cellHeight = height / rows;
@@ -24,7 +24,7 @@ function CanvasGrid({ state, grid, onClickCell }) {
         ctx.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
       }
     }
-  }, [grid]);
+  }, [grid, colorMap]);
 
   const handleClick = useCallback(
     (e) => {
