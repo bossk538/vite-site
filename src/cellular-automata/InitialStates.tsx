@@ -4,22 +4,36 @@ import { imageToPixelArray } from './utils';
 import { ColorMap } from './ColorMap';
 import type { HexColor } from './types';
 
+const randomMatrixN = (rows, columns, nColors) => {
+  return Array.from({ length: rows }, () =>
+    Array.from({ length: columns }, () => Math.floor(Math.random() * nColors))
+  );
+};
+
 export const InitialStates = ({ state, dispatch, updateGrid }) => {
   const [videoFile, setVideoFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [clusterColors, setClusterColors] = useState(false);
+  const [frame, setFrame] = useState(null);
   const localState = useRef(state);
   const workerRef = useRef(null);
 
   useEffect(() => {
     workerRef.current = new Worker(new URL('./worker-2.ts', import.meta.url), { type: 'module' });
     workerRef.current.onmessage = (e) => {
+      console.log(`IMAGE ONMESSAGE`, e.data);
       let colorMap = localState.current.colorMap;
       if (e.data.type === 'colorMap') {
         colorMap = e.data.payload;
         localState.current.colorMap = colorMap;
         localState.current.nColors = colorMap.length;
         workerRef.current.postMessage({ action: 'mapPixels', colorMap });
+      } else if (e.data.type ===  'colorMapUpdate') {
+        colorMap = e.data.payload;
+        console.log(`COLORMAP_UPDAT\n`, localState.current.colorMap, colorMap);
+        localState.current.colorMap = colorMap;
+        localState.current.nColors = colorMap.length;
+        updateGrid(null, localState.current);
       } else if (e.data.type === 'newGrid') {
         updateGrid(e.data.payload, localState.current);
       }
@@ -29,6 +43,12 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
       workerRef.current.terminate();
     };
   }, []);
+
+  useEffect(() => {
+    console.log(`STATE`, state, localState.current);
+    localState.current.nColors = state.nColors;
+    localState.current.colorMap = state.colorMap;
+  }, [state]);
 
   const frameSelection = async (file) => {
     for await (const frame of extractVideoFrames(file, { fps: 5, maxFrames: 20 })) {
@@ -40,12 +60,14 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
         localState.current.columns = frame.width;
         localState.current.height = frame.height;
         localState.current.rows = frame.height;
-
+        setFrame(frame);
+/*
         if (clusterColors) {
           workerRef.current.postMessage({ action: 'clusterColors', frame, colorMap: localState.current.colorMap });
         } else {
           workerRef.current.postMessage({ action: 'mapPixels', frame, colorMap: localState.current.colorMap });
         }
+        */
       }
     }
   };
@@ -86,11 +108,16 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
           height,
           pixels,
         };
+        setFrame(frame);
+        workerRef.current.postMessage({ action: 'mapPixels', frame , colorMap: localState.current.colorMap });
+        /*
         if (clusterColors) {
           workerRef.current.postMessage({ action: 'clusterColors', frame , colorMap: localState.current.colorMap });
+        } else if (true) {
+          workerRef.current.postMessage({ action: 'generateColors', frame , colorMap: localState.current.colorMap });
         } else {
-          workerRef.current.postMessage({ action: 'mapPixels', frame , colorMap: localState.current.colorMap });
         }
+        */
       };
     };
   };
@@ -113,29 +140,51 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
   };
 
   const handleGrayscale = () => {
-    console.warn('not implemented');
-  };
-
-  const handleCluster = () => {
-    console.warn('not implemented');
+    if (frame) {
+      workerRef.current.postMessage({ action: 'grayscaleColors', frame , colorMap: localState.current.colorMap });
+    }
   };
 
   const handleColorMapUpdate = (colorMap) => {
     localState.current.colorMap = colorMap;
+    if (frame) {
+      workerRef.current.postMessage({ action: 'mapPixels', frame , colorMap: localState.current.colorMap });
+    }
+  };
+
+  const handleCreateRandomGrid = () => {
+    const grid = randomMatrixN(localState.current.rows, localState.current.columns, localState.current.nColors);
+    updateGrid(grid, localState.current);
+  };
+
+  const handleCluster = () => {
+    if (frame) {
+      workerRef.current.postMessage({ action: 'clusterColors', frame , colorMap: localState.current.colorMap });
+    }
+  };
+
+  const handleClusterGenerate = () => {
+    if (frame) {
+      workerRef.current.postMessage({ action: 'generateColors', frame , colorMap: localState.current.colorMap });
+    }
   };
 
   return (<form className="initial-states-form">
-    <label>Choose a Video
-      <input type="file" accept="video/*" onChange={handleFileChange} />
-    </label>
-    <label>Choose an Image
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-    </label>
-    <label>Cluster image colors
-      <input type="checkbox" checked={clusterColors} onChange={e => setClusterColors(e.target.checked)} />
-    </label>
-    <ColorMap colorMap={localState.current.colorMap} handleUpdate={handleColorMapUpdate} />
-    <button type="button" onClick={handleGrayscale}>Create Grayscale</button>
-    <button type="button" onClick={handleCluster}>Cluster Colors</button>
+    <div>
+      <label>Choose an Image
+        <input type="file" accept="image/*,video/*" onChange={handleFileChange} />
+      </label>
+      <label>Cluster image colors
+        <input type="checkbox" checked={clusterColors} onChange={e => setClusterColors(e.target.checked)} />
+      </label>
+      <ColorMap colorMap={localState.current.colorMap} handleUpdate={handleColorMapUpdate} />
+    </div>
+    <div>
+      <button type="button" onClick={handleCreateRandomGrid}>Create Random Grid</button>
+      <button type="button" onClick={handleCluster}>Cluster Colors</button>
+      <button type="button" onClick={handleClusterGenerate}>Cluster Colors Gradually</button>
+      <button type="button" onClick={handleGrayscale}>Create Grayscale</button>
+      <button type="button" onClick={handleCluster}>Cluster Colors</button>
+    </div>
   </form>);
 };

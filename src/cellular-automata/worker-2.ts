@@ -1,10 +1,13 @@
-import { kmeans } from 'ml-kmeans'
-import type { HexColor } from './types';
+import { kmeans, kmeansGenerator } from 'ml-kmeans'
+import type { HexColor, RGBArray } from './types';
 
 const centroidsToRGB = (centroids: RGBArray[]): RGBColor[] => {
   return centroids.map(([ r, g, b]) => `rgb(${Math.floor(r)},${Math.floor(g)},${Math.floor(b)})`);
 };
 
+const centroidsToHex = (centroids: RGBArray[]): HexColor[] => {
+  return centroids.map(([ r, g, b]) => '#' + ((1 << 24) + (Math.floor(r) << 16) + (Math.floor(g) << 8) + Math.floor(b)).toString(16).slice(1));
+};
 
 const rgbDistSquared = (rgb1: RGBArray, rgb2: RGBArray): number => {
   return (rgb1[0] - rgb2[0]) ** 2 + (rgb1[1] - rgb2[1]) ** 2 + (rgb1[2] - rgb2[2]) ** 2;
@@ -112,14 +115,27 @@ onmessage = (e) => {
   if (frame) {
     _frame = frame;
   }
+  console.log(`WORKER2`, e.data, _frame);
 
   const { pixels, width, height } = _frame;
 
   if (action === 'clusterColors') {
-    //const ans = kmeans(pixels.flat(), colorMap.length);
-    //const newColorMap = centroidsToRGB(ans.centroids);
-    const newColorMap = saturated;
+    const ans = kmeans(pixels.flat(), colorMap.length);
+    const newColorMap = centroidsToHex(ans.centroids);
+    //const newColorMap = saturated;
     postMessage({ type: 'colorMap', payload: newColorMap });
+  } else if (action === 'generateColors') {
+    const generator = kmeansGenerator(pixels.flat(), colorMap.length, { maxIterations: 1000, tolerance: 1e-4 });
+    for (const curr of generator) {
+      const newColorMap = centroidsToHex(curr.centroids);
+      if (curr.converged) {
+        postMessage({ type: 'colorMap', payload: newColorMap });
+        break;
+      } else {
+        postMessage({ type: 'colorMapUpdate', payload: newColorMap });
+      }
+    }
+    throw new Error('Failed to converge');
   } else if (action === 'grayscaleColors') {
     const newColorMap = generateGrayScale(colorMap.length);
     postMessage({ type: 'colorMap', payload: newColorMap });

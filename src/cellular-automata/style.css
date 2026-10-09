@@ -32,3 +32,27 @@ body {
 .color-map input::-webkit-color-swatch {
   border: none;
 }
+
+.initial-states-form {
+  display: flex;
+  justify-content: space-evenly;
+}
+.initial-states-form div {
+  text-align: left;
+}
+
+.initial-states-form input[type=file],
+.initial-states-form button {
+  color: #333;
+  display: block;
+  width: 15rem;
+  background-color: lightgray;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: sans-serif;
+  font-style: normal;
+  border: 1px #333 solid;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 2px;
+}

@@ -58,7 +58,7 @@ function hslToHex(h: number, s: number, l: number): HexColor {
   return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
 }
 
-const rgbToHex = (string: RGBColor): HexColor => {
+export const rgbToHex = (string: RGBColor): HexColor => {
   const match = string.match(/\d+/g);
   const [r, g, b] = mathch;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);

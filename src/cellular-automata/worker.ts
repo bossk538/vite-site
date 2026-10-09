@@ -30,12 +30,6 @@ const nextMatrix = (grid, rows, cols, nColors, w, h, name) => {
   return newGrid;
 };
 
-const randomMatrixN = (rows, columns, nColors) => {
-  return Array.from({ length: rows }, () =>
-    Array.from({ length: columns }, () => Math.floor(Math.random() * nColors))
-  );
-};
-
 let _grid;
 let _state;
 
@@ -43,21 +37,22 @@ onmessage = (e) => {
   const { action, state, row, col, payload, grid } = e.data;
   console.log(`WORKER RECEIVE`, e.data, _state);
   if (action === 'begin') {
-    _grid = randomMatrixN(state.rows, state.columns, state.nColors);
-    _state = state;
-    postMessage(_grid);
+          throw new Error(`not implemented`);
   } else if (action === 'continue') {
     _grid = nextMatrix(_grid, _state.rows, _state.columns, _state.nColors, _state.w, _state.h, _state.automaton);
     postMessage(_grid);
   } else if (action === 'draw') {
-    _grid[row][col] = (_grid[row][col] + 1) % _state.nColors;
-    postMessage(_grid);
+          throw new Error(`not implemented`);
   } else if (action === 'update') {
-    _grid = structuredClone(grid);
-    _state = structuredClone(state);
-    postMessage(_grid);
+    if (grid) {
+      _grid = grid;
+    }
+    if (state) {
+      _state = state;
+    }
+    postMessage('success');
   } else if (action === 'updateState') {
-    _state = {..._state, ...state};
+          throw new Error(`not implemented`);
   } else {
     throw new Error(`Undefined action: ${action}`);
   }

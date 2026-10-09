@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { HexColor } from './types';
 import './style.css';
 
 export const ColorMap = ({ colorMap, handleUpdate }) => {
   const [draft, setDraft] = useState([...colorMap]);
+
+  useEffect(() => {
+    setDraft(colorMap);
+  }, [colorMap]);
 
   const handleColorChange = (e, idx) => {
     const newColorMap = [...draft];

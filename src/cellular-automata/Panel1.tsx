@@ -4,6 +4,10 @@ import { ColorMap } from './ColorMap';
 import type { HexColor } from './types';
 
 export const GridSetup = ({ state, dispatch }) => {
+  const handleColorMapUpdate = (colorMap) => {
+    dispatch({ type: 'colorMap', payload: colorMap });
+  };
+
   return (
       <form>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
@@ -44,7 +48,7 @@ export const GridSetup = ({ state, dispatch }) => {
                 </label>
               </li>
               <li>
-                <ColorMap colorMap={state.colorMap} dispatch={dispatch} />
+                <ColorMap colorMap={state.colorMap} handleUpdate={handleColorMapUpdate} />
               </li>
             </ul>
           </div>
