@@ -1,5 +1,4 @@
 import automata from './automata';
-import type { HexColor } from './types';
 
 function* makeIterator(grid, w, h, row, column) {
   const gridRows = grid.length;
@@ -21,8 +20,7 @@ const nextMatrix = (grid, rows, cols, nColors, w, h, name) => {
     for (let col = 0; col < cols; col++) {
       const it = makeIterator(grid, w, h, row, col);
       const orig = grid[row][col];
-      let value;
-      value = automata[name].impl(it, nColors, orig);
+      const value = automata[name].impl(it, nColors, orig);
       newGrid[row][col] = value;
     }
   }
@@ -34,7 +32,7 @@ let _grid;
 let _state;
 
 onmessage = (e) => {
-  const { action, state, row, col, payload, grid } = e.data;
+  const { action, state, grid } = e.data;
   console.log(`WORKER RECEIVE`, e.data, _state);
   if (action === 'begin') {
           throw new Error(`not implemented`);

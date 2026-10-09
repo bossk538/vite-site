@@ -24,7 +24,7 @@ export class KeyboardInputManager {
     }
 
     emit(event, data) {
-      var callbacks = this.events[event];
+      let callbacks = this.events[event];
       if (callbacks) {
         callbacks.forEach(function (callback) {
           callback(data);
@@ -33,9 +33,9 @@ export class KeyboardInputManager {
     }
 
     listen() {
-      var self = this;
+      let self = this;
 
-      var map = {
+      let map = {
         38: 0, // Up
         39: 1, // Right
         40: 2, // Down
@@ -52,9 +52,9 @@ export class KeyboardInputManager {
 
       // Respond to direction keys
       document.addEventListener("keydown", function (event) {
-        var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
+        let modifiers = event.altKey || event.ctrlKey || event.metaKey ||
                         event.shiftKey;
-        var mapped    = map[event.which];
+        let mapped    = map[event.which];
 
         if (!modifiers) {
           if (mapped !== undefined) {
@@ -75,8 +75,8 @@ export class KeyboardInputManager {
       this.bindButtonPress(".keep-playing-button", this.keepPlaying);
 
       // Respond to swipe events
-      var touchStartClientX, touchStartClientY;
-      var gameContainer = document.getElementsByClassName("game-container")[0];
+      let touchStartClientX, touchStartClientY;
+      let gameContainer = document.getElementsByClassName("game-container")[0];
 
       gameContainer.addEventListener(this.eventTouchstart, function (event) {
         if ((!window.navigator.msPointerEnabled && event.touches.length > 1) ||
@@ -105,7 +105,7 @@ export class KeyboardInputManager {
           return; // Ignore if still touching with one or more fingers
         }
 
-        var touchEndClientX, touchEndClientY;
+        let touchEndClientX, touchEndClientY;
 
         if (window.navigator.msPointerEnabled) {
           touchEndClientX = event.pageX;
@@ -115,11 +115,11 @@ export class KeyboardInputManager {
           touchEndClientY = event.changedTouches[0].clientY;
         }
 
-        var dx = touchEndClientX - touchStartClientX;
-        var absDx = Math.abs(dx);
+        let dx = touchEndClientX - touchStartClientX;
+        let absDx = Math.abs(dx);
 
-        var dy = touchEndClientY - touchStartClientY;
-        var absDy = Math.abs(dy);
+        let dy = touchEndClientY - touchStartClientY;
+        let absDy = Math.abs(dy);
 
         if (Math.max(absDx, absDy) > 10) {
           // (right : left) : (down : up)
@@ -139,7 +139,7 @@ export class KeyboardInputManager {
     }
 
     bindButtonPress(selector, fn) {
-      var button = document.querySelector(selector);
+      let button = document.querySelector(selector);
       button.addEventListener("click", fn.bind(this));
       button.addEventListener(this.eventTouchend, fn.bind(this));
     }

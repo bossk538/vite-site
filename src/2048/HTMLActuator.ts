@@ -9,7 +9,7 @@ export default class HTMLActuator {
     }
 
     actuate(grid, metadata) {
-      var self = this;
+      let self = this;
 
       window.requestAnimationFrame(function () {
         self.clearContainer(self.tileContainer);
@@ -48,15 +48,15 @@ export default class HTMLActuator {
     }
 
     addTile(tile) {
-      var self = this;
+      let self = this;
 
-      var wrapper   = document.createElement("div");
-      var inner     = document.createElement("div");
-      var position  = tile.previousPosition || { x: tile.x, y: tile.y };
-      var positionClass = this.positionClass(position);
+      const wrapper   = document.createElement("div");
+      const inner     = document.createElement("div");
+      const position  = tile.previousPosition || { x: tile.x, y: tile.y };
+      const positionClass = this.positionClass(position);
 
       // We can't use classlist because it somehow glitches when replacing classes
-      var classes = ["tile", "tile-" + tile.value, positionClass];
+      const classes = ["tile", "tile-" + tile.value, positionClass];
 
       if (tile.value > 2048) classes.push("tile-super");
 
@@ -107,13 +107,13 @@ export default class HTMLActuator {
     updateScore(score) {
       this.clearContainer(this.scoreContainer);
 
-      var difference = score - this.score;
+      const difference = score - this.score;
       this.score = score;
 
       this.scoreContainer.textContent = this.score;
 
       if (difference > 0) {
-        var addition = document.createElement("div");
+        const addition = document.createElement("div");
         addition.classList.add("score-addition");
         addition.textContent = "+" + difference;
 
@@ -126,8 +126,8 @@ export default class HTMLActuator {
     }
 
     message(won) {
-      var type    = won ? "game-won" : "game-over";
-      var message = won ? "You win!" : "Game over!";
+      const type    = won ? "game-won" : "game-over";
+      const message = won ? "You win!" : "Game over!";
 
       this.messageContainer.classList.add(type);
       this.messageContainer.getElementsByTagName("p")[0].textContent = message;

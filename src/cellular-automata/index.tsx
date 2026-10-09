@@ -1,9 +1,9 @@
-import React, { useRef, useState, useReducer, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useReducer, useEffect } from 'react';
 import CanvasGrid from './CanvasGrid';
 import { generateBalancedColors } from './utils';
 import automata from './automata';
 import { Controls } from './Accordion';
-import type { HexColor } from './types';
+//import type { HexColor } from './types';
 import './style.css';
 
 const defaultState = {
@@ -30,8 +30,7 @@ const updateState = (state, type, payload) => {
     case 'columns':
       return { ...state, columns: Number(payload) };
     case 'nColors':
-      const colorMap = generateBalancedColors(payload);
-      return { ...state, nColors: Number(payload), colorMap };
+      return { ...state, nColors: Number(payload), colorMap: generateBalancedColors(payload) };
     case 'interval':
       return { ...state, interval: Number(payload) };
     case 'nhdHoriz':
@@ -54,14 +53,6 @@ const reducer = (state, action) => {
     return newState;
 };
 
-const randomMatrixN = (rows, columns, nColors) => {
-  return Array.from({ length: rows }, () =>
-    Array.from({ length: columns }, () => Math.floor(Math.random() * nColors))
-  );
-};
-
-let intervalId;
-let count = 0;
 const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
 
 function CellularAutomata() {
@@ -87,12 +78,9 @@ function CellularAutomata() {
     worker.postMessage({ action: 'continue' });
   };
 
-  const lastTime = useRef<number | null>(null);
   useEffect(() => {
     if (running) {
       let start = null;
-      let lastTime = 0;
-      let animationId = null;
       worker.onmessage = (e) => {
         console.log(`ONMESSAGE`, e);
         const step = (timestamp) => {
@@ -111,7 +99,7 @@ function CellularAutomata() {
     }
   }, [running, state.interval]);
 
-  const onClickCell = (row, col) => {
+  const onClickCell = (/* row, col */) => {
   //  worker.postMessage({ action: 'draw', row, col });
   };
 

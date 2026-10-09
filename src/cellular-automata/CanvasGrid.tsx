@@ -1,5 +1,4 @@
-import { memo, useEffect, useRef, useState, useCallback } from "react";
-import type { HexColor } from './types';
+import { memo, useEffect, useRef, useCallback } from "react";
 
 function CanvasGrid({ colorMap, width, height, rows, columns, grid, onClickCell }) {
   const canvasRef = useRef(null);
@@ -24,7 +23,7 @@ function CanvasGrid({ colorMap, width, height, rows, columns, grid, onClickCell 
         ctx.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
       }
     }
-  }, [grid, colorMap]);
+  }, [grid, colorMap, cellWidth, cellHeight, width, height]);
 
   const handleClick = useCallback(
     (e) => {

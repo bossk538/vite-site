@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { animframe_polyfill } from './js/animframe_polyfill';
 import { classlist_polyfill } from './js/classlist_polyfill';
 import { GameManager, LocalStorageManager } from './utils';
@@ -7,7 +7,8 @@ import './style/main.css';
 
 // bind_polyfill.js
 Function.prototype.bind = Function.prototype.bind || function (target) {
-  var self = this;
+  // @ts-ignore
+  let self = this;
   return function (args) {
     if (!(args instanceof Array)) {
       args = [args];
@@ -19,9 +20,9 @@ classlist_polyfill();
 animframe_polyfill();
 const SIZE = 4;
 
-export const TFE = (props) => {
-  const [nrows, setNrows] = useState(SIZE);
-  const [ncols, setNcols] = useState(SIZE);
+export const TFE = () => {
+  const [nrows] = useState(SIZE);
+  const [ncols] = useState(SIZE);
   const [gameManager, setGameManager] = useState();
 
   const handleKeyPress = useCallback((event) => {
@@ -41,9 +42,9 @@ export const TFE = (props) => {
         83: 2, // S
         65: 3  // A
       };
-      var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
+      const modifiers = event.altKey || event.ctrlKey || event.metaKey ||
                         event.shiftKey;
-      var mapped    = map[event.which];
+      const mapped    = map[event.which];
 
       if (!modifiers) {
         if (mapped !== undefined) {

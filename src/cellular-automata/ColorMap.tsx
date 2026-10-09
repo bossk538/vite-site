@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import type { HexColor } from './types';
 import './style.css';
 
 export const ColorMap = ({ colorMap, handleUpdate }) => {

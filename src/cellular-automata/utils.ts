@@ -60,7 +60,7 @@ function hslToHex(h: number, s: number, l: number): HexColor {
 
 export const rgbToHex = (string: RGBColor): HexColor => {
   const match = string.match(/\d+/g);
-  const [r, g, b] = mathch;
+  const [r, g, b] = match;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 };
 

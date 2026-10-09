@@ -107,9 +107,9 @@ const generateGrayScale = (n) => {
 
 let _frame = null;
 
-const saturated = ['#000', '#00f', '#0f0', '#0ff', '#f00', '#f0f', '#ff0', '#fff'];
+const saturated: HexColor[] = ['#000', '#00f', '#0f0', '#0ff', '#f00', '#f0f', '#ff0', '#fff'];
 
-onmessage = (e) => {
+onmessage = (e: MessageEvent<any>) => {
   const { action, frame, colorMap } = e.data;
 
   if (frame) {
@@ -124,6 +124,8 @@ onmessage = (e) => {
     const newColorMap = centroidsToHex(ans.centroids);
     //const newColorMap = saturated;
     postMessage({ type: 'colorMap', payload: newColorMap });
+  } else if (action === 'saturate') {
+    postMessage({ type: 'colorMap', payload: saturated });
   } else if (action === 'generateColors') {
     const generator = kmeansGenerator(pixels.flat(), colorMap.length, { maxIterations: 1000, tolerance: 1e-4 });
     for (const curr of generator) {

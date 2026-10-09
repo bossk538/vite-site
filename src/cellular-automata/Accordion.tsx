@@ -2,7 +2,6 @@ import React from 'react';
 import { Accordion } from '../components/Accordion';
 import { TabsControl } from './Tabs';
 import { Playback } from './Playback';
-import type { HexColor } from './types';
 
 export const Controls = ({ state, dispatch, updateGrid, running, handleStart, handleStop, handleContinue }) => {
   const accordion = [

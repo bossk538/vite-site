@@ -1,5 +1,21 @@
+type Position = {
+  x: number;
+  y: number;
+};
+
+type GameState = {
+};
+
+type CallbackType = () => void;
+
+type CellType = {
+};
+
+type TileType = {
+};
+
 class Tile {
-    constructor(position: any, value: number) {
+    constructor(position: Position, value: number) {
         this.x = position.x;
         this.y = position.y;
         this.value = value || 2;
@@ -25,35 +41,35 @@ class Tile {
 }
 
 class Grid {
-    constructor(size: any, previousState: any) {
+    constructor(size: number, previousState: GameState) {
         this.size = size;
         this.cells = previousState ? this.fromState(previousState) : this.empty();
     }
     empty() {
-        var cells = [];
+         cells = [];
 
-        for (var x = 0; x < this.size; x++) {
-            var row = cells[x] = [];
+        for ( x = 0; x < this.size; x++) {
+             row = cells[x] = [];
 
-            for (var y = 0; y < this.size; y++) {
+            for ( y = 0; y < this.size; y++) {
                 row.push(null);
             }
         }
         return cells;
     }
-    fromState(state: any) {
-        var cells = [];
-        for (var x = 0; x < this.size; x++) {
-            var row = cells[x] = [];
-            for (var y = 0; y < this.size; y++) {
-                var tile = state[x][y];
+    fromState(state: GameState) {
+         cells = [];
+        for ( x = 0; x < this.size; x++) {
+             row = cells[x] = [];
+            for ( y = 0; y < this.size; y++) {
+                 tile = state[x][y];
                 row.push(tile ? new Tile(tile.position, tile.value) : null);
             }
         }
         return cells;
     }
     randomAvailableCell() {
-      var cells = this.availableCells();
+       cells = this.availableCells();
 
       if (cells.length) {
         return cells[Math.floor(Math.random() * cells.length)];
@@ -61,7 +77,7 @@ class Grid {
     }
 
     availableCells() {
-      var cells = [];
+       cells = [];
 
       this.eachCell(function (x, y, tile) {
         if (!tile) {
@@ -71,9 +87,9 @@ class Grid {
 
       return cells;
     }
-    eachCell(callback: any) {
-          for (var x = 0; x < this.size; x++) {
-            for (var y = 0; y < this.size; y++) {
+    eachCell(callback: CallbackType) {
+          for ( x = 0; x < this.size; x++) {
+            for ( y = 0; y < this.size; y++) {
               callback(x, y, this.cells[x][y]);
             }
           }
@@ -81,36 +97,36 @@ class Grid {
         cellsAvailable() {
           return !!this.availableCells().length;
         }
-        cellAvailable(cell: any) {
+        cellAvailable(cell: CellType) {
           return !this.cellOccupied(cell);
         }
-        cellOccupied(cell: any) {
+        cellOccupied(cell: CellType) {
           return !!this.cellContent(cell);
         }
-        cellContent(cell: any) {
+        cellContent(cell: CellType) {
           if (this.withinBounds(cell)) {
             return this.cells[cell.x][cell.y];
           } else {
             return null;
           }
         }
-        insertTile(tile: any) {
+        insertTile(tile: TileType) {
           this.cells[tile.x][tile.y] = tile;
         }
-        removeTile(tile: any) {
+        removeTile(tile: TileType) {
           this.cells[tile.x][tile.y] = null;
         }
-        withinBounds(position: any) {
+        withinBounds(position: Position) {
           return position.x >= 0 && position.x < this.size &&
              position.y >= 0 && position.y < this.size;
         }
         serialize() {
-          var cellState = [];
+           cellState = [];
 
-          for (var x = 0; x < this.size; x++) {
-            var row = cellState[x] = [];
+          for ( x = 0; x < this.size; x++) {
+             row = cellState[x] = [];
 
-            for (var y = 0; y < this.size; y++) {
+            for ( y = 0; y < this.size; y++) {
               row.push(this.cells[x][y] ? this.cells[x][y].serialize() : null);
             }
           }
@@ -152,7 +168,7 @@ export class GameManager {
 
     // Set up the game
     async setup() {
-      var previousState = await this.storageManager.getGameState();
+       previousState = await this.storageManager.getGameState();
 
       // Reload the game from a previous game if present
       if (previousState) {
@@ -179,7 +195,7 @@ export class GameManager {
 
     // Set up the initial tiles to start the game with
     addStartTiles() {
-      for (var i = 0; i < this.startTiles; i++) {
+      for ( i = 0; i < this.startTiles; i++) {
         this.addRandomTile();
       }
     }
@@ -187,8 +203,8 @@ export class GameManager {
     // Adds a tile in a random position
     addRandomTile() {
       if (this.grid.cellsAvailable()) {
-        var value = Math.random() < 0.9 ? 2 : 4;
-        var tile = new Tile(this.grid.randomAvailableCell(), value);
+         value = Math.random() < 0.9 ? 2 : 4;
+         tile = new Tile(this.grid.randomAvailableCell(), value);
 
         this.grid.insertTile(tile);
       }
@@ -249,15 +265,15 @@ export class GameManager {
     // Move tiles on the grid in the specified direction
     move(direction) {
       // 0: up, 1: right, 2: down, 3: left
-      var self = this;
+       self = this;
 
       if (this.isGameTerminated()) return; // Don't do anything if the game's over
 
-      var cell, tile;
+       cell, tile;
 
-      var vector     = this.getVector(direction);
-      var traversals = this.buildTraversals(vector);
-      var moved      = false;
+       vector     = this.getVector(direction);
+       traversals = this.buildTraversals(vector);
+       moved      = false;
 
       // Save the current tile positions and remove merger information
       this.prepareTiles();
@@ -269,12 +285,12 @@ export class GameManager {
           tile = self.grid.cellContent(cell);
 
           if (tile) {
-            var positions = self.findFarthestPosition(cell, vector);
-            var next      = self.grid.cellContent(positions.next);
+             positions = self.findFarthestPosition(cell, vector);
+             next      = self.grid.cellContent(positions.next);
 
             // Only one merger per row traversal?
             if (next && next.value === tile.value && !next.mergedFrom) {
-              var merged = new Tile(positions.next, tile.value * 2);
+               merged = new Tile(positions.next, tile.value * 2);
               merged.mergedFrom = [tile, next];
 
               self.grid.insertTile(merged);
@@ -313,7 +329,7 @@ export class GameManager {
     // Get the vector representing the chosen direction
     getVector(direction) {
       // Vectors representing tile movement
-      var map = {
+       map = {
         0: { x: 0,  y: -1 }, // Up
         1: { x: 1,  y: 0 },  // Right
         2: { x: 0,  y: 1 },  // Down
@@ -325,9 +341,9 @@ export class GameManager {
 
     // Build a list of positions to traverse in the right order
     buildTraversals(vector) {
-      var traversals = { x: [], y: [] };
+       traversals = { x: [], y: [] };
 
-      for (var pos = 0; pos < this.size; pos++) {
+      for ( pos = 0; pos < this.size; pos++) {
         traversals.x.push(pos);
         traversals.y.push(pos);
       }
@@ -340,7 +356,7 @@ export class GameManager {
     }
 
     findFarthestPosition(cell, vector) {
-      var previous;
+       previous;
 
       // Progress towards the vector direction until an obstacle is found
       do {
@@ -361,20 +377,20 @@ export class GameManager {
 
     // Check for available matches between tiles (more expensive check)
     tileMatchesAvailable() {
-      var self = this;
+       self = this;
 
-      var tile;
+       tile;
 
-      for (var x = 0; x < this.size; x++) {
-        for (var y = 0; y < this.size; y++) {
+      for ( x = 0; x < this.size; x++) {
+        for ( y = 0; y < this.size; y++) {
           tile = this.grid.cellContent({ x: x, y: y });
 
           if (tile) {
-            for (var direction = 0; direction < 4; direction++) {
-              var vector = self.getVector(direction);
-              var cell   = { x: x + vector.x, y: y + vector.y };
+            for ( direction = 0; direction < 4; direction++) {
+               vector = self.getVector(direction);
+               cell   = { x: x + vector.x, y: y + vector.y };
 
-              var other  = self.grid.cellContent(cell);
+               other  = self.grid.cellContent(cell);
 
               if (other && other.value === tile.value) {
                 return true; // These two tiles can be merged

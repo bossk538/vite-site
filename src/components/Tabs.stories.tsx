@@ -1,5 +1,5 @@
 // src/components/Tabs.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tabs } from './Tabs';
 
 // 1. Default export configures the component metadata

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 
 export const TicTacToe2 = () => {
   const NCols = 5;
@@ -10,7 +10,6 @@ export const TicTacToe2 = () => {
   }, [NRows, NCols]);
   const [grid, setGrid] = useState(newGrid);
   const [player, setPlayer] = useState(0)
-  const [message, setMessage] = useState('Hello World!');
   const setPosition = (row, col) => {
     const newGrid = grid.map(row => [...row]);
     newGrid[row][col] = player;
@@ -34,6 +33,7 @@ export const TicTacToe2 = () => {
     setPlayer(0)
   }
 
+/*
   const isBoardFull = (grid) => {
     for (const row of grid) {
       for (const col of row) {
@@ -44,6 +44,7 @@ export const TicTacToe2 = () => {
     }
     return true;
   }
+*/
 
   const findLongestSequence = (grid) => {
     const s = Array(players.length).fill(0)
