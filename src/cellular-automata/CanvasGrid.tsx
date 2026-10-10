@@ -1,6 +1,17 @@
 import { memo, useEffect, useRef, useCallback } from "react";
+import type { Grid, HexColor } from './types';
 
-function CanvasGrid({ colorMap, width, height, rows, columns, grid, onClickCell }) {
+type CanvasGridProps = {
+  colorMap: HexColor[];
+  width: number;
+  height: number;
+  rows: number;
+  columns: number;
+  grid: Grid;
+  onClickCell: any;
+}
+
+function CanvasGrid({ colorMap, width, height, rows, columns, grid, onClickCell }: CanvasGridProps) {
   const canvasRef = useRef(null);
   console.log(`CanvasGrid`, { colorMap, width, height, rows, columns, grid, onClickCell });
 
@@ -40,11 +51,11 @@ function CanvasGrid({ colorMap, width, height, rows, columns, grid, onClickCell 
 
   return (
     <canvas
+      className="CanvasGrid"
       ref={canvasRef}
       width={width}
       height={height}
       onClick={handleClick}
-      style={{ border: "1px solid #ccc" }}
     />
   );
 }

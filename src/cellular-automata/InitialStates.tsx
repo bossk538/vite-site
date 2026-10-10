@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { extractVideoFrames } from '/src/utils/extractVideoFrames';
-import { imageToPixelArray } from './utils';
 import { ColorMap } from './ColorMap';
-import type { HexColor } from './types';
+import type { Grid } from './types';
 
-const randomMatrixN = (rows, columns, nColors) => {
+const randomMatrixN = (rows: number, columns: number, nColors: number): Grid => {
   return Array.from({ length: rows }, () =>
     Array.from({ length: columns }, () => Math.floor(Math.random() * nColors))
   );
 };
 
-export const InitialStates = ({ state, dispatch, updateGrid }) => {
-  const [videoFile, setVideoFile] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+export const InitialStates = ({ state, updateGrid }) => {
+  const [file, setFile] = useState('');
   const [clusterColors, setClusterColors] = useState(false);
   const [frame, setFrame] = useState(null);
   const localState = useRef(state);
@@ -127,11 +125,11 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
     const [type, format] = file.type.split('/');
     switch (type) {
       case 'video':
-        setVideoFile(file);
+        setFile(file);
         frameSelection(file);
         break;
       case 'image':
-        setImageFile(file);
+        setFile(file);
         imageLoad(file);
         break;
       default:
@@ -141,7 +139,7 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
 
   const handleGrayscale = () => {
     if (frame) {
-      workerRef.current.postMessage({ action: 'grayscaleColors', frame , colorMap: localState.current.colorMap });
+      workerRef.current.postMessage({ action: 'grayscaleColors', frame, colorMap: localState.current.colorMap });
     }
   };
 
@@ -172,7 +170,7 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
   return (<form className="initial-states-form">
     <div>
       <label>Choose an Image
-        <input type="file" accept="image/*,video/*" onChange={handleFileChange} />
+        <input type="file" accept="image/*,video/*" onChange={handleFileChange} value={file.value} />
       </label>
       <label>Cluster image colors
         <input type="checkbox" checked={clusterColors} onChange={e => setClusterColors(e.target.checked)} />

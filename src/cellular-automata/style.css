@@ -17,19 +17,20 @@ body {
   height: 99vh;
 }
 
-.color-map {
+.ColorMap {
   display: flex;
   gap: 1px;
+  padding-top: 3px;
 }
-.color-map input {
+.ColorMap input {
   padding: 0;
   width: 20px;
   appearance: none;
 }
-.color-map input::-webkit-color-swatch-wrapper {
+.ColorMap input::-webkit-color-swatch-wrapper {
   padding: 0;
 }
-.color-map input::-webkit-color-swatch {
+.ColorMap input::-webkit-color-swatch {
   border: none;
 }
 
@@ -39,6 +40,11 @@ body {
 }
 .initial-states-form div {
   text-align: left;
+}
+
+.CanvasGrid {
+  border: 1px solid #ccc;
+  border-radius: 2px;
 }
 
 .initial-states-form input[type=file],

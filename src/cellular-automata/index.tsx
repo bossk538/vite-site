@@ -1,9 +1,9 @@
-import React, { useRef, useState, useReducer, useEffect } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import CanvasGrid from './CanvasGrid';
 import { generateBalancedColors } from './utils';
 import automata from './automata';
 import { Controls } from './Accordion';
-//import type { HexColor } from './types';
+import type { Grid } from './types';
 import './style.css';
 
 const defaultState = {
@@ -43,6 +43,8 @@ const updateState = (state, type, payload) => {
       return { ...state, grid: payload };
     case 'colorMap':
       return { ...state, colorMap: payload, nColors: payload.length };
+    case 'neighborhoodTopology':
+      return { ...state, neighborhoodTopology: payload };
     default:
       throw new Error(`Unknown action type: ${type}`);
   }
@@ -59,7 +61,7 @@ function CellularAutomata() {
   const [state, dispatch] = useReducer(reducer, defaultState);
   const [currState, setCurrState] = useState(state);
   const [running, setRunning] = useState(false);
-  const [grid, setGrid] = useState(null);
+  const [grid, setGrid] = useState<Grid>(null);
 
   const handleReset = () => {};
 
@@ -103,7 +105,7 @@ function CellularAutomata() {
   //  worker.postMessage({ action: 'draw', row, col });
   };
 
-  const updateGrid = (newGrid, stateUpdates = {}) => {
+  const updateGrid = (newGrid: Grid, stateUpdates = {}) => {
     const newState = {...currState, ...stateUpdates};
     console.log(`UPDATE GRID`, newGrid, newState);
     setCurrState(newState);

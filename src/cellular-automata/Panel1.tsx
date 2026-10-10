@@ -4,7 +4,7 @@ import { ColorMap } from './ColorMap';
 import type { HexColor } from './types';
 
 export const GridSetup = ({ state, dispatch }) => {
-  const handleColorMapUpdate = (colorMap) => {
+  const handleColorMapUpdate = (colorMap: HexColor[]) => {
     dispatch({ type: 'colorMap', payload: colorMap });
   };
 

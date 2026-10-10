@@ -1,9 +1,5 @@
 import { kmeans, kmeansGenerator } from 'ml-kmeans'
-import type { HexColor, RGBArray } from './types';
-
-const centroidsToRGB = (centroids: RGBArray[]): RGBColor[] => {
-  return centroids.map(([ r, g, b]) => `rgb(${Math.floor(r)},${Math.floor(g)},${Math.floor(b)})`);
-};
+import type { HexColor, RGBArray, Worker2Params } from './types';
 
 const centroidsToHex = (centroids: RGBArray[]): HexColor[] => {
   return centroids.map(([ r, g, b]) => '#' + ((1 << 24) + (Math.floor(r) << 16) + (Math.floor(g) << 8) + Math.floor(b)).toString(16).slice(1));
@@ -36,6 +32,7 @@ const hslToRgb = (text) => {
   if (typeof text !== 'string') {
     return text;
   } else if (/^hsl\(/.test(text)) {
+    // @ts-expect-error - h should be a constant
     let [h, s, l] = text.match(/[\d.]+/g).map(Number);
     s /= 100;
     l /= 100;
@@ -50,7 +47,7 @@ const hslToRgb = (text) => {
       Math.round(255 * f(4))
     ];
   } else if (/^rgb\(/.test(text)) {
-    let [r, g, b] = text.match(/[\d.]+/g).map(Number);
+    const [r, g, b] = text.match(/[\d.]+/g).map(Number);
     return [Math.floor(r), Math.floor(g), Math.floor(b)];
   } else if (/^#/.test(text)) {
     return text.replace(/^#?([a-f\d])([a-f\d])([a-f\d])\$/i, (_, r, g, b) => `#${r}${r}${g}${g}${b}${b}`)
@@ -71,7 +68,7 @@ type GridProps = {
   height: number;
   width: number;
   colorMap: HexColor[];
-  pixels: any;
+  pixels: RGBArray[][];
 };
 const mapPixelsToGrid = ({
   height,
@@ -97,7 +94,7 @@ const mapPixelsToGrid = ({
   return newGrid;
 };
 
-const generateGrayScale = (n) => {
+const generateGrayScale = (n: number): HexColor[] => {
   return Array.from({ length: n }, (_, idx) => {
     const value = Math.floor(255 * idx / ( n - 1));
     const hex = ('0' + value.toString(16)).slice(-2);
@@ -109,7 +106,7 @@ let _frame = null;
 
 const saturated: HexColor[] = ['#000', '#00f', '#0f0', '#0ff', '#f00', '#f0f', '#ff0', '#fff'];
 
-onmessage = (e: MessageEvent<any>) => {
+onmessage = (e: MessageEvent<Worker2Params>) => {
   const { action, frame, colorMap } = e.data;
 
   if (frame) {
