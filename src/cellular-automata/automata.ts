@@ -1,4 +1,4 @@
-import type { HexColor } from './types';
+import type { HexColor, AutomataKey } from './types';
 
 const aut1 = (it, nColors, orig, m) => {
   const counts = Array.from({ length: nColors }, () => 0);
@@ -9,6 +9,17 @@ const aut1 = (it, nColors, orig, m) => {
   }
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]); // sort from largest to smallest
   return Number(sorted[m][0]); // 2nd most common value in neighborhood
+};
+
+const avg = (it) => {
+  let sum = 0;
+  let count = 0;
+  for (const i of it) {
+    const [value] = i;
+    sum += value;
+    count++;
+  }
+  return Math.floor(sum / count + 0.5);
 };
 
 const gol = (it, n, orig) => {
@@ -48,7 +59,11 @@ const automata = {
     config: {},
     impl: (it, n, orig) => aut1(it, n, orig, 1),
   },
-
+  avg: {
+    description: 'Average value of pixels',
+    config: {},
+    impl: avg,
+  },
 };
 
 export default automata;

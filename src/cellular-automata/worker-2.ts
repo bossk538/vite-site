@@ -119,7 +119,6 @@ onmessage = (e: MessageEvent<Worker2Params>) => {
   if (action === 'clusterColors') {
     const ans = kmeans(pixels.flat(), colorMap.length);
     const newColorMap = centroidsToHex(ans.centroids);
-    //const newColorMap = saturated;
     postMessage({ type: 'colorMap', payload: newColorMap });
   } else if (action === 'saturate') {
     postMessage({ type: 'colorMap', payload: saturated });

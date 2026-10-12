@@ -1,8 +1,8 @@
 import React from 'react';
 import { Tabs } from '../components/Tabs';
-import { GridSetup } from './Panel1';
-import { NeighborhoodSetup } from './Panel2';
-import { AutomataSetup } from './Panel3';
+import { GridSetup } from './GridSetup';
+import { NeighborhoodSetup } from './NeighborhoodSetup';
+import { AutomataSetup } from './AutomataSetup';
 import { InitialStates } from './InitialStates';
 import type { HexColor } from './types';
 
