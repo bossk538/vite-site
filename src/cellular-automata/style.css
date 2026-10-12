@@ -33,6 +33,9 @@ body {
 .ColorMap input::-webkit-color-swatch {
   border: none;
 }
+.ColorMap input.selected {
+  border: 2px solid blue;
+}
 
 .initial-states-form {
   display: flex;

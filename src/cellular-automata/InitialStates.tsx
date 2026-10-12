@@ -9,7 +9,7 @@ const randomMatrixN = (rows: number, columns: number, nColors: number): Grid => 
   );
 };
 
-export const InitialStates = ({ state, updateGrid }) => {
+export const InitialStates = ({ state, dispatch, updateGrid }) => {
   const [file, setFile] = useState('');
   const [clusterColors, setClusterColors] = useState(false);
   const [frame, setFrame] = useState(null);
@@ -175,7 +175,7 @@ export const InitialStates = ({ state, updateGrid }) => {
       <label>Cluster image colors
         <input type="checkbox" checked={clusterColors} onChange={e => setClusterColors(e.target.checked)} />
       </label>
-      <ColorMap colorMap={localState.current.colorMap} handleUpdate={handleColorMapUpdate} />
+      <ColorMap colorMap={localState.current.colorMap} handleUpdate={handleColorMapUpdate} state={state} dispatch={dispatch} />
     </div>
     <div>
       <button type="button" onClick={handleCreateRandomGrid}>Create Random Grid</button>

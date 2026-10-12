@@ -48,7 +48,7 @@ export const GridSetup = ({ state, dispatch }) => {
                 </label>
               </li>
               <li>
-                <ColorMap colorMap={state.colorMap} handleUpdate={handleColorMapUpdate} />
+                <ColorMap colorMap={state.colorMap} handleUpdate={handleColorMapUpdate} state={state} dispatch={dispatch} />
               </li>
             </ul>
           </div>

@@ -1,12 +1,12 @@
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useState, useReducer, useEffect, useMemo } from 'react';
 import CanvasGrid from './CanvasGrid';
 import { generateBalancedColors } from './utils';
 import automata from './automata';
 import { Controls } from './Accordion';
-import type { Grid } from './types';
+import type { Grid, StateType } from './types';
 import './style.css';
 
-const defaultState = {
+const defaultState: StateType = {
   width: 1600,
   height: 800,
   rows: 800,
@@ -16,10 +16,11 @@ const defaultState = {
   w: 3,
   h: 3,
   automaton: 'mc1',
+  selectedColor: 1,
 };
 defaultState.colorMap = generateBalancedColors(defaultState.nColors);
 
-const updateState = (state, type, payload) => {
+const updateState = (state: StateType, type, payload) => {
   switch (type) {
     case 'width':
       return { ...state, width: Number(payload) };
@@ -30,7 +31,7 @@ const updateState = (state, type, payload) => {
     case 'columns':
       return { ...state, columns: Number(payload) };
     case 'nColors':
-      return { ...state, nColors: Number(payload), colorMap: generateBalancedColors(payload) };
+      return { ...state, nColors: Number(payload), colorMap: generateBalancedColors(payload), selectedColor: 0 };
     case 'interval':
       return { ...state, interval: Number(payload) };
     case 'nhdHoriz':
@@ -42,32 +43,34 @@ const updateState = (state, type, payload) => {
     case 'grid':
       return { ...state, grid: payload };
     case 'colorMap':
-      return { ...state, colorMap: payload, nColors: payload.length };
+      return { ...state, colorMap: payload, nColors: payload.length, selectedColor: 0 };
     case 'neighborhoodTopology':
       return { ...state, neighborhoodTopology: payload };
+    case 'selectedColor':
+      return { ...state, selectedColor: payload };
     default:
       throw new Error(`Unknown action type: ${type}`);
   }
 };
 
 const reducer = (state, action) => {
-    const newState = updateState(state, action.type, action.payload);
-    return newState;
+  const newState = updateState(state, action.type, action.payload);
+  return newState;
 };
 
-const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
 
 function CellularAutomata() {
   const [state, dispatch] = useReducer(reducer, defaultState);
   const [currState, setCurrState] = useState(state);
   const [running, setRunning] = useState(false);
   const [grid, setGrid] = useState<Grid>(null);
+  const worker = useMemo(() => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }), []);
 
   const handleReset = () => {};
 
   const handleStart = () => {
     setRunning(true);
-    worker.postMessage({ action: 'begin', state, });
+    worker.postMessage({ action: 'update', grid, state, });
     setCurrState(state);
   };
 
@@ -101,11 +104,11 @@ function CellularAutomata() {
     }
   }, [running, state.interval]);
 
-  const onClickCell = (/* row, col */) => {
-  //  worker.postMessage({ action: 'draw', row, col });
+  const onClickCell = (row: number, col: number) => {
+    worker.postMessage({ action: 'draw', row, col, value: state.selectedColor });
   };
 
-  const updateGrid = (newGrid: Grid, stateUpdates = {}) => {
+  const updateGrid = (newGrid: Grid, stateUpdates: StateType = {}): void => {
     const newState = {...currState, ...stateUpdates};
     console.log(`UPDATE GRID`, newGrid, newState);
     setCurrState(newState);
@@ -114,6 +117,10 @@ function CellularAutomata() {
     }
     worker.postMessage({ action: 'update', state: newState, grid: newGrid ?? grid });
   };
+
+  useEffect(() => {
+    updateGrid(null, state);
+  }, []);
 
   return (
     <div className="cellular-automata-screen"> 

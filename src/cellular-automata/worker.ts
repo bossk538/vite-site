@@ -56,25 +56,36 @@ let _grid: Grid;
 let _state;
 
 onmessage = (e) => {
-  const { action, state, grid } = e.data;
+  const { action, state, grid, payload } = e.data;
   console.log(`WORKER RECEIVE`, e.data, _state);
-  if (action === 'begin') {
-          throw new Error(`not implemented`);
-  } else if (action === 'continue') {
+  if (action === 'continue') {
     _grid = nextMatrix(_grid, _state.rows, _state.columns, _state.nColors, _state.w, _state.h, _state.automaton, _state.neighborhoodTopology);
     postMessage(_grid);
-  } else if (action === 'draw') {
-          throw new Error(`not implemented`);
   } else if (action === 'update') {
-    if (grid) {
-      _grid = grid;
-    }
     if (state) {
       _state = state;
     }
+    if (grid) {
+      _grid = grid;
+    } else if (!_grid) {
+      _grid = Array.from({ length: _state.rows }, () => Array.from({ length: _state.columns }, () => 0));
+    }
     postMessage('success');
-  } else if (action === 'updateState') {
-          throw new Error(`not implemented`);
+  } else if (action === 'update_grid') {
+    _grid = payload;
+  } else if (action === 'update_state') {
+
+    // if dimensions of grid change we wipe out grid
+    if (payload.rows !== _state.rows || payload.columns !== _state.columns || payload.colorMap.length !== _state.colorMap.length) {
+      _grid = Array.from({ length: _state.rows }, () => Array.from({ length: _state.columns }, () => 0));
+    }
+
+    _state = payload;
+    postMessage(_grid);
+  } else if (action === 'draw') {
+    const { row, col, value } = e.data;
+    _grid[row][col] = value ? value : 1;
+    postMessage(_grid);
   } else {
     throw new Error(`Undefined action: ${action}`);
   }

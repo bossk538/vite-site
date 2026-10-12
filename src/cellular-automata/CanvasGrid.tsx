@@ -8,7 +8,7 @@ type CanvasGridProps = {
   rows: number;
   columns: number;
   grid: Grid;
-  onClickCell: any;
+  onClickCell: (row: number, col: number) => void;
 }
 
 function CanvasGrid({ colorMap, width, height, rows, columns, grid, onClickCell }: CanvasGridProps) {

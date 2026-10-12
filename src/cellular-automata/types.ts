@@ -12,3 +12,15 @@ export type Worker2Params = {
   frame: any;
   colorMap: HexColor[];
 }
+export type StateType = Partial<{
+  width: number;
+  height: number;
+  rows: number;
+  columns: number;
+  nColors: number;
+  interval: number;
+  w: number;
+  h: number;
+  automaton: AutomataKey;
+  selectedColor: number;
+}>;
