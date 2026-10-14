@@ -2,18 +2,19 @@ body {
   background: white;
   color: black;
   font-size: 16px;
-  display: flex;
+  display: block;
   max-width: none;
 }
 
 #root {
+  max-width: unset;
+  width: 100%;
 }
 
 .cellular-automata-screen {
   display: flex;
   flex-direction: column;
   justify-content: start;
-  width: 99vw;
   height: 99vh;
 }
 
@@ -65,3 +66,33 @@ body {
   padding: 5px;
   margin: 2px;
 }
+.canvas-wrapper {
+  margin-left: auto;
+  margin-right: auto; 
+  overflow: auto;
+  width: 100%;
+  flex: 1;
+  padding: 5px 0;
+}
+.cellular-automata-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+.Controls {
+  top: 0; 
+  margin: 1rem;
+  border: 1px #ccc solid;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.Controls .accordion {
+  background-color: #eee;
+}
+.Playback button {
+  margin: 0 .25rem;
+  border: 1px solid #ccc;
+  background-color: #def;
+  line-height: 1rem;
+e

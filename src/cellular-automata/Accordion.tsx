@@ -9,5 +9,5 @@ export const Controls = ({ state, dispatch, updateGrid, running, handleStart, ha
     { label: 'Playback', content: <Playback running={running} handleStart={handleStart} handleStop={handleStop} handleContinue={handleContinue} /> },
   ];
 
-  return <Accordion accordion={accordion} />;
+  return <div className="Controls"><Accordion accordion={accordion} /></div>;
 };

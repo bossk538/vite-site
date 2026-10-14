@@ -125,7 +125,7 @@ function CellularAutomata() {
   return (
     <div className="cellular-automata-screen"> 
       <Controls state={state} dispatch={dispatch} updateGrid={updateGrid} running={running} handleStart={handleStart} handleStop={handleStop} handleReset={handleReset} handleContinue={handleContinue} />
-      <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+      <div className="canvas-wrapper">
         <CanvasGrid grid={grid} onClickCell={onClickCell} colorMap={state.colorMap} width={state.width} height={state.height} rows={state.rows} columns={state.columns} />
       </div>
     </div>

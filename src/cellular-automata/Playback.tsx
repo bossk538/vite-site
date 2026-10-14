@@ -3,7 +3,7 @@ import type { HexColor } from './types';
 
 export const Playback = ({ running, handleStart, handleStop, handleContinue, handleReset }) => {
   return (
-    <div>
+    <div className="Playback">
       { running && <button type="button" onClick={handleStart}>Start Over</button> }
       { !running && <button type="button" onClick={handleStart}>Start</button> }
       { running && <button type="button" onClick={handleStop}>Pause</button> }
