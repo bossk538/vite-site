@@ -16,6 +16,9 @@
   "dependencies": {
     "@react-router/dev": "^7.9.3",
     "@react-router/node": "^7.9.3",
+    "@salt-ds/core": "^1.72.0",
+    "@salt-ds/icons": "^1.18.3",
+    "@salt-ds/theme": "^1.47.0",
     "axios": "^1.20.0",
     "brain.js": "^2.0.0-beta.24",
     "d3": "^7.9.0",
@@ -46,6 +49,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
+    "eslint-plugin-regexp": "^3.3.1",
     "eslint-plugin-storybook": "^10.6.0",
     "globals": "^16.5.0",
     "playwright": "latest",
@@ -54,5 +58,9 @@
     "typescript-eslint": "^8.71.1",
     "vite": "^7.1.7",
     "vitest": "latest"
+  },
+  "allowScripts": {
+    "gl@8.1.6": true,
+    "esbuild@0.28.2": true
   }
 }
