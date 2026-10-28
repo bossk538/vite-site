@@ -1,0 +1,167 @@
+.typewriter {
+  --caret: currentcolor;
+}
+
+.typewriter::before {
+  content: "";
+  animation: typing 13.5s infinite;
+}
+
+.typewriter::after {
+  content: "";
+  border-right: 1px solid var(--caret);
+  animation: blink 0.5s linear infinite;
+}
+
+/* Type the first word one letter at a time. */
+@keyframes typing {
+  0.0000%, 27.3488% { content: ""; }
+  1.1395%, 26.2093% { content: "d"; }
+  2.2791%, 25.0698% { content: "de"; }
+  3.4186%, 23.9302% { content: "dev"; }
+  4.5581%, 22.7907% { content: "deve"; }
+  5.6977%, 21.6512% { content: "devel"; }
+  6.8372%, 20.5116% { content: "develo"; }
+  7.9767%, 19.3721% { content: "develop"; }
+  9.1163%, 18.2326% { content: "develope"; }
+  10.2558%, 17.0930% { content: "developer"; }
+  /* Repeat the same pattern for the remaining words. */
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Swap the typing effect for slower word changes. */
+  .typewriter::after {
+    animation: none;
+  }
+
+  @keyframes sequence-popup {
+    0%, 100% { content: "developer"; }
+    25% { content: "writer"; }
+    50% { content: "reader"; }
+    75% { content: "human"; }
+  }
+
+  .typewriter::before {
+    content: "developer";
+    animation: sequence-popup 12s linear infinite;
+  }
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: skyblue;
+  width: 100px;
+  padding: 1rem;
+}
+.flex div {
+  background-color: white;
+  border-width: .4rem;
+}
+.border-none {
+  border-style: none;
+}
+.border-hidden {
+  border-style: hidden;
+}
+.border-dotted {
+  border-style: dotted;
+}
+.border-dashed {
+  border-style: dashed;
+}
+.border-solid {
+  border-style: solid;
+}
+.border-double {
+  border-style: double;
+}
+.border-groove {
+  border-style: groove;
+}
+.border-ridge {
+  border-style: ridge;
+}
+.border-inset {
+  border-style: inset;
+}
+.border-outset {
+  border-style: outset;
+}
+.grid-wrap {
+  width: 1000px;
+  height: 400px;
+  overflow: auto;
+  margin: 1rem;
+  border: 1px solid #eee;
+  border-radius: .25rem;
+}
+.grid {
+  width: 100%;
+  min-width: 500px;
+  border-collapse: collapse;
+}
+.grid td:first-child {
+  left: 0;
+  position: sticky;
+  font-weight: bold;
+  /* box-shadow: 4px 0 4px -2px rgb(0 0 0 / 0.2), inset -1px 0 0 #d0d4dc; */
+  box-shadow: 10px 5px 5px red;
+}
+.grid th {
+  /* box-shadow: inset 0 -1px 0 #d0d4dc; */
+  box-shadow: 10px 5px 5px red;
+}
+/*
+.grid th:first-child {
+  left: 0;
+  position: sticky;
+  font-weight: bold;
+}
+*/
+  /* box-shadow: 4px 0 4px -2px rgb(0 0 0 / 0.2), inset -1px -1px 0 #d0d4dc; */
+.grid thead {
+  top: 0;
+  position: sticky;
+  z-index:2;
+  box-shadow: 0px 5px 5px #ddd;
+}
+.grid thead tr th {background-color: inherit; }
+.grid thead tr,
+.grid tbody tr { background-color: #fff; }
+.grid tbody tr td:first-child { 
+  background-color: lightgreen;
+  box-shadow: 10px 5px 5px red;
+  z-index: 1;
+}
+.grid tbody tr:nth-child(even) { background-color: #f5f7fa; }
+.grid td { background-color: inherit; }
+.grid th,
+.grid td {
+  white-space: nowrap;
+  padding: 0 50px;
+}
+.grid th {
+  /* box-shadow: 0 4px 6px -2px rgb(0 0 0 / 0.15); */
+  box-shadow: 10px 5px 5px red;
+}
+.grid th:first-child {
+  /* box-shadow:
+    4px 0 6px -2px rgb(0 0 0 / 0.15),
+    0 4px 6px -2px rgb(0 0 0 / 0.15); */
+  box-shadow: 10px 5px 5px red;
+}
+.amount {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: green;
+}
+.amount.negative {
+  color: #c62828;
+}
