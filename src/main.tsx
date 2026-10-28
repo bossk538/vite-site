@@ -3,12 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { TFE } from './2048/2048';
-import { LGR } from './liquid-glass';
-import { CanvasApp } from './canvas';
-import { TicTacToe2 } from './tic-tac-toe2';
-import Asteroids from './asteroids';
-import CellularAutomata from './cellular-automata';
-import { SimulatePurchase } from './banking-cc-app-purchase';
+import { LGR } from './pages/liquid-glass';
+import { CanvasApp } from './pages/canvas';
+import { TicTacToe2 } from './pages/tic-tac-toe2';
+import Asteroids from './pages/asteroids';
+import CellularAutomata from './pages/cellular-automata';
+import { SimulatePurchase } from './pages/banking-cc-app-purchase';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
 createRoot(document.getElementById('root')!).render(

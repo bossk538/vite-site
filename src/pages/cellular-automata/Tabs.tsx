@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs } from '../components/Tabs';
+import { Tabs } from '../../components/Tabs';
 import { GridSetup } from './GridSetup';
 import { NeighborhoodSetup } from './NeighborhoodSetup';
 import { AutomataSetup } from './AutomataSetup';
