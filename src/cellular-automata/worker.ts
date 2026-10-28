@@ -55,8 +55,8 @@ const nextMatrix = (grid: Grid, rows: number, cols: number, nColors: number, w: 
 let _grid: Grid;
 let _state;
 
-onmessage = (e) => {
-  const { action, state, grid, payload } = e.data;
+self.onmessage = (e) => {
+  const { action, state, grid, payload, t0, bitmap } = e.data;
   console.log(`WORKER RECEIVE`, e.data, _state);
   if (action === 'continue') {
     _grid = nextMatrix(_grid, _state.rows, _state.columns, _state.nColors, _state.w, _state.h, _state.automaton, _state.neighborhoodTopology);

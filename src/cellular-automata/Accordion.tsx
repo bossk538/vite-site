@@ -3,10 +3,10 @@ import { Accordion } from '../components/Accordion';
 import { TabsControl } from './Tabs';
 import { Playback } from './Playback';
 
-export const Controls = ({ state, dispatch, updateGrid, running, handleStart, handleStop, handleContinue }) => {
+export const Controls = ({ state, dispatch, updateGrid, running, handleStart, handleStop, handleContinue, canvasRef, handleFileChange, handleAdvance }) => {
   const accordion = [
-    { label: 'Setup', content: <TabsControl state={state} dispatch={dispatch} updateGrid={updateGrid} /> },
-    { label: 'Playback', content: <Playback running={running} handleStart={handleStart} handleStop={handleStop} handleContinue={handleContinue} /> },
+    { label: 'Setup', content: <TabsControl state={state} dispatch={dispatch} updateGrid={updateGrid} canvasRef={canvasRef} handleFileChange={handleFileChange} /> },
+    { label: 'Playback', content: <Playback running={running} handleStart={handleStart} handleStop={handleStop} handleContinue={handleContinue} handleAdvance={handleAdvance} /> },
   ];
 
   return <div className="Controls"><Accordion accordion={accordion} /></div>;

@@ -9,13 +9,16 @@ const randomMatrixN = (rows: number, columns: number, nColors: number): Grid => 
   );
 };
 
-export const InitialStates = ({ state, dispatch, updateGrid }) => {
+export const InitialStates = ({ state, dispatch, updateGrid, canvasRef, handleFileChange }) => {
   const [file, setFile] = useState('');
   const [clusterColors, setClusterColors] = useState(false);
   const [frame, setFrame] = useState(null);
   const localState = useRef(state);
   const workerRef = useRef(null);
+  const workerRef3 = useRef(null);
+  const status = { textContent: '' };
 
+/*
   useEffect(() => {
     workerRef.current = new Worker(new URL('./worker-2.ts', import.meta.url), { type: 'module' });
     workerRef.current.onmessage = (e) => {
@@ -41,6 +44,35 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
       workerRef.current.terminate();
     };
   }, []);
+*/
+
+  useEffect(() => {
+    workerRef3.current = new Worker(new URL('./worker-3.ts', import.meta.url), { type: 'module' });
+    workerRef3.current.onmessage = (e) => {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('bitmaprenderer');
+      console.log(`WORKER3 ONMESSAGE`, canvas, e.data);
+      const { bitmap, t0, error } = e.data;
+      if (error) {
+        status.textContent = `Error: ${error}`;
+        return;
+      }
+
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+
+      // Hand the worker's result straight to the canvas. Zero copy;
+      // the bitmap is consumed and can't be reused afterwards.
+      ctx.transferFromImageBitmap(bitmap);
+
+      status.textContent =
+        `${canvas.width}×${canvas.height} done in ${(performance.now() - t0).toFixed(1)} ms`;
+    };
+    return () => {
+      workerRef3.current.onmessage = null;
+      workerRef3.current.terminate();
+    };
+  }, []);
 
   useEffect(() => {
     console.log(`STATE`, state, localState.current);
@@ -48,7 +80,7 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
     localState.current.colorMap = state.colorMap;
   }, [state]);
 
-  const frameSelection = async (file) => {
+  const _frameSelection = async (file) => {
     for await (const frame of extractVideoFrames(file, { fps: 5, maxFrames: 20 })) {
       //console.log(`Frame ${frame.index} @ ${frame.time.toFixed(2)}s`, frame.pixels);
       // frame.pixels[y][x] => [r, g, b]
@@ -71,6 +103,13 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
   };
 
   const imageLoad = async (file) => {
+    status.textContent = 'Processing…';
+    const t0 = performance.now();
+
+    const bitmap = await createImageBitmap(file);
+    console.log(`BITMAP`, bitmap);
+    workerRef3.current.postMessage({ bitmap, t0, action: 'bitmap' }, [bitmap]);
+    return;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (e) => {
@@ -120,7 +159,7 @@ export const InitialStates = ({ state, dispatch, updateGrid }) => {
     };
   };
 
-  const handleFileChange = (e) => {
+  const _handleFileChange = (e) => {
     const file = e.target.files[0];
     const [type, format] = file.type.split('/');
     switch (type) {
