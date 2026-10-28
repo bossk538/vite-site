@@ -1,3 +1,4 @@
+/* source: https://bolterandchainsword.com/topic/352780-paint-color-hexadecimal-codes/ */
 :root {
   --abaddon-black: #231f20;
   --administratum-grey: #949b94;
@@ -124,6 +125,7 @@
   --relictor-gold: #e8c88d;
   --retributor-armour: #ceae65;
   --rhinox-hide: #493335;
+  --rotting-flesh: #b8c39e;
   --runefang-steel: #c6cbd0;
   --runelord-brass: #bcafa0;
   --russ-grey: #547588;
@@ -158,6 +160,7 @@
   --tau-light-ochre: #bf6e1d;
   --teclis-blue: #317fc1;
   --temple-guard-blue: #329b8d;
+  --tentacle-pink: #ffbacd;
   --terminatus-stone: #bdaa9b;
   --thousand-sons-blue: #18abcc;
   --thunderhawk-blue: #417175;
@@ -171,7 +174,7 @@
   --ushabti-bone: #bcbc80;
   --valhallan-blizzard: #fdf9ee;
   --verminlord-hide: #773a37;
-  --waaagh!-flesh: #20552b;
+  --waaagh-flesh: #20552b;
   --warboss-green: #3e7f5d;
   --warpfiend-grey: #6c6a75;
   --warplock-bronze: #695154;
