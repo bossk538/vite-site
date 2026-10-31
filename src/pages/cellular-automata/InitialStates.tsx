@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { extractVideoFrames } from '/src/utils/extractVideoFrames';
+import { extractVideoFrames } from '../../utils/extractVideoFrames';
 import { ColorMap } from './ColorMap';
 import type { Grid } from './types';
 
