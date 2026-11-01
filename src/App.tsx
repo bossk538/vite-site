@@ -33,6 +33,7 @@ function App() {
           <li><Link to="/banking-cc-app-purchase">Simulate Purchase</Link></li>
           <li><Link to="/asteroids">Asteroids</Link></li>
           <li><Link to="/cellular-automata">Cellular Automata</Link></li>
+          <li><Link to="/sound-generator">Sound Generator</Link></li>
         </ul>
       </div>
       <p className="read-the-docs">
