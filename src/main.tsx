@@ -9,6 +9,7 @@ import { TicTacToe2 } from './pages/tic-tac-toe2';
 import Asteroids from './pages/asteroids';
 import SoundGenerator from './pages/sound-generator';
 import CellularAutomata from './pages/cellular-automata';
+import MusicXMLViewer from './pages/music-xml-viewer';
 import { SimulatePurchase } from './pages/banking-cc-app-purchase';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/asteroids" element={<Asteroids />} />
         <Route path="/cellular-automata" element={<CellularAutomata />} />
         <Route path="/sound-generator" element={<SoundGenerator />} />
+        <Route path="/music-xml-viewer" element={<MusicXMLViewer />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
