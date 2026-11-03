@@ -34,6 +34,7 @@ function App() {
           <li><Link to="/asteroids">Asteroids</Link></li>
           <li><Link to="/cellular-automata">Cellular Automata</Link></li>
           <li><Link to="/sound-generator">Sound Generator</Link></li>
+          <li><Link to="/musicxml">MusicXML</Link></li>
         </ul>
       </div>
       <p className="read-the-docs">
