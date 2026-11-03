@@ -16,12 +16,14 @@
   "dependencies": {
     "@react-router/dev": "^7.9.3",
     "@react-router/node": "^7.9.3",
+    "@stringsync/musicxml": "^0.4.0",
     "axios": "^1.20.0",
     "brain.js": "^2.0.0-beta.24",
     "d3": "^7.9.0",
     "isbot": "^5",
     "liquid-glass-react": "^1.1.1",
     "ml-kmeans": "^7.0.1",
+    "opensheetmusicdisplay": "^2.2.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.18.3"
