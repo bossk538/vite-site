@@ -24,6 +24,7 @@
     "liquid-glass-react": "^1.1.1",
     "ml-kmeans": "^7.0.1",
     "opensheetmusicdisplay": "^2.2.1",
+    "osmd-audio-player": "^0.7.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.18.3"
