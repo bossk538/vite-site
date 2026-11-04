@@ -183,7 +183,7 @@ export function buildEflat() {
     return { step, alter: SHARPED.has(step) ? 1 : null, octave: startOctave + octavesUp };
   };
 
-  const makeNote = ({ step, alter, octave }, duration, type, staff, voice, stem) => {
+  const makeNote = ({ step, alter, octave, duration, type, staff, voice, stem }) => {
     const pitch = new elements.Pitch()
       .setStep(new elements.Step({ contents: [step] }))
       .setOctave(new elements.Octave({ contents: [octave] }));
@@ -199,7 +199,6 @@ export function buildEflat() {
 
   const measures = bars.map((bar, i) => {
     const values = [];
-
     if (i === 0) {
       values.push(
         new elements.Attributes()
@@ -231,19 +230,19 @@ export function buildEflat() {
 
     // Right hand: staff 1, voice 1, one octave above the left hand (starts E4).
     let barDuration = 0;
-    for (const [deg, dur, type] of bar) {
+    for (const [deg, duration, type] of bar) {
       const { step, alter, octave } = pitchAt(deg, 4);
-      values.push(makeNote({ step, alter, octave }, dur, type, 1, 1, 'up'));
-      barDuration += dur;
+      values.push(makeNote({ step, alter, octave, duration, type, staff: 1, voice: 1, stem: 'up' }));
+      barDuration += duration;
     }
 
     // Rewind to the start of the bar for the left hand.
     values.push(new elements.Backup().setDuration(new elements.Duration({ contents: [barDuration] })));
 
     // Left hand: staff 2, voice 5, starting on E3.
-    for (const [deg, dur, type] of bar) {
+    for (const [deg, duration, type] of bar) {
       const { step, alter, octave } = pitchAt(deg, 3);
-      values.push(makeNote({ step, alter, octave }, dur, type, 2, 5, 'down'));
+      values.push(makeNote({ step, alter, octave, duration, type, staff: 2, voice: 5, stem: 'down' }));
     }
 
     if (i === bars.length - 1) {
