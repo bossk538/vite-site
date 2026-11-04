@@ -129,59 +129,51 @@ export function buildEflat() {
   const SHARPED = new Set(['F', 'G', 'C', 'D']); // E major: F# C# G# D#
   const bars = [
     [
-        [ 0, 1, "quarter", 'E', null, ],
-        [ 1, 1, "quarter", 'F', 1, ],
-        [ 2, 1, "quarter", 'G', 1, ],
-        [ 3, 1, "quarter", 'A', null, ]
+        [ 1, "quarter", 'E', null, 4],
+        [ 1, "quarter", 'F', 1, 4],
+        [ 1, "quarter", 'G', 1, 4],
+        [ 1, "quarter", 'A', null, 4]
     ],
     [
-        [ 4, 1, "quarter", 'B', null, ],
-        [ 5, 1, "quarter", 'C', 1, ],
-        [ 6, 1, "quarter", 'D', 1, ],
-        [ 7, 1, "quarter", 'E', null, ]
+        [ 1, "quarter", 'B', null, 4],
+        [ 1, "quarter", 'C', 1, 5],
+        [ 1, "quarter", 'D', 1, 5],
+        [ 1, "quarter", 'E', null, 5]
     ],
     [
-        [ 8, 1, "quarter", 'F', 1, ],
-        [ 9, 1, "quarter", 'G', 1, ],
-        [ 10, 1, "quarter", 'A', null, ],
-        [ 11, 1, "quarter", 'B', null, ]
+        [ 1, "quarter", 'F', 1, 5],
+        [ 1, "quarter", 'G', 1, 5],
+        [ 1, "quarter", 'A', null, 5],
+        [ 1, "quarter", 'B', null, 5]
     ],
     [
-        [ 12, 1, "quarter", 'C', 1, ],
-        [ 13, 1, "quarter", 'D', 1, ],
-        [ 14, 1, "quarter", 'E', null, ],
-        [ 13, 1, "quarter", 'D', 1, ]
+        [ 1, "quarter", 'C', 1, 6],
+        [ 1, "quarter", 'D', 1, 6],
+        [ 1, "quarter", 'E', null, 6],
+        [ 1, "quarter", 'D', 1, 6]
     ],
     [
-        [ 12, 1, "quarter", 'C', 1, ],
-        [ 11, 1, "quarter", 'B', null, ],
-        [ 10, 1, "quarter", 'A', null, ],
-        [ 9, 1, "quarter", 'G', 1, ]
+        [ 1, "quarter", 'C', 1, 6],
+        [ 1, "quarter", 'B', null, 5],
+        [ 1, "quarter", 'A', null, 5],
+        [ 1, "quarter", 'G', 1, 5]
     ],
     [
-        [ 8, 1, "quarter", 'F', 1, ],
-        [ 7, 1, "quarter", 'E', null, ],
-        [ 6, 1, "quarter", 'D', 1, ],
-        [ 5, 1, "quarter", 'C', 1, ]
+        [ 1, "quarter", 'F', 1, 5],
+        [ 1, "quarter", 'E', null, 5],
+        [ 1, "quarter", 'D', 1, 5],
+        [ 1, "quarter", 'C', 1, 5]
     ],
     [
-        [ 4, 1, "quarter", 'B', null, ],
-        [ 3, 1, "quarter", 'A', null, ],
-        [ 2, 1, "quarter", 'G', 1, ],
-        [ 1, 1, "quarter", 'F', 1, ]
+        [ 1, "quarter", 'B', null, 4],
+        [ 1, "quarter", 'A', null, 4],
+        [ 1, "quarter", 'G', 1, 4],
+        [ 1, "quarter", 'F', 1, 4]
     ],
     [
-        [ 0, 4, "whole", 'E', null ]
+        [ 4, "whole", 'E', null, 4]
     ]
   ];
-
-  // Scale degrees 0..14 = E3 .. E5 for the left hand.
-  const pitchAt = (degree, startOctave, s0, a0, o0) => {
-    const step = STEPS[degree % 7];
-    // Octave numbers change at C: E F G A B stay, C D move up.
-    const octavesUp = Math.floor(degree / 7) + (degree % 7 >= 5 ? 1 : 0);
-    return { step: s0, alter: a0, octave: startOctave + octavesUp };
-  };
 
   const makeNote = ({ step, alter, octave, duration, type, staff, voice, stem }) => {
     const pitch = new elements.Pitch()
@@ -230,8 +222,7 @@ export function buildEflat() {
 
     // Right hand: staff 1, voice 1, one octave above the left hand (starts E4).
     let barDuration = 0;
-    for (const [deg, duration, type, s0, a0, o0] of bar) {
-      const { step, alter, octave } = pitchAt(deg, 4, s0, a0, o0);
+    for (const [duration, type, step, alter, octave] of bar) {
       values.push(makeNote({ step, alter, octave, duration, type, staff: 1, voice: 1, stem: 'up' }));
       barDuration += duration;
     }
@@ -240,9 +231,8 @@ export function buildEflat() {
     values.push(new elements.Backup().setDuration(new elements.Duration({ contents: [barDuration] })));
 
     // Left hand: staff 2, voice 5, starting on E3.
-    for (const [deg, duration, type, s0, a0, o0] of bar) {
-      const { step, alter, octave } = pitchAt(deg, 3, s0, a0, o0);
-      values.push(makeNote({ step, alter, octave, duration, type, staff: 2, voice: 5, stem: 'down' }));
+    for (const [duration, type, step, alter, octave] of bar) {
+      values.push(makeNote({ step, alter, octave: octave - 2, duration, type, staff: 2, voice: 5, stem: 'down' }));
     }
 
     if (i === bars.length - 1) {
