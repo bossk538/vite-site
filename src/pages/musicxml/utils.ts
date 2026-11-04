@@ -1,54 +1,5 @@
 import { elements, MusicXML } from '@stringsync/musicxml';
 
-
-  const bars = [
-    [
-        [ 0, 1, "quarter" ],
-        [ 1, 1, "quarter" ],
-        [ 2, 1, "quarter" ],
-        [ 3, 1, "quarter" ]
-    ],
-    [
-        [ 4, 1, "quarter" ],
-        [ 5, 1, "quarter" ],
-        [ 6, 1, "quarter" ],
-        [ 7, 1, "quarter" ]
-    ],
-    [
-        [ 8, 1, "quarter" ],
-        [ 9, 1, "quarter" ],
-        [ 10, 1, "quarter" ],
-        [ 11, 1, "quarter" ]
-    ],
-    [
-        [ 12, 1, "quarter" ],
-        [ 13, 1, "quarter" ],
-        [ 14, 1, "quarter" ],
-        [ 13, 1, "quarter" ]
-    ],
-    [
-        [ 12, 1, "quarter" ],
-        [ 11, 1, "quarter" ],
-        [ 10, 1, "quarter" ],
-        [ 9, 1, "quarter" ]
-    ],
-    [
-        [ 8, 1, "quarter" ],
-        [ 7, 1, "quarter" ],
-        [ 6, 1, "quarter" ],
-        [ 5, 1, "quarter" ]
-    ],
-    [
-        [ 4, 1, "quarter" ],
-        [ 3, 1, "quarter" ],
-        [ 2, 1, "quarter" ],
-        [ 1, 1, "quarter" ]
-    ],
-    [
-        [ 0, 4, "whole" ]
-    ]
-  ];
-
 /**
  * Builds a 2-octave E-major scale for piano in parallel octaves,
  * quarter notes, common time (4/4). The left hand starts on E3
@@ -176,6 +127,53 @@ export function buildEflat() {
   const DIVISIONS = 1; // 1 division = 1 quarter note
   const STEPS = ['E', 'F', 'G', 'A', 'B', 'C', 'D'];
   const SHARPED = new Set(['F', 'G', 'C', 'D']); // E major: F# C# G# D#
+  const bars = [
+    [
+        [ 0, 1, "quarter" ],
+        [ 1, 1, "quarter" ],
+        [ 2, 1, "quarter" ],
+        [ 3, 1, "quarter" ]
+    ],
+    [
+        [ 4, 1, "quarter" ],
+        [ 5, 1, "quarter" ],
+        [ 6, 1, "quarter" ],
+        [ 7, 1, "quarter" ]
+    ],
+    [
+        [ 8, 1, "quarter" ],
+        [ 9, 1, "quarter" ],
+        [ 10, 1, "quarter" ],
+        [ 11, 1, "quarter" ]
+    ],
+    [
+        [ 12, 1, "quarter" ],
+        [ 13, 1, "quarter" ],
+        [ 14, 1, "quarter" ],
+        [ 13, 1, "quarter" ]
+    ],
+    [
+        [ 12, 1, "quarter" ],
+        [ 11, 1, "quarter" ],
+        [ 10, 1, "quarter" ],
+        [ 9, 1, "quarter" ]
+    ],
+    [
+        [ 8, 1, "quarter" ],
+        [ 7, 1, "quarter" ],
+        [ 6, 1, "quarter" ],
+        [ 5, 1, "quarter" ]
+    ],
+    [
+        [ 4, 1, "quarter" ],
+        [ 3, 1, "quarter" ],
+        [ 2, 1, "quarter" ],
+        [ 1, 1, "quarter" ]
+    ],
+    [
+        [ 0, 4, "whole" ]
+    ]
+  ];
 
   // Scale degrees 0..14 = E3 .. E5 for the left hand.
   const pitchAt = (degree, startOctave) => {
@@ -184,12 +182,6 @@ export function buildEflat() {
     const octavesUp = Math.floor(degree / 7) + (degree % 7 >= 5 ? 1 : 0);
     return { step, alter: SHARPED.has(step) ? 1 : null, octave: startOctave + octavesUp };
   };
-
-  // Up 14 notes (E3..D#5), down 14 notes (E5..F#3) = 7 bars of quarters,
-  // then a final E3 whole note in bar 8.
-//  const degrees = [];
-//  for (let d = 0; d < 14; d++) degrees.push(d);
-//  for (let d = 14; d > 0; d--) degrees.push(d);
 
   const makeNote = ({ step, alter, octave }, duration, type, staff, voice, stem) => {
     const pitch = new elements.Pitch()
@@ -204,13 +196,6 @@ export function buildEflat() {
       .setStem(new elements.Stem({ contents: [stem] }))
       .setStaff(new elements.Staff({ contents: [staff] }));
   };
-
-  // Each bar is a list of [degree, duration, type].
-//  const bars = [];
-//  for (let i = 0; i < degrees.length; i += 4) {
-//    bars.push(degrees.slice(i, i + 4).map((d) => [d, 1, 'quarter']));
-//  }
-//  bars.push([[0, 4, 'whole']]);
 
   const measures = bars.map((bar, i) => {
     const values = [];
@@ -247,7 +232,8 @@ export function buildEflat() {
     // Right hand: staff 1, voice 1, one octave above the left hand (starts E4).
     let barDuration = 0;
     for (const [deg, dur, type] of bar) {
-      values.push(makeNote(pitchAt(deg, 4), dur, type, 1, 1, 'up'));
+      const { step, alter, octave } = pitchAt(deg, 4);
+      values.push(makeNote({ step, alter, octave }, dur, type, 1, 1, 'up'));
       barDuration += dur;
     }
 
@@ -256,7 +242,8 @@ export function buildEflat() {
 
     // Left hand: staff 2, voice 5, starting on E3.
     for (const [deg, dur, type] of bar) {
-      values.push(makeNote(pitchAt(deg, 3), dur, type, 2, 5, 'down'));
+      const { step, alter, octave } = pitchAt(deg, 3);
+      values.push(makeNote({ step, alter, octave }, dur, type, 2, 5, 'down'));
     }
 
     if (i === bars.length - 1) {
