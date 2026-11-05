@@ -29,6 +29,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/cellular-automata" element={<CellularAutomata />} />
         <Route path="/sound-generator" element={<SoundGenerator />} />
         <Route path="/musicxml" element={<MusicXML />} />
+        <Route path="/music-xml-viewer" element={<MusicXMLViewer />} />
         <Route path="/music-xml-player" element={<MusicXMLPlayer />} />
       </Routes>
     </BrowserRouter>
