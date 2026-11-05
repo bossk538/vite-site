@@ -295,7 +295,57 @@ function shuffle(array) {
   }
   return result;
 }
-const row = shuffle(Array.from({ length: 12 }, (_, i) => i));
+class Row {
+  constructor(init) {
+    if (Array.isArray(init)) {
+      this.row = init.map(pc => ({ pc, octave: 4 }));
+    } else {
+      this.row = shuffle(Array.from({ length: 12 }, (_, i) => ({ pc: i, octave: 4 })));
+    }
+  }
+  transpose(interval) {
+    for (const item of this.row) {
+      const p = item.pc + 12 * item.octave;
+      item.pc = p % 12;
+      item.octave = Math.floor(p / 12);
+    }
+  }
+  multiply(factor) {
+    for (const item of this.row) {
+      item.pc = (factor * item.pc) % 12;
+    }
+  }
+  invert() {
+    let p0 = null;
+    for (const item of this.row) {
+      if (p0 === null) {
+        p0 = item.pc + 12 * item.octave;
+      } else {
+        const p = 2 * p0 - (item.pc + 12 * item.octave);
+        item.pc = p % 12;
+        item.octave = Math.floor(p / 12);
+      }
+    }
+  }
+  reverse() {
+    this.row.reverse();
+  }
+  pitches() {
+    return this.row.map(({ pc, octave }) => ({ step: chromatic[pc].step, alter: chromatic[pc].alter, octave }));
+  }
+  pitchesXml() {
+    return this.row.map(({ pc, octave }) => `<pitch><step>${chromatic[pc].step}</step><alter>${chromatic[pc].alter}</alter><octave>${octave}</octave></pitch>`);
+  }
+  compose(row) {
+    const newRow = [];
+    for (let i = 0; i < 12; i++) {
+      const mapped = row[this.row[i].pc];
+      newRow.push({ ...mapped });
+    }
+    this.row = newRow;
+  }
+}
+const row = new Row();
 const _work = (title) => {
   const out = [];
   out.push(`<work>`);
@@ -305,7 +355,7 @@ const _work = (title) => {
   out.push(`</work>`);
   return out;
 };
-const _partList = (parts) => {
+const _partList = (parts, meausre) => {
   const out = [];
   out.push(`<part-list>`);
   for (const part of parts) {
@@ -323,7 +373,7 @@ const ids = {
   'Viola': 'P3',
   'Cello': 'P4'
 };
-const measures = [];
+const measures = Array.from({ length: 10 });
 const _part = (part) => {
   const out = [];
   out.push(`<part id="${ids[part]}">`);
@@ -333,12 +383,16 @@ const _part = (part) => {
 export const foo = () => {
   const out = [];
   out.push(`<?xml version="1.0" encoding="UTF-8"?>`);
-  out.push(`<score-partwise version="4.0">`);
+  out.push(`<score-timewise version="4.0">`);
   out.push(..._work('I am a title'));
   out.push(..._partList(partList));
-  for (const part of parts) {
-    out.push(..._part(part));
+  for (let measure = 1; meausre < 12; measure++) {
+    out.push(`<measure number="${measure}">`);
+    for (const part of parts) {
+      out.push(..._part(part, measure));
+    }
+    out.push(`</measure>`);
   }
-  out.push(`</score-partwise>`);
+  out.push(`</score-timewise>`);
   return out.join('');
 };
