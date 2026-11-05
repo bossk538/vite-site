@@ -1,5 +1,15 @@
 import { elements, MusicXML } from '@stringsync/musicxml';
 
+const makePitch = ({ step, alter, octave }) => {
+  const pitch = new elements.Pitch()
+    .setStep(new elements.Step({ contents: [step] }))
+    .setOctave(new elements.Octave({ contents: [octave] }));
+  if (alter !== null) {
+    pitch.setAlter(new elements.Alter({ contents: [alter] }));
+  }
+  return pitch;
+};
+
 /**
  * Builds a 2-octave E-major scale for piano in parallel octaves,
  * quarter notes, common time (4/4). The left hand starts on E3
@@ -125,14 +135,12 @@ export function buildEMajorScaleParallelOctaves() {
 
 export function buildEflat() {
   const DIVISIONS = 1; // 1 division = 1 quarter note
-  const STEPS = ['E', 'F', 'G', 'A', 'B', 'C', 'D'];
-  const SHARPED = new Set(['F', 'G', 'C', 'D']); // E major: F# C# G# D#
   const bars = [
     [
-        [ 1, "quarter", 'E', null, 4],
+        [ 1, "quarter", 'E', 0, 4],
         [ 1, "quarter", 'F', 1, 4],
         [ 1, "quarter", 'G', 1, 4],
-        [ 1, "quarter", 'A', null, 4]
+        [ 1, "quarter", 'A', 0, 4]
     ],
     [
         [ 1, "quarter", 'B', null, 4],
@@ -176,10 +184,7 @@ export function buildEflat() {
   ];
 
   const makeNote = ({ step, alter, octave, duration, type, staff, voice, stem }) => {
-    const pitch = new elements.Pitch()
-      .setStep(new elements.Step({ contents: [step] }))
-      .setOctave(new elements.Octave({ contents: [octave] }));
-    if (alter !== null) pitch.setAlter(new elements.Alter({ contents: [alter] }));
+    const pitch = makePitch({ step, alter, octave });
 
     return new elements.Note()
       .setVariation([null, pitch, new elements.Duration({ contents: [duration] }), []])
@@ -267,3 +272,73 @@ export function buildEflat() {
 
   return musicXml.serialize();
 }
+
+const chromatic = [
+  { step: 'C', alter: 0, octave: 4 },
+  { step: 'C', alter: 1, octave: 4 },
+  { step: 'D', alter: 0, octave: 4 },
+  { step: 'D', alter: 1, octave: 4 },
+  { step: 'E', alter: 0, octave: 4 },
+  { step: 'F', alter: 0, octave: 4 },
+  { step: 'F', alter: 1, octave: 4 },
+  { step: 'G', alter: 0, octave: 4 },
+  { step: 'G', alter: 1, octave: 4 },
+  { step: 'A', alter: 0, octave: 4 },
+  { step: 'A', alter: 1, octave: 4 },
+  { step: 'B', alter: 0, octave: 4 },
+];
+function shuffle(array) {
+  const result = [...array]; // copy so the original isn't changed
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // 0 ≤ j ≤ i
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+const row = shuffle(Array.from({ length: 12 }, (_, i) => i));
+const _work = (title) => {
+  const out = [];
+  out.push(`<work>`);
+  out.push(`<work-title>`);
+  out.push(title);
+  out.push(`</work-title>`);
+  out.push(`</work>`);
+  return out;
+};
+const _partList = (parts) => {
+  const out = [];
+  out.push(`<part-list>`);
+  for (const part of parts) {
+    out.push(`<score-part id="${ids[part]}">`);
+    out.push(part);
+    out.push(`</score-part>`);
+  }
+  out.push(`</part-list>`);
+  return out;
+};
+const partList = ['Violin 1', 'Violin 2', 'Viola', 'Cello'];
+const ids = {
+  'Violin 1': 'P1',
+  'Violin 2': 'P2',
+  'Viola': 'P3',
+  'Cello': 'P4'
+};
+const measures = [];
+const _part = (part) => {
+  const out = [];
+  out.push(`<part id="${ids[part]}">`);
+  out.push(`</part>`);
+};
+
+export const foo = () => {
+  const out = [];
+  out.push(`<?xml version="1.0" encoding="UTF-8"?>`);
+  out.push(`<score-partwise version="4.0">`);
+  out.push(..._work('I am a title'));
+  out.push(..._partList(partList));
+  for (const part of parts) {
+    out.push(..._part(part));
+  }
+  out.push(`</score-partwise>`);
+  return out.join('');
+};

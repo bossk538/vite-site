@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { buildEMajorScaleParallelOctaves, buildEflat } from './utils';
+import { buildEMajorScaleParallelOctaves, buildEflat, foo } from './utils';
 
 export default function MusicXmlGenerator() {
   const [xmlOutput, setXmlOutput] = useState('');
@@ -12,6 +12,9 @@ export default function MusicXmlGenerator() {
         break;
       case 'EflatMaj':
         setXmlOutput(buildEflat());
+        break;
+      case 'foo':
+        setXmlOutput(foo());
         break;
       default:
         throw new Error(`Unknown type ${score}`);
