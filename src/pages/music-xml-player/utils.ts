@@ -14,6 +14,17 @@ const _partList = (parts, meausre) => {
   out.push(`<part-list>`);
   for (const part of parts) {
     out.push(`<score-part id="${ids[part]}">`);
+    out.push(`
+      <part-name>${part}</part-name>
+      <score-instrument id="P1-I1">
+        <instrument-name>Violin</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P1-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>41</midi-program>
+        <volume>100</volume>
+      </midi-instrument>
+    `);
     out.push(part);
     out.push(`</score-part>`);
   }
@@ -28,42 +39,28 @@ const ids = {
   'Viola': 'P3',
   'Cello': 'P4'
 };
-const notes = [
-  'eighth',
-  'eighth',
-  'quarter',
-  'quarter',
-  'eighth',
-  'eighth',
-  'quarter',
-  'quarter',
-  'eighth',
-  'eighth',
-  'quarter',
-  'quarter',
-];
 const n = [
-  { type: 4, dots: 1, dur: 3 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 4, dots: 0, dur: 2 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 8, dots: 0, dur: 1 },
-  { type: 2, dots: 0, dur: 4 },
+  { type: 4, dots: 1, dur: 30 },
+  { type: 8, dots: 0, dur: 10 },
+  { type: 8, dots: 0, dur: 10 },
+  { type: 8, dots: 0, dur: 10 },
+  { type: 4, dots: 1, dur: 30 },
+  { type: 8, dots: 0, dur: 10 },
+  { type: 8, dots: 0, dur: 10 },
+  { type: 8, dots: 0, dur: 10 },
+  { type: 4, dots: 1, dur: 30 },
+  { type: 16, dots: 0, dur: 5 },
+  { type: 16, dots: 0, dur: 5 },
+  { type: 2, dots: 0, dur: 40 },
 ];
 const nt = {
   1: 'whole',
   2: 'half',
   4: 'quarter',
   8: 'eighth',
-  16: 'sixteenth',
-  32: 'thirtysecond',
-  64: 'sixtyforth',
+  16: '16th',
+  32: '32nd',
+  64: '64th',
 }
 const _notes = (row, part, measure) => {
   const out = [];
@@ -104,7 +101,7 @@ export const foo = (row) => {
   const out = [];
   out.push(`<?xml version="1.0" encoding="UTF-8"?>`);
   out.push(`<score-partwise version="4.0">`);
-  out.push(..._work('I am a title'));
+  out.push(..._work('Untitled'));
   out.push(..._partList(partList));
   for (const part of partList) {
     out.push(..._part(row, part));

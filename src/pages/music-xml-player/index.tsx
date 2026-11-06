@@ -39,7 +39,6 @@ export default function MusicXMLPlayer() {
 
   // 2. Load and render new MusicXML files into both the visual and audio engines
   useEffect(() => {
-  console.log(`MUSIC XML DAta`, musicXmlData)
     if (musicXmlData && osmdRef.current && playerRef.current) {
       setIsPlayerReady(false);
       setIsPlaying(false);
@@ -86,6 +85,12 @@ export default function MusicXMLPlayer() {
       playerRef.current.pause();
       setIsPlaying(false);
     } else {
+// OpenSheetMusicDisplay
+      for (const instrument of osmdRef.current.Sheet.Instruments) {
+	      for (const voice of instrument.Voices) {
+		      voice.Volume = 2;
+	      }
+      }
       playerRef.current.play();
       setIsPlaying(true);
     }
