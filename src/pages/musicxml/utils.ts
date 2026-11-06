@@ -303,11 +303,17 @@ class Row {
       this.row = shuffle(Array.from({ length: 12 }, (_, i) => ({ pc: i, octave: 4 })));
     }
   }
+  static #toInt({ pc, octave }) {
+    return pc + 12 * octave;
+  }
+  static #assign(item, p) {
+    item.pc = p % 12;
+    item.octave = Math.floor(p / 12);
+  }
   transpose(interval) {
     for (const item of this.row) {
-      const p = item.pc + 12 * item.octave;
-      item.pc = p % 12;
-      item.octave = Math.floor(p / 12);
+      const p = this.#toInt(item);
+      this.#assign(item, p);
     }
   }
   multiply(factor) {
@@ -319,11 +325,10 @@ class Row {
     let p0 = null;
     for (const item of this.row) {
       if (p0 === null) {
-        p0 = item.pc + 12 * item.octave;
+        p0 = this.#toInt(item);
       } else {
-        const p = 2 * p0 - (item.pc + 12 * item.octave);
-        item.pc = p % 12;
-        item.octave = Math.floor(p / 12);
+        const p = 2 * p0 - this.#toInt(item);
+        this.#assign(item, p);
       }
     }
   }
@@ -344,15 +349,17 @@ class Row {
     }
     this.row = newRow;
   }
-  contour(strategy) {
-    if (strategy === 'closest') {
+  contour(strategy, options) {
+    if (strategy === 'closest') { // also can be a threshold so 5ths and 4ths are preserved, etc.
       for (let i = 1; i < 12; i++) {
-        const pc0 = this.row[i - 1] + 12 * this.row[i - 1].octave;
-        const pc1 = this.row[i].pc + 12 * this.row[i].octave;
+        const pc0 = this.#toInt(this.row[i - 1]);
+        const pc1 = this.#toInt(this.row[i]);
         if (Math.abs(pc0 - pc1) > 6) {
           // need to adjust octave
         }
       }
+    } else if (strategy === 'invert') {
+    } else if (strategy === 'clamp') {
     }
   }
 }
