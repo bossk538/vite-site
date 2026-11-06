@@ -1,0 +1,13 @@
+.MusicXMLPlayer {
+  padding: 20px;
+  font-family: sans-serif;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.canvas {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-height: 400px;
+  background-color: #fff;
+  overflow-x: auto;
+}

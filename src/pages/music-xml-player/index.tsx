@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
 import AudioPlayer from 'osmd-audio-player';
+import { foo } from './utils';
+import './style.css';
 
 export default function MusicXMLPlayer() {
   const [musicXmlData, setMusicXmlData] = useState(null);
@@ -36,6 +38,7 @@ export default function MusicXMLPlayer() {
 
   // 2. Load and render new MusicXML files into both the visual and audio engines
   useEffect(() => {
+  console.log(`MUSIC XML DAta`, musicXmlData)
     if (musicXmlData && osmdRef.current && playerRef.current) {
       setIsPlayerReady(false);
       setIsPlaying(false);
@@ -87,8 +90,23 @@ export default function MusicXMLPlayer() {
     }
   };
 
+  const handleDownload = () => {
+    const score = 'row';
+    const blob = new Blob([musicXmlData], { type: 'application/vnd.recordare.musicxml+xml' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${score}.musicxml`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const generateScore = () => {
+    setMusicXmlData(foo());
+  };
+
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '1000px', margin: '0 auto' }}>
+    <div className="MusicXMLPlayer">
       <h2>MusicXML Sheet Music Viewer & Audio Player</h2>
 
       {/* Upload controls */}
@@ -98,7 +116,13 @@ export default function MusicXMLPlayer() {
           accept=".musicxml,.xml"
           onChange={handleFileUpload}
         />
-        {fileName && <p>Loaded: <strong>{fileName}</strong></p>}
+        {fileName && <span>Loaded: <strong>{fileName}</strong></span>}
+        {musicXmlData && (
+          <button onClick={handleDownload} >
+            Download .musicxml File
+          </button>
+        )}
+        <button onClick={generateScore}>Build</button>
       </div>
 
       {/* Audio controls */}
@@ -126,13 +150,7 @@ export default function MusicXMLPlayer() {
       {/* Visual Canvas Target */}
       <div
         ref={divRef}
-        style={{
-          border: '1px solid #ccc',
-          padding: '10px',
-          minHeight: '400px',
-          backgroundColor: '#fff',
-          overflowX: 'auto'
-        }}
+        className="canvas"
       />
     </div>
   );
