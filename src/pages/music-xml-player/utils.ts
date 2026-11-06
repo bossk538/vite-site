@@ -28,19 +28,36 @@ const ids = {
   'Viola': 'P3',
   'Cello': 'P4'
 };
+const notes = [
+  'eighth',
+  'eighth',
+  'quarter',
+  'quarter',
+  'eighth',
+  'eighth',
+  'quarter',
+  'quarter',
+  'eighth',
+  'eighth',
+  'quarter',
+  'quarter',
+];
 const measures = Array.from({ length: 10 });
 const _notes = (row, part, measure) => {
   const out = [];
-  const pitches = row.pitchesXml();
+  const pitches = row.pitches();
   row.transpose(1);
   row.invert();
-  for (const pitch of pitches) {
+  for (let i = 0; i < pitches.length; i++) {
+    const pitch = pitches[i];
+    const pitchNum = Row.pitchNumber(pitch);
+    const type = notes[i];
     out.push(`<note>`);
-    out.push(...pitch);
-    out.push(`<duration>1</duration>`);
+    out.push(...Row.pitchXml(pitch));
+    out.push(`<duration>${type === 'quarter' ? 2 : 1}</duration>`);
     out.push(`<voice>1</voice>`);
-    out.push(`<type>quarter</type>`);
-    out.push(`<stem>up</stem>`);
+    out.push(`<type>${type}</type>`);
+    out.push(`<stem>${pitchNum > 52 ? 'down' : 'up' }</stem>`);
     out.push(`<staff>1</staff>`);
     out.push(`</note>`);
   }

@@ -12,6 +12,15 @@ const chromatic = [
   { step: 'A', alter: 1, octave: 4 },
   { step: 'B', alter: 0, octave: 4 },
 ];
+const revNote = {
+  C: 0,
+  D: 2,
+  E: 4,
+  F: 5,
+  G: 7,
+  A: 9,
+  B: 11,
+};
 function shuffle(array) {
   const result = [...array]; // copy so the original isn't changed
   for (let i = result.length - 1; i > 0; i--) {
@@ -73,11 +82,17 @@ export class Row {
   pitches() {
     return this.row.map(({ pc, octave }) => ({ step: chromatic[pc].step, alter: chromatic[pc].alter, octave }));
   }
-  static pitchXml({ pc, octave}) {
+  static #pitchXml({ pc, octave}) {
     return `<pitch><step>${chromatic[pc].step}</step><alter>${chromatic[pc].alter}</alter><octave>${octave}</octave></pitch>`;
   }
+  static pitchXml({ step, alter, octave}) {
+    return `<pitch><step>${step}</step><alter>${alter}</alter><octave>${octave}</octave></pitch>`;
+  }
+  static pitchNumber({ step, alter, octave}) {
+    return revNote[step] + (alter ?? 0) + 12 * octave;
+  }
   pitchesXml() {
-    return this.row.map(Row.pitchXml);
+    return this.row.map(Row.#pitchXml);
   }
   compose(row) {
     const newRow = [];
