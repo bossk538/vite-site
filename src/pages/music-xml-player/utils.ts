@@ -42,7 +42,29 @@ const notes = [
   'quarter',
   'quarter',
 ];
-const measures = Array.from({ length: 10 });
+const n = [
+  { type: 4, dots: 1, dur: 3 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 2 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 8, dots: 0, dur: 1 },
+  { type: 2, dots: 0, dur: 4 },
+];
+const nt = {
+  1: 'whole',
+  2: 'half',
+  4: 'quarter',
+  8: 'eighth',
+  16: 'sixteenth',
+  32: 'thirtysecond',
+  64: 'sixtyforth',
+}
 const _notes = (row, part, measure) => {
   const out = [];
   const pitches = row.pitches();
@@ -51,13 +73,16 @@ const _notes = (row, part, measure) => {
   for (let i = 0; i < pitches.length; i++) {
     const pitch = pitches[i];
     const pitchNum = Row.pitchNumber(pitch);
-    const type = notes[i];
+    const type = n[i];
     out.push(`<note>`);
     out.push(...Row.pitchXml(pitch));
-    out.push(`<duration>${type === 'quarter' ? 2 : 1}</duration>`);
+    out.push(`<duration>${type.dur}</duration>`);
     out.push(`<voice>1</voice>`);
-    out.push(`<type>${type}</type>`);
-    out.push(`<stem>${pitchNum > 52 ? 'down' : 'up' }</stem>`);
+    out.push(`<type>${nt[type.type]}</type>`);
+    for (let d = 0; d < type.dots; d++) {
+      out.push(`<dot />`);
+    }
+ //   out.push(`<stem>${pitchNum > 62 ? 'down' : 'up' }</stem>`);
     out.push(`<staff>1</staff>`);
     out.push(`</note>`);
   }
@@ -66,7 +91,7 @@ const _notes = (row, part, measure) => {
 const _part = (row, part) => {
   const out = [];
   out.push(`<part id="${ids[part]}">`);
-  for (let measure = 1; measure < 12; measure++) {
+  for (let measure = 1; measure <= 12; measure++) {
     out.push(`<measure number="${measure}">`);
     out.push(..._notes(row, part, measure));
     out.push(`</measure>`);
