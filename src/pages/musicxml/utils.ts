@@ -344,8 +344,18 @@ class Row {
     }
     this.row = newRow;
   }
+  contour(strategy) {
+    if (strategy === 'closest') {
+      for (let i = 1; i < 12; i++) {
+        const pc0 = this.row[i - 1] + 12 * this.row[i - 1].octave;
+        const pc1 = this.row[i].pc + 12 * this.row[i].octave;
+        if (Math.abs(pc0 - pc1) > 6) {
+          // need to adjust octave
+        }
+      }
+    }
+  }
 }
-const row = new Row();
 const _work = (title) => {
   const out = [];
   out.push(`<work>`);
@@ -366,7 +376,8 @@ const _partList = (parts, meausre) => {
   out.push(`</part-list>`);
   return out;
 };
-const partList = ['Violin 1', 'Violin 2', 'Viola', 'Cello'];
+const partList = ['Violin 1'];
+const partList_ = ['Violin 1', 'Violin 2', 'Viola', 'Cello'];
 const ids = {
   'Violin 1': 'P1',
   'Violin 2': 'P2',
@@ -374,25 +385,42 @@ const ids = {
   'Cello': 'P4'
 };
 const measures = Array.from({ length: 10 });
+const _notes = (part, measure) => {
+  const out = [];
+  const pitches = new Row().pitchesXml();
+  for (const pitch of pitches) {
+    out.push(`<note>`);
+    out.push(...pitch);
+    out.push(`<duration>1</duration>`);
+    out.push(`<voice>1</voice>`);
+    out.push(`<type>quarter</type>`);
+    out.push(`<stem>up</stem>`);
+    out.push(`<staff>1</staff>`);
+    out.push(`</note>`);
+  }
+  return out;
+};
 const _part = (part) => {
   const out = [];
   out.push(`<part id="${ids[part]}">`);
+  for (let measure = 1; measure < 12; measure++) {
+    out.push(`<measure number="${measure}">`);
+    out.push(..._notes(part, measure));
+    out.push(`</measure>`);
+  }
   out.push(`</part>`);
+  return out;
 };
 
 export const foo = () => {
   const out = [];
   out.push(`<?xml version="1.0" encoding="UTF-8"?>`);
-  out.push(`<score-timewise version="4.0">`);
+  out.push(`<score-partwise version="4.0">`);
   out.push(..._work('I am a title'));
   out.push(..._partList(partList));
-  for (let measure = 1; meausre < 12; measure++) {
-    out.push(`<measure number="${measure}">`);
-    for (const part of parts) {
-      out.push(..._part(part, measure));
-    }
-    out.push(`</measure>`);
+  for (const part of partList) {
+    out.push(..._part(part));
   }
-  out.push(`</score-timewise>`);
+  out.push(`</score-partwise>`);
   return out.join('');
 };

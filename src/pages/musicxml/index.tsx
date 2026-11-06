@@ -44,6 +44,7 @@ export default function MusicXmlGenerator() {
       <select value={score} onChange={e => setScore(e.target.value)}>
         <option value="EMaj">E Major Scale</option>
         <option value="EflatMaj">E flat Major Scale</option>
+        <option value="foo">Tone Row</option>
       </select>
 
       {xmlOutput && (
