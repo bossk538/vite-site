@@ -2,7 +2,7 @@
   padding: 20px;
   font-family: sans-serif;
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 0;
 }
 .canvas {
   border: 1px solid #ccc;
@@ -10,4 +10,15 @@
   min-height: 400px;
   background-color: #fff;
   overflow-x: auto;
+  width: 75vw;
+}
+.MusicXMLPlayer main {
+  display: flex;
+  justify-content: flex-start;
+}
+.RowPanel {
+  width: 24vw;
+}
+.RowPanel ul {
+  list-style: none;
 }

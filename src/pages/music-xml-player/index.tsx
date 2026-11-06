@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
 import AudioPlayer from 'osmd-audio-player';
+import { RowPanel } from './RowPanel';
 import { foo } from './utils';
 import './style.css';
 
@@ -101,57 +102,56 @@ export default function MusicXMLPlayer() {
     URL.revokeObjectURL(url);
   };
 
-  const generateScore = () => {
-    setMusicXmlData(foo());
+  const generateScore = (xmlData) => {
+    setMusicXmlData(xmlData);
   };
 
   return (
     <div className="MusicXMLPlayer">
-      <h2>MusicXML Sheet Music Viewer & Audio Player</h2>
-
-      {/* Upload controls */}
-      <div style={{ marginBottom: '15px' }}>
-        <input
-          type="file"
-          accept=".musicxml,.xml"
-          onChange={handleFileUpload}
-        />
-        {fileName && <span>Loaded: <strong>{fileName}</strong></span>}
-        {musicXmlData && (
-          <button onClick={handleDownload} >
-            Download .musicxml File
-          </button>
-        )}
-        <button onClick={generateScore}>Build</button>
-      </div>
-
-      {/* Audio controls */}
-      {musicXmlData && (
+      <nav>
+        {/* Upload controls */}
         <div style={{ marginBottom: '15px' }}>
-          <button
-            onClick={handlePlayPause}
-            disabled={!isPlayerReady}
-            style={{
-              padding: '10px 20px',
-              fontSize: '14px',
-              cursor: isPlayerReady ? 'pointer' : 'not-allowed',
-              backgroundColor: !isPlayerReady ? '#ccc' : isPlaying ? '#ff4d4d' : '#4CAF50',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '4px',
-              fontWeight: 'bold'
-            }}
-          >
-            {!isPlayerReady ? 'Loading Synthesizer...' : isPlaying ? 'Pause' : 'Play Audio'}
-          </button>
+          <input
+            type="file"
+            accept=".musicxml,.xml"
+            onChange={handleFileUpload}
+          />
+          {fileName && <span>Loaded: <strong>{fileName}</strong></span>}
+          {musicXmlData && (
+            <button onClick={handleDownload} >
+              Download .musicxml File
+            </button>
+          )}
         </div>
-      )}
 
-      {/* Visual Canvas Target */}
-      <div
-        ref={divRef}
-        className="canvas"
-      />
+        {/* Audio controls */}
+        {musicXmlData && (
+          <div style={{ marginBottom: '15px' }}>
+            <button
+              onClick={handlePlayPause}
+              disabled={!isPlayerReady}
+              style={{
+                padding: '10px 20px',
+                fontSize: '14px',
+                cursor: isPlayerReady ? 'pointer' : 'not-allowed',
+                backgroundColor: !isPlayerReady ? '#ccc' : isPlaying ? '#ff4d4d' : '#4CAF50',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                fontWeight: 'bold'
+              }}
+            >
+              {!isPlayerReady ? 'Loading Synthesizer...' : isPlaying ? 'Pause' : 'Play Audio'}
+            </button>
+          </div>
+        )}
+      </nav>
+
+      <main>
+        <RowPanel generate={generateScore} />
+        {/* Visual Canvas Target */}
+        <div ref={divRef} className="canvas" />
+      </main>
     </div>
   );
 }
