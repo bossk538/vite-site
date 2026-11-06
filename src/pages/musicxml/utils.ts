@@ -295,12 +295,15 @@ function shuffle(array) {
   }
   return result;
 }
+const _nums = Array.from({ length: 12 }, (_, i) => i);
+
 class Row {
   constructor(init) {
     if (Array.isArray(init)) {
       this.row = init.map(pc => ({ pc, octave: 4 }));
     } else {
-      this.row = shuffle(Array.from({ length: 12 }, (_, i) => ({ pc: i, octave: 4 })));
+      const row = shuffle(_nums);
+      this.row = row.map(i => ({ pc: i, octave: 4 }));
     }
   }
   static #toInt({ pc, octave }) {
@@ -311,9 +314,9 @@ class Row {
     item.octave = Math.floor(p / 12);
   }
   transpose(interval) {
-    for (const item of this.row) {
-      const p = this.#toInt(item);
-      this.#assign(item, p);
+    for (let i = 0; i < 12; i++) {
+      const p = Row.#toInt(this.row[i]) + interval;
+      this.row[i] = { pc: p % 12, octave: Math.floor(p / 12) }
     }
   }
   multiply(factor) {
@@ -325,10 +328,10 @@ class Row {
     let p0 = null;
     for (const item of this.row) {
       if (p0 === null) {
-        p0 = this.#toInt(item);
+        p0 = Row.#toInt(item);
       } else {
-        const p = 2 * p0 - this.#toInt(item);
-        this.#assign(item, p);
+        const p = 2 * p0 - Row.#toInt(item);
+        Row.#assign(item, p);
       }
     }
   }
@@ -352,8 +355,8 @@ class Row {
   contour(strategy, options) {
     if (strategy === 'closest') { // also can be a threshold so 5ths and 4ths are preserved, etc.
       for (let i = 1; i < 12; i++) {
-        const pc0 = this.#toInt(this.row[i - 1]);
-        const pc1 = this.#toInt(this.row[i]);
+        const pc0 = Row.#toInt(this.row[i - 1]);
+        const pc1 = Row.#toInt(this.row[i]);
         if (Math.abs(pc0 - pc1) > 6) {
           // need to adjust octave
         }
@@ -392,9 +395,12 @@ const ids = {
   'Cello': 'P4'
 };
 const measures = Array.from({ length: 10 });
+let _row = new Row();
 const _notes = (part, measure) => {
   const out = [];
-  const pitches = new Row().pitchesXml();
+  const pitches = _row.pitchesXml();
+  _row.transpose(1);
+  _row.invert();
   for (const pitch of pitches) {
     out.push(`<note>`);
     out.push(...pitch);
