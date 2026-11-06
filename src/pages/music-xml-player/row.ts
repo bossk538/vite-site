@@ -73,8 +73,11 @@ export class Row {
   pitches() {
     return this.row.map(({ pc, octave }) => ({ step: chromatic[pc].step, alter: chromatic[pc].alter, octave }));
   }
+  static pitchXml({ pc, octave}) {
+    return `<pitch><step>${chromatic[pc].step}</step><alter>${chromatic[pc].alter}</alter><octave>${octave}</octave></pitch>`;
+  }
   pitchesXml() {
-    return this.row.map(({ pc, octave }) => `<pitch><step>${chromatic[pc].step}</step><alter>${chromatic[pc].alter}</alter><octave>${octave}</octave></pitch>`);
+    return this.row.map(Row.pitchXml);
   }
   compose(row) {
     const newRow = [];
