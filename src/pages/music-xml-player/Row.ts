@@ -21,6 +21,20 @@ const revNote = {
   A: 9,
   B: 11,
 };
+const intervals = [
+  'prime',
+  'minor 2nd',
+  'major 2nd',
+  'minor 3rd',
+  'major 3rd',
+  'perfect 4th',
+  'tritone',
+  'perfect 5th',
+  'minor 6th',
+  'major 6th',
+  'minor 7th',
+  'major 7th',
+];
 function shuffle(array) {
   const result = [...array]; // copy so the original isn't changed
   for (let i = result.length - 1; i > 0; i--) {
@@ -90,6 +104,23 @@ export class Row {
   }
   static pitchNumber({ step, alter, octave}) {
     return revNote[step] + (alter ?? 0) + 12 * octave;
+  }
+  intervals(opt) {
+    let prev = Row.#toInt(this.row[0]);
+    const out = [];
+    for (let i = 1; i < 12; i++) {
+      const curr = Row.#toInt(this.row[i]);
+      if (opt === 'class') {
+        out.push(Math.abs(curr - prev) % 12);
+      } else if (opt === 'abs') {
+        out.push(Math.abs(curr - prev));
+      } else if (opt === 'names') {
+        out.push(intervals[Math.abs(curr - prev)]);
+      } else {
+        out.push(curr - prev);
+      }
+    }
+    return out;
   }
   pitchesXml() {
     return this.row.map(Row.#pitchXml);
