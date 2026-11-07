@@ -78,3 +78,68 @@ if (jestApi.describe && jestApi.it && jestApi.expect) {
     });
   });
 }
+/*
+Example for simple calculator class:
+
+import { describe, it, expect, beforeEach } from 'vitest';
+import { Calculator } from './Calculator';
+
+describe('Calculator Class', () => {
+  let calc: Calculator;
+
+  // Arrange: Initialize a fresh instance before every test
+  beforeEach(() => {
+    calc = new Calculator(10);
+  });
+
+  describe('Constructor & Getter', () => {
+    it('should initialize with the provided constructor value', () => {
+      expect(calc.current).toBe(10);
+    });
+  });
+
+  describe('add()', () => {
+    it('should correctly add a positive number', () => {
+      // Act
+      calc.add(5);
+      // Assert
+      expect(calc.current).toBe(15);
+    });
+
+    it('should correctly add a negative number', () => {
+      calc.add(-3);
+      expect(calc.current).toBe(7);
+    });
+
+    it('should support method chaining', () => {
+      const result = calc.add(5);
+      expect(result).toBe(calc);
+      expect(result.current).toBe(15);
+    });
+  });
+
+  describe('multiply()', () => {
+    it('should correctly multiply by a positive integer', () => {
+      calc.multiply(3);
+      expect(calc.current).toBe(30);
+    });
+
+    it('should correctly multiply by zero', () => {
+      calc.multiply(0);
+      expect(calc.current).toBe(0);
+    });
+
+    it('should correctly multiply by a fraction', () => {
+      calc.multiply(0.5);
+      expect(calc.current).toBe(5);
+    });
+  });
+
+  describe('Combined Operations', () => {
+    it('should handle sequential mutations correctly', () => {
+      calc.add(2).multiply(2); // (10 + 2) * 2
+      expect(calc.current).toBe(24);
+    });
+  });
+});
+*/
