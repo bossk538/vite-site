@@ -62,11 +62,22 @@ const nt = {
   32: '32nd',
   64: '64th',
 }
-const _notes = (row, part, measure) => {
+const _notes = (row, part, measure, program) => {
   const out = [];
   const pitches = row.pitches();
-  row.transpose(1);
-  row.invert();
+  for (const t of program) {
+    if (t === 'm5') {
+      row.multiply(5);
+    } else if (t === 'm7') {
+      row.multiply(7);
+    } else if (t === 'i') {
+      row.invert();
+    } else if (t === 'r') {
+      row.reverse();
+    } else if (/-?\d+/.test(t)) {
+      row.transpose(Number(t));
+    }  
+  }
   for (let i = 0; i < pitches.length; i++) {
     const pitch = pitches[i];
     const pitchNum = Row.pitchNumber(pitch);
@@ -85,26 +96,27 @@ const _notes = (row, part, measure) => {
   }
   return out;
 };
-const _part = (row, part) => {
+const _part = (row, part, program) => {
   const out = [];
   out.push(`<part id="${ids[part]}">`);
   for (let measure = 1; measure <= 12; measure++) {
     out.push(`<measure number="${measure}">`);
-    out.push(..._notes(row, part, measure));
+    out.push(..._notes(row, part, measure, program));
     out.push(`</measure>`);
   }
   out.push(`</part>`);
   return out;
 };
 
-export const foo = (row) => {
+export const foo = (row, text) => {
+  const program = text.split(' ');
   const out = [];
   out.push(`<?xml version="1.0" encoding="UTF-8"?>`);
   out.push(`<score-partwise version="4.0">`);
   out.push(..._work('Untitled'));
   out.push(..._partList(partList));
   for (const part of partList) {
-    out.push(..._part(row, part));
+    out.push(..._part(row, part, program));
   }
   out.push(`</score-partwise>`);
   return out.join('');
