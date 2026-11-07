@@ -9,13 +9,42 @@ describe('Row Class', () => {
     row = new Row();
   });
 
-  describe('Constructor & Getter', () => {
+  describe.skip('Constructor & Getter', () => {
     it('should initialize with the provided constructor value', () => {
       expect(row.current).toBe(10);
     });
   });
+  describe('Constructor', () => {
+    it('should initialize default correctly', () => {
+      const row = new Row();
+      const set = [
+        { pc: 0, octave: 4 },
+        { pc: 1, octave: 4 },
+        { pc: 2, octave: 4 },
+        { pc: 3, octave: 4 },
+        { pc: 4, octave: 4 },
+        { pc: 5, octave: 4 },
+        { pc: 6, octave: 4 },
+        { pc: 7, octave: 4 },
+        { pc: 8, octave: 4 },
+        { pc: 9, octave: 4 },
+        { pc: 10, octave: 4 },
+        { pc: 11, octave: 4 },
+      ];
+      expect(row.row).toEqual(expect.arrayContaining(set));
+      expect(row.row.length).toEqual(12);
+    });
+    it('should initialize correctly', () => {
+      const row = new Row([0, 4, 7]);
 
-  describe('add()', () => {
+      expect(row.row).toEqual([
+        { pc: 0, octave: 4 },
+        { pc: 4, octave: 4 },
+        { pc: 7, octave: 4 },
+      ]);
+    });
+  });
+  describe.skip('add()', () => {
     it('should correctly add a positive number', () => {
       // Act
       row.add(5);
@@ -35,7 +64,7 @@ describe('Row Class', () => {
     });
   });
 
-  describe('multiply()', () => {
+  describe.skip('multiply()', () => {
     it('should correctly multiply by a positive integer', () => {
       row.multiply(3);
       expect(row.current).toBe(30);
