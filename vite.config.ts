@@ -15,6 +15,7 @@ export default defineConfig({
   server: {
     allowedHosts: ['localhost', 'goodzeit.com', 'www.goodzeit.com']
   },
+  environment: 'jsdom',
   test: {
     projects: [{
       extends: true,
@@ -33,7 +34,10 @@ export default defineConfig({
           instances: [{
             browser: 'chromium'
           }]
-        }
+        },
+        include: [
+          'src/pages/**/*.{test}.{js,jsx,ts,tsx}'
+        ],
       }
     }]
   }
