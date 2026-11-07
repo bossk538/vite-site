@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { foo } from './utils';
-import { Row } from './row';
+import { Row } from './Row';
 import './style.css';
 
 export const RowPanel = ({ generate }) => {

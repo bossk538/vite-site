@@ -1,4 +1,4 @@
-import { Row } from './row';
+import { Row } from './Row';
 
 const _work = (title) => {
   const out = [];

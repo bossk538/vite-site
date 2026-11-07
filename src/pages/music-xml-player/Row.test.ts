@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { Row } from './row';
+import { Row } from './Row';
 
 describe('Row Class', () => {
   let row; //: Row;
