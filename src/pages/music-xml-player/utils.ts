@@ -54,6 +54,7 @@ const n = [
   { type: 2, dots: 0, dur: 40 },
 ];
 const nt = {
+  breve: 'breve',
   1: 'whole',
   2: 'half',
   4: 'quarter',
@@ -62,6 +63,24 @@ const nt = {
   32: '32nd',
   64: '64th',
 }
+const nn = [
+  { type: 'breve', dots: 0, dur: 128 },
+  { type: 'breve', dots: 1, dur: 192 },
+  { type: 1, dots: 0, dur: 64 },
+  { type: 1, dots: 1, dur: 96 },
+  { type: 2, dots: 0, dur: 32 },
+  { type: 2, dots: 1, dur: 48 },
+  { type: 4, dots: 0, dur: 16 },
+  { type: 4, dots: 1, dur: 24 },
+  { type: 8, dots: 0, dur: 8 },
+  { type: 8, dots: 1, dur: 12 },
+  { type: 16, dots: 0, dur: 4 },
+  { type: 16, dots: 1, dur: 6 },
+  { type: 32, dots: 0, dur: 2 },
+  { type: 32, dots: 1, dur: 3 },
+  { type: 64, dots: 0, dur: 1 },
+  { type: 64, dots: 1, dur: 1 },
+];
 const _notes = (row, part, measure, program) => {
   const out = [];
   const pitches = row.pitches();
