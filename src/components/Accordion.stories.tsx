@@ -16,7 +16,7 @@ const P1 = () => {
     return (<div>
       <fieldset>
         <p>
-          <label for="cufc1">
+          <label htmlFor="cufc1">
             Name
             <span aria-hidden="true">
               *
@@ -31,7 +31,7 @@ const P1 = () => {
                  aria-required="true" />
         </p>
         <p>
-          <label for="cufc2">
+          <label htmlFor="cufc2">
             Email
             <span aria-hidden="true">
               *
@@ -45,7 +45,7 @@ const P1 = () => {
                  aria-required="true" />
         </p>
         <p>
-          <label for="cufc3">
+          <label htmlFor="cufc3">
             Phone:
           </label>
           <input type="text"
@@ -54,7 +54,7 @@ const P1 = () => {
                  id="cufc3" />
         </p>
         <p>
-          <label for="cufc4">
+          <label htmlFor="cufc4">
             Extension:
           </label>
           <input type="text"
@@ -63,7 +63,7 @@ const P1 = () => {
                  id="cufc4" />
         </p>
         <p>
-          <label for="cufc5">
+          <label htmlFor="cufc5">
             Country:
           </label>
           <input type="text"
@@ -72,7 +72,7 @@ const P1 = () => {
                  id="cufc5" />
         </p>
         <p>
-          <label for="cufc6">
+          <label htmlFor="cufc6">
             City/Province:
           </label>
           <input type="text"
@@ -89,7 +89,7 @@ const P2 = () => {
     <div>
       <fieldset>
         <p>
-          <label for="b-add1">
+          <label htmlFor="b-add1">
             Address 1:
           </label>
           <input type="text"
@@ -97,7 +97,7 @@ const P2 = () => {
                  id="b-add1" />
         </p>
         <p>
-          <label for="b-add2">
+          <label htmlFor="b-add2">
             Address 2:
           </label>
           <input type="text"
@@ -105,7 +105,7 @@ const P2 = () => {
                  id="b-add2" />
         </p>
         <p>
-          <label for="b-city">
+          <label htmlFor="b-city">
             City:
           </label>
           <input type="text"
@@ -113,7 +113,7 @@ const P2 = () => {
                  id="b-city" />
         </p>
         <p>
-          <label for="b-state">
+          <label htmlFor="b-state">
             State:
           </label>
           <input type="text"
@@ -121,7 +121,7 @@ const P2 = () => {
                  id="b-state" />
         </p>
         <p>
-          <label for="b-zip">
+          <label htmlFor="b-zip">
             Zip Code:
           </label>
           <input type="text"
@@ -138,7 +138,7 @@ const P3 = () => {
     <div>
       <fieldset>
         <p>
-          <label for="m-add1">
+          <label htmlFor="m-add1">
             Address 1:
           </label>
           <input type="text"
@@ -146,7 +146,7 @@ const P3 = () => {
                  id="m-add1" />
         </p>
         <p>
-          <label for="m-add2">
+          <label htmlFor="m-add2">
             Address 2:
           </label>
           <input type="text"
@@ -154,7 +154,7 @@ const P3 = () => {
                  id="m-add2" />
         </p>
         <p>
-          <label for="m-city">
+          <label htmlFor="m-city">
             City:
           </label>
           <input type="text"
@@ -162,7 +162,7 @@ const P3 = () => {
                  id="m-city" />
         </p>
         <p>
-          <label for="m-state">
+          <label htmlFor="m-state">
             State:
           </label>
           <input type="text"
@@ -170,7 +170,7 @@ const P3 = () => {
                  id="m-state" />
         </p>
         <p>
-          <label for="m-zip">
+          <label htmlFor="m-zip">
             Zip Code:
           </label>
           <input type="text"
