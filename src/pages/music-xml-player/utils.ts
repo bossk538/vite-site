@@ -81,7 +81,7 @@ const nn = [
   { type: 64, dots: 0, dur: 1 },
   { type: 64, dots: 1, dur: 1 },
 ];
-const _notes = (row, part, measure, program) => {
+const _notes = (row, part, measure, program, row2) => {
   const out = [];
   const pitches = row.pitches();
   for (const t of program) {
@@ -93,6 +93,8 @@ const _notes = (row, part, measure, program) => {
       row.invert();
     } else if (t === 'r') {
       row.reverse();
+    } else if (t === 'r') {
+      row.compose(row2);
     } else if (/-?\d+/.test(t)) {
       row.transpose(Number(t));
     }  
@@ -115,19 +117,19 @@ const _notes = (row, part, measure, program) => {
   }
   return out;
 };
-const _part = (row, part, program) => {
+const _part = (row, part, program, row2) => {
   const out = [];
   out.push(`<part id="${ids[part]}">`);
   for (let measure = 1; measure <= 12; measure++) {
     out.push(`<measure number="${measure}">`);
-    out.push(..._notes(row, part, measure, program));
+    out.push(..._notes(row, part, measure, program, row2));
     out.push(`</measure>`);
   }
   out.push(`</part>`);
   return out;
 };
 
-export const foo = (row, text) => {
+export const foo = (row, text, row2) => {
   const program = text.split(' ');
   const out = [];
   out.push(`<?xml version="1.0" encoding="UTF-8"?>`);
@@ -135,7 +137,7 @@ export const foo = (row, text) => {
   out.push(..._work('Untitled'));
   out.push(..._partList(partList));
   for (const part of partList) {
-    out.push(..._part(row, part, program));
+    out.push(..._part(row, part, program, row2));
   }
   out.push(`</score-partwise>`);
   return out.join('');

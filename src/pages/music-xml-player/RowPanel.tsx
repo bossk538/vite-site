@@ -9,7 +9,7 @@ export const RowPanel = ({ generate }) => {
   const [row2d, setRow2d] = useState('');
   const [program, setProgram] = useState('');
   const handleGenerate = () => {
-    const xmlData = foo(row.clone(), program);
+    const xmlData = foo(row.clone(), program, row2);
     generate(xmlData);
   };
   const handleRow2 = (e) => {
