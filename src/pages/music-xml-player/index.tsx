@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
 import AudioPlayer from 'osmd-audio-player';
 import { RowPanel } from './RowPanel';
-import { foo } from './utils';
 import './style.css';
 
 export default function MusicXMLPlayer() {
