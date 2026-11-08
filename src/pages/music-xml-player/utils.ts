@@ -93,7 +93,7 @@ const _notes = (row, part, measure, program, row2) => {
       row.invert();
     } else if (t === 'r') {
       row.reverse();
-    } else if (t === 'r') {
+    } else if (t === 'c') {
       row.compose(row2);
     } else if (/-?\d+/.test(t)) {
       row.transpose(Number(t));
