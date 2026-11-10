@@ -39,7 +39,7 @@ const ids = {
   'Viola': 'P3',
   'Cello': 'P4'
 };
-const n = [
+const n0 = [
   { type: 4, dots: 1, dur: 30 },
   { type: 8, dots: 0, dur: 10 },
   { type: 8, dots: 0, dur: 10 },
@@ -52,6 +52,20 @@ const n = [
   { type: 16, dots: 0, dur: 5 },
   { type: 16, dots: 0, dur: 5 },
   { type: 2, dots: 0, dur: 40 },
+];
+const n = [
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 4, dots: 0, dur: 1 },
+  { type: 2, dots: 1, dur: 3 },
 ];
 const nt = {
   breve: 'breve',
@@ -82,6 +96,7 @@ const nn = [
   { type: 64, dots: 1, dur: 1 },
 ];
 const _notes = (row, part, measure, program, row2) => {
+  console.log(`PROGRAM: ${program}`, row, part, measure, row2);
   const out = [];
   const pitches = row.pitches();
   for (const t of program) {

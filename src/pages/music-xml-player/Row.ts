@@ -1,4 +1,4 @@
-const chromatic = [
+export const chromatic = [
   { step: 'C', alter: 0, octave: 4 },
   { step: 'C', alter: 1, octave: 4 },
   { step: 'D', alter: 0, octave: 4 },
@@ -114,7 +114,7 @@ export class Row {
     this.row.reverse();
   }
   pitches() {
-    return this.row.map(({ pc, octave }) => ({ step: chromatic[pc].step, alter: chromatic[pc].alter, octave }));
+    return this.row.map(({ pc, octave }) => ({ ...chromatic[pc], octave }));
   }
   static #pitchXml({ pc, octave}) {
     return `<pitch><step>${chromatic[pc].step}</step><alter>${chromatic[pc].alter}</alter><octave>${octave}</octave></pitch>`;
