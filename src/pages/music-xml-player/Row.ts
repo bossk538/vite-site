@@ -12,6 +12,20 @@ const chromatic = [
   { step: 'A', alter: 1, octave: 4 },
   { step: 'B', alter: 0, octave: 4 },
 ];
+const chromatic_ = [
+  { step: 'C', alter: 0, octave: 4 },
+  { step: 'D', alter: -1, octave: 4 },
+  { step: 'D', alter: 0, octave: 4 },
+  { step: 'E', alter: -1, octave: 4 },
+  { step: 'E', alter: 0, octave: 4 },
+  { step: 'F', alter: 0, octave: 4 },
+  { step: 'G', alter: -1, octave: 4 },
+  { step: 'G', alter: 0, octave: 4 },
+  { step: 'A', alter: -1, octave: 4 },
+  { step: 'A', alter: 0, octave: 4 },
+  { step: 'B', alter: -1, octave: 4 },
+  { step: 'B', alter: 0, octave: 4 },
+];
 const revNote = {
   C: 0,
   D: 2,
@@ -50,7 +64,8 @@ export class Row {
     if (Array.isArray(init)) {
       this.row = init.map(pc => ({ pc, octave: 4 }));
     } else {
-      const row = shuffle(_nums);
+      //const row = shuffle(_nums);
+      const row = [..._nums];
       this.row = row.map(i => ({ pc: i, octave: 4 }));
     }
   }
@@ -75,8 +90,13 @@ export class Row {
     }
   }
   multiply(factor) {
+    const octaveMap = this.row.reduce((acc, curr) => {
+      acc[curr.pc] = curr.octave;
+      return acc;
+    }, {});
     for (const item of this.row) {
       item.pc = (factor * item.pc) % 12;
+      item.octave = octaveMap[item.pc];
     }
   }
   invert() {
