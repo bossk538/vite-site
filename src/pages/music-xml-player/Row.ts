@@ -62,12 +62,17 @@ const _nums = Array.from({ length: 12 }, (_, i) => i);
 export class Row {
   constructor(init) {
     if (Array.isArray(init)) {
+      if (init.length !== 12 || init.find(n => typeof n !== 'number' || n < 0 || n > 11)) throw new Error('Invalid row');
       this.row = init.map(pc => ({ pc, octave: 4 }));
     } else {
-      //const row = shuffle(_nums);
-      const row = [..._nums];
+      const row = shuffle(_nums);
       this.row = row.map(i => ({ pc: i, octave: 4 }));
     }
+    this.maxOctave = 5;
+    this.minOctave = 3;
+  }
+  #minMax(pc, octave) {
+    return Math.min(this.maxOctave, Math.max(this.minOctave, octave));
   }
   clone() {
     const dataCopy = structuredClone(this);
@@ -148,8 +153,9 @@ export class Row {
   compose(row) {
     const newRow = [];
     for (let i = 0; i < 12; i++) {
-      const mapped = row[this.row[i].pc];
-      newRow.push({ ...mapped });
+      const entry = this.row[i];
+      const mapped = row.row[entry.pc];
+      newRow.push({...mapped});
     }
     this.row = newRow;
   }

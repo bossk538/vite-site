@@ -22,16 +22,20 @@ export default function MusicXMLPlayer() {
         drawingParameters: "default"
       });
       
+      setTimeout(() => {
       playerRef.current = new AudioPlayer();
       
       // Sync player events to toggle play state if audio ends naturally
       playerRef.current.on('end', () => setIsPlaying(false));
+      }, 100);
     }
 
     // Cleanup audio player when component unmounts
     return () => {
       if (playerRef.current) {
+	      try {
         playerRef.current.stop();
+	      } catch(e) { console.warn(e.message) }
       }
     };
   }, []);

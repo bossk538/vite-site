@@ -100,6 +100,9 @@ const _notes = (row, part, measure, program, row2) => {
   const out = [];
   const pitches = row.pitches();
   for (const t of program) {
+    //const match = t.match(/^([A-Za-z]{1,2})(\d{0,2})$/);
+	  //if (!match) throw new Error('Invalid format');
+    //const [, letters, digits] = match;
     if (t === 'm5') {
       row.multiply(5);
     } else if (t === 'm7') {
@@ -110,10 +113,11 @@ const _notes = (row, part, measure, program, row2) => {
       row.reverse();
     } else if (t === 'c') {
       row.compose(row2);
-    } else if (/-?\d+/.test(t)) {
+    } else if (/^-?\d+$/.test(t)) {
       row.transpose(Number(t));
     }  
   }
+  console.log(`PROGRAM CHANGE: `, row);
   for (let i = 0; i < pitches.length; i++) {
     const pitch = pitches[i];
     const pitchNum = Row.pitchNumber(pitch);
@@ -132,10 +136,10 @@ const _notes = (row, part, measure, program, row2) => {
   }
   return out;
 };
-const _part = (row, part, program, row2) => {
+const _part = (row, part, program, row2, nmeasures) => {
   const out = [];
   out.push(`<part id="${ids[part]}">`);
-  for (let measure = 1; measure <= 12; measure++) {
+  for (let measure = 1; measure <= nmeasures; measure++) {
     out.push(`<measure number="${measure}">`);
     out.push(..._notes(row, part, measure, program, row2));
     out.push(`</measure>`);
@@ -144,7 +148,7 @@ const _part = (row, part, program, row2) => {
   return out;
 };
 
-export const foo = (row, text, row2) => {
+export const foo = (row, text, row2, nmeasures) => {
   const program = text.split(' ');
   const out = [];
   out.push(`<?xml version="1.0" encoding="UTF-8"?>`);
@@ -152,7 +156,7 @@ export const foo = (row, text, row2) => {
   out.push(..._work('Untitled'));
   out.push(..._partList(partList));
   for (const part of partList) {
-    out.push(..._part(row, part, program, row2));
+    out.push(..._part(row, part, program, row2, nmeasures));
   }
   out.push(`</score-partwise>`);
   return out.join('');
