@@ -20,6 +20,7 @@
     "@react-router/dev": "^7.9.3",
     "@react-router/node": "^7.9.3",
     "@stringsync/musicxml": "^0.4.0",
+    "@vanilla-extract/css": "^1.21.3",
     "axios": "^1.20.0",
     "brain.js": "^2.0.0-beta.24",
     "d3": "^7.9.0",
