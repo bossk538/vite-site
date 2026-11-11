@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { Row } from './Row';
+import { Row, chromatic } from './Row';
 
 describe('Row Class', () => {
   let row; //: Row;
@@ -64,6 +64,10 @@ describe('Row Class', () => {
         { pc: 7, octave: 4 },
       ]);
     });
+  });
+  describe('pitches()', () => {
+    const row = new Row(range);
+    expect(row.pitches()).toEqual(chromatic);
   });
   describe.skip('invert()', () => {
   });
