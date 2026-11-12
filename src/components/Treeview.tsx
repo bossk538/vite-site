@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './Treeview.css';
+//import './Treeview.css';
+import { treeview } from './Treeview.css.ts';
 
 const initTree = ({ heading, group }) => {
   const node = {
