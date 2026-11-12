@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import './Treeview.css';
 import { treeview } from './Treeview.css.ts';
 
 const initTree = ({ heading, group }) => {
@@ -24,7 +23,7 @@ const Tree = ({ tree, top, handleToggle, handleKeyDown }) => {
   if (top) {
     return (<>
       <h3 id={id}>{heading}</h3>
-      <ul role="tree" aria-labelledby={id}>
+      <ul className={treeview} role="tree" aria-labelledby={id}>
         { group?.map((tree, idx) => (
           <li key={tree.id}
             role="treeitem"
@@ -126,7 +125,7 @@ export const Treeview = ({ tree }) => {
     }
   };
 
-  return <div><Tree tree={local} handleToggle={handleToggle} handleKeyDown={handleKeyDown} />
+  return <div><Tree tree={local} top={true} handleToggle={handleToggle} handleKeyDown={handleKeyDown} />
   <p>
     <label tabIndex="0">File or Folder Selected: {selected}</label>
   </p>

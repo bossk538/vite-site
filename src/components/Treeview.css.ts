@@ -1,6 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
-export const treeview = style({});
+export const treeview = style({
+  color: 'red',
+});
 /*
 ul[role="tree"] {
   margin: 0;
