@@ -77,6 +77,16 @@ const nt = {
   32: '32nd',
   64: '64th',
 }
+export const noteLengths = [
+  { type: 'breve', name: 'breve',   dur: [128,192,224,240] },
+  { type: 1,       name: 'whole',   dur: [64,96,112,120] },
+  { type: 2,       name: 'half',    dur: [32,48,56,60] },
+  { type: 4,       name: 'quarter', dur: [16, 24,28,30] },
+  { type: 8,       name: 'eighth',  dur: [8,12,14,15] },
+  { type: 16,      name: '16th',    dur: [4,6,7] },
+  { type: 32,      name: '32nd',    dur: [2,3] },
+  { type: 64,      name: '64th',    dur: [1] },
+];
 const nn = [
   { type: 'breve', dots: 0, dur: 128 },
   { type: 'breve', dots: 1, dur: 192 },
@@ -95,8 +105,7 @@ const nn = [
   { type: 64, dots: 0, dur: 1 },
   { type: 64, dots: 1, dur: 1 },
 ];
-const _notes = (row, part, measure, program, row2) => {
-  console.log(`PROGRAM: ${program}`, row, part, measure, row2);
+const _notes = (row, part, measure, program, row2, lengths) => {
   const out = [];
   const pitches = row.pitches();
   for (const t of program) {
@@ -117,38 +126,39 @@ const _notes = (row, part, measure, program, row2) => {
       row.transpose(Number(t));
     }  
   }
-  console.log(`PROGRAM CHANGE: `, row);
   for (let i = 0; i < pitches.length; i++) {
     const pitch = pitches[i];
     const pitchNum = Row.pitchNumber(pitch);
-    const type = n[i];
+    const cfg = lengths[i];
+    const type = noteLengths[cfg.type];
+    const dur = type.dur[cfg.dots];
+
     out.push(`<note>`);
     out.push(...Row.pitchXml(pitch));
-    out.push(`<duration>${type.dur}</duration>`);
+    out.push(`<duration>${dur}</duration>`);
     out.push(`<voice>1</voice>`);
-    out.push(`<type>${nt[type.type]}</type>`);
-    for (let d = 0; d < type.dots; d++) {
+    out.push(`<type>${type.name}</type>`);
+    for (let d = 0; d < cfg.dots; d++) {
       out.push(`<dot />`);
     }
- //   out.push(`<stem>${pitchNum > 62 ? 'down' : 'up' }</stem>`);
     out.push(`<staff>1</staff>`);
     out.push(`</note>`);
   }
   return out;
 };
-const _part = (row, part, program, row2, nmeasures) => {
+const _part = (row, part, program, row2, nmeasures, lengths) => {
   const out = [];
   out.push(`<part id="${ids[part]}">`);
   for (let measure = 1; measure <= nmeasures; measure++) {
     out.push(`<measure number="${measure}">`);
-    out.push(..._notes(row, part, measure, program, row2));
+    out.push(..._notes(row, part, measure, program, row2, lengths));
     out.push(`</measure>`);
   }
   out.push(`</part>`);
   return out;
 };
 
-export const foo = (row, text, row2, nmeasures) => {
+export const foo = (row, text, row2, nmeasures, lengths) => {
   const program = text.split(' ');
   const out = [];
   out.push(`<?xml version="1.0" encoding="UTF-8"?>`);
@@ -156,7 +166,7 @@ export const foo = (row, text, row2, nmeasures) => {
   out.push(..._work('Untitled'));
   out.push(..._partList(partList));
   for (const part of partList) {
-    out.push(..._part(row, part, program, row2, nmeasures));
+    out.push(..._part(row, part, program, row2, nmeasures, lengths));
   }
   out.push(`</score-partwise>`);
   return out.join('');

@@ -26,6 +26,11 @@ const chromatic_ = [
   { step: 'B', alter: -1, octave: 4 },
   { step: 'B', alter: 0, octave: 4 },
 ];
+export const chton = ({ pc, octave }) => {
+  const { step, alter } = chromatic[pc];
+  const acc = alter === 0 ? '' : alter === 1 ? '#' : alter === -1 ? 'b' : 'X';
+  return step + acc + octave;
+};
 const revNote = {
   C: 0,
   D: 2,
@@ -158,6 +163,14 @@ export class Row {
       newRow.push({...mapped});
     }
     this.row = newRow;
+  }
+  setOctaves(octaves) {
+    for (let i = 0; i < 12; i++) {
+      this.row[i].octave = octaves[i];
+    }
+  }
+  setOctave(index, octave) {
+    this.row[index].octave = octave;
   }
   contour(strategy, options) {
     if (strategy === 'closest') { // also can be a threshold so 5ths and 4ths are preserved, etc.

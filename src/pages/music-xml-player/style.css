@@ -22,3 +22,9 @@
 .RowPanel ul {
   list-style: none;
 }
+.RowPanel .box {
+	padding: 4px;
+	border: 4px double #ccc;
+	border-radius: 4px;
+	margin: 4px;
+}
