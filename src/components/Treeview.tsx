@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Treeview.css';
+import { treeview } from './Treeview.css.ts';
 
 const initTree = ({ heading, group }) => {
   const node = {
@@ -18,20 +18,22 @@ const TreeGroup = ({ group }) => {
   return 
 };
 
-const Tree = ({ tree, top, handleToggle }) => {
+const Tree = ({ tree, top, handleToggle, handleKeyDown }) => {
   const { heading, group, id } = tree;
   if (top) {
     return (<>
       <h3 id={id}>{heading}</h3>
-      <ul role="tree" aria-labelledby={id}>
-        { group?.map(tree => (
+      <ul className={treeview} role="tree" aria-labelledby={id}>
+        { group?.map((tree, idx) => (
           <li key={tree.id}
             role="treeitem"
             aria-selected={tree.selected!.toString()}
             aria-expanded={tree.expanded?.toString()}
             onClick={(e) => handleToggle(e, tree.id)}
+            tabIndex={tree.selected ? 0 : -1}
+            onKeyDown={(e) => handleKeyDown(e, tree.id)}
             className="doc">
-            <Tree tree={tree} top={false} handleToggle={handleToggle} />
+            <Tree tree={tree} top={false} handleToggle={handleToggle} handleKeyDown={handleKeyDown} />
           </li>
         )) }
       </ul>
@@ -48,8 +50,10 @@ const Tree = ({ tree, top, handleToggle }) => {
             aria-selected={tree.selected!.toString()}
             aria-expanded={tree.expanded?.toString()}
             onClick={(e) => handleToggle(e, tree.id)}
+            tabIndex={tree.selected ? 0 : -1}
+            onKeyDown={(e) => handleKeyDown(e, tree.id)}
             className="doc">
-            <Tree tree={tree} top={false} handleToggle={handleToggle} />
+            <Tree tree={tree} top={false} handleToggle={handleToggle} handleKeyDown={handleKeyDown} />
           </li>
         )) }
       </ul>
@@ -96,9 +100,34 @@ export const Treeview = ({ tree }) => {
     setLocal(newTree);
   };
 
-  return <div><Tree tree={local} handleToggle={handleToggle} />
+  const handleKeyDown = (e, id) => {
+    console.log(`KEYDOWN: ${e.code}`, id);
+    e.stopPropagation();
+    switch (e.code) {
+      case 'Tab':
+        break;
+      case 'ArrowUp':
+        break;
+      case 'ArrowDown':
+        break;
+      case 'ArrowLeft':
+        break;
+      case 'ArrowRight':
+        break;
+      case ' ':
+        break;
+      case 'Enter':
+        break;
+      case 'Home':
+        break;
+      case 'End':
+        break;
+    }
+  };
+
+  return <div><Tree tree={local} top={true} handleToggle={handleToggle} handleKeyDown={handleKeyDown} />
   <p>
-    <label>File or Folder Selected: {selected}</label>
+    <label tabIndex="0">File or Folder Selected: {selected}</label>
   </p>
   </div>;
   return <Tree tree={local} handleToggle={handleToggle} />;
