@@ -18,29 +18,31 @@ export const RowPanel = ({ generate }) => {
   };
   const createRow2 = () => {
     const row2 = row.clone();
-    // P, I, R, RI plus number
-    const str = row2d.toUpperCase();
-    const match = str.match(/^([A-Za-z]{1,2})(\d{0,2})$/);
-    if (!match) throw new Error(`Invalid format: ${str}`);
-    const [, letters, digits] = match;
-    const transpose = Number(digits || '0');
-    if (Number.isNaN(transpose)) throw new Error(`Invalid transpose`);
+    if (row2d) {
+      // P, I, R, RI plus number
+      const str = row2d.toUpperCase();
+      const match = str.match(/^([A-Za-z]{1,2})(\d{0,2})$/);
+      if (!match) throw new Error(`Invalid format: ${str}`);
+      const [, letters, digits] = match;
+      const transpose = Number(digits || '0');
+      if (Number.isNaN(transpose)) throw new Error(`Invalid transpose`);
 
-    switch (letters) {
-      case 'P':
-        break;
-      case 'R':
-        row2.reverse();
-        break;
-      case 'I':
-        row2.invert();
-        break;
-      case 'RI':
-        row2.invert();
-        row2.reverse();
-        break;
+      switch (letters) {
+        case 'P':
+          break;
+        case 'R':
+          row2.reverse();
+          break;
+        case 'I':
+          row2.invert();
+          break;
+        case 'RI':
+          row2.invert();
+          row2.reverse();
+          break;
+      }
+      row2.transpose(transpose);
     }
-    row2.transpose(transpose);
     return row2;
   };
   return (<div className="RowPanel"><form>
