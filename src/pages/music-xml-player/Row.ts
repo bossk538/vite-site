@@ -28,7 +28,7 @@ const chromatic_ = [
 ];
 export const chton = ({ pc, octave }) => {
   const { step, alter } = chromatic[pc];
-  const acc = alter === 0 ? '' : alter === 1 ? '#' : alter === -1 ? 'b' : 'X';
+  const acc = alter === 0 ? '' : alter === 1 ? '♯' : alter === -1 ? '♭' : 'X';
   return step + acc + octave;
 };
 const revNote = {

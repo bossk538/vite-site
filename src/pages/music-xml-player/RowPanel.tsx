@@ -6,6 +6,9 @@ const NE = ({ len, handleNote, index, note }) => {
   const [type, setType] = useState(len.type)
   const [dots, setDots] = useState(len.dots);
   const [octave, setOctave] = useState(len.octave);
+  const [hasRest, setHasRest] = useState(len.hasRest);
+  const [restType, setRestType] = useState(len.restType);
+  const [restDots, setRestDots] = useState(len.restDots);
   return (<div className="box">
       <h3>{index + 1}: {note}</h3>
       <label>
@@ -22,6 +25,18 @@ const NE = ({ len, handleNote, index, note }) => {
         Octave:
         <input type="number" value={octave} onChange={e => setOctave(e.target.value)} />
       </label>
+      <label>Initial rest:<input type="checkbox" value={hasRest} onChange={e => setHasRest(e.target.checked)} /></label>
+      <label>
+        Rest Note type:
+        <select value={restType} onChange={e => setRestType(Number(e.target.value))}>
+          { noteLengths.map(({ name }, idx) => (<option key={idx} value={idx}>{name}</option>)) }
+        </select>
+      </label>
+      <label>
+        Rest Dots:
+        <input type="number" value={restDots} onChange={e => setRestDots(e.target.value)} />
+      </label>
+
       <button type="button" onClick={() => handleNote({ octave, type, dots, index })}>Set</button>
     </div>);
 };
@@ -34,6 +49,9 @@ export const RowPanel = ({ generate }) => {
     octave: 4,
     type: 3,
     dots: 0,
+    hasRest: false,
+    restType: 4,
+    restDots: 0,
     index,
   })));
   const handleGenerate = (e, lo) => {
@@ -74,9 +92,9 @@ export const RowPanel = ({ generate }) => {
     return row2;
   };
 
-  const handleNote = ({ octave, type, dots, index }) => {
+  const handleNote = ({ octave, type, dots, index, hasRest, restType, restDots }) => {
     const newLengths = [...lengths];
-    newLengths[index] = { octave, type, dots, index };
+    newLengths[index] = { octave, type, dots, index, hasRest, restType, restDots };
     const newRow = row.clone();
     newRow.setOctave(index, octave);
     setRow(newRow);

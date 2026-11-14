@@ -133,6 +133,19 @@ const _notes = (row, part, measure, program, row2, lengths) => {
     const type = noteLengths[cfg.type];
     const dur = type.dur[cfg.dots];
 
+    if (cfg.hasRest) {
+      const restType = noteLengths[cfg.restType];
+      const restDur = restType.dur[cfg.restDots];
+      out.push(`<note>`);
+      out.push(`<rest />`);
+      out.push(`<duration>${restDur}</duration>`);
+      out.push(`<type>${restType.name}</type>`);
+      for (let d = 0; d < cfg.restDots; d++) {
+        out.push(`<dot />`);
+      }
+      out.push(`</note>`);
+    }
+
     out.push(`<note>`);
     out.push(...Row.pitchXml(pitch));
     out.push(`<duration>${dur}</duration>`);
