@@ -37,7 +37,7 @@ const NE = ({ len, handleNote, index, note }) => {
         <input type="number" value={restDots} onChange={e => setRestDots(e.target.value)} />
       </label>
 
-      <button type="button" onClick={() => handleNote({ octave, type, dots, index })}>Set</button>
+      <button type="button" onClick={() => handleNote({ octave, type, dots, hasRest, restType, restDots, index })}>Set</button>
     </div>);
 };
 export const RowPanel = ({ generate }) => {
