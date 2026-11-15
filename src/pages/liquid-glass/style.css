@@ -1,3 +1,6 @@
+.typewriter-wrapper {
+  background-color: #ffeeee;
+}
 .typewriter {
   --caret: currentcolor;
 }
