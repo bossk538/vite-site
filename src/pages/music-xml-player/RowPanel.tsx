@@ -86,6 +86,9 @@ export const RowPanel = ({ generate }) => {
           row2.invert();
           row2.reverse();
           break;
+        case 'IR':
+          row2.reverse();
+          row2.invert();
       }
       row2.transpose(transpose);
     }
@@ -118,7 +121,7 @@ export const RowPanel = ({ generate }) => {
     <ul>
       <li><h2>Create Row</h2></li>
       <li><p>some random text</p></li>
-      <li><label>Row2:<input type="text" value={row2d} onChange={handleRow2} /></label></li>
+      <li><label>Row2 (P,I,R,IR,RI + #):<input type="text" value={row2d} onChange={handleRow2} /></label></li>
       <li><label>Program:<input type="text" value={program} onChange={e => setProgram(e.target.value)} /></label></li>
       <li><button type="button" onClick={handleNewRow}>New Row</button></li>
       <li><button type="button" onClick={handleGenerate}>Generate</button></li>
