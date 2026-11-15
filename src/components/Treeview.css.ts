@@ -33,8 +33,8 @@ globalStyle(
 });
 globalStyle( // 📁  📂
   `${treeview} [role="treeitem"].doc::before`, {
-//    fontFamily: "Font Awesome 5 Free",
-content: '📂',
+    fontFamily: "Font Awesome 5 Free",
+//    content: '📂',
 //    content: '"\\01F4C2"',
     display: 'inline-block',
     paddingRight: '2px',
@@ -42,18 +42,19 @@ content: '📂',
     verticalAlign: 'middle',
 });
 globalStyle(
-  `x${treeview} [role="treeitem"][aria-expanded="false"] > span::before`, {
+  `${treeview} [role="treeitem"][aria-expanded="false"] > span::before`, {
     fontFamily: "Font Awesome 5 Free",
-    content: "\\f07b",
+//    content: "\\f07b",
+    content: '"\\01F4C2"',
     display: 'inline-block',
     paddingRight: '3px',
     verticalAlign: 'middle',
     fontWeight: 900,
 });
 globalStyle(
-  `x${treeview} [role="treeitem"][aria-expanded="true"] > span::before`, {
+  `${treeview} [role="treeitem"][aria-expanded="true"] > span::before`, {
     fontFamily: "Font Awesome 5 Free",
-    content: "\\f07c",
+    content: '"\\01F4C2"',
     display: 'inline-block',
     paddingRight: '3px',
     verticalAlign: 'middle',
