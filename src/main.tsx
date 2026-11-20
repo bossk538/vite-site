@@ -10,6 +10,7 @@ import Asteroids from './pages/asteroids';
 import SoundGenerator from './pages/sound-generator';
 import CellularAutomata from './pages/cellular-automata';
 import MusicXMLPlayer from './pages/music-xml-player';
+import ButtonDemo from './pages/button-demo';
 import { SimulatePurchase } from './pages/banking-cc-app-purchase';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/cellular-automata" element={<CellularAutomata />} />
         <Route path="/sound-generator" element={<SoundGenerator />} />
         <Route path="/music-xml-player" element={<MusicXMLPlayer />} />
+        <Route path="/button-demo" element={<ButtonDemo />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

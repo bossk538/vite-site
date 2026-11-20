@@ -35,6 +35,7 @@ function App() {
           <li><Link to="/cellular-automata">Cellular Automata</Link></li>
           <li><Link to="/sound-generator">Sound Generator</Link></li>
           <li><Link to="/music-xml-player">MusicXML Player</Link></li>
+          <li><Link to="/button-demo">Button Demo</Link></li>
         </ul>
       </div>
       <p className="read-the-docs">

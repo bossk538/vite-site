@@ -34,8 +34,7 @@ globalStyle(
 globalStyle( // 📁  📂
   `${treeview} [role="treeitem"].doc::before`, {
     fontFamily: "Font Awesome 5 Free",
-//    content: '📂',
-//    content: '"\\01F4C2"',
+    content: '"\\01F5CE"',
     display: 'inline-block',
     paddingRight: '2px',
     paddingLeft: '5px',
