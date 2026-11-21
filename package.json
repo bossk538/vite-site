@@ -40,6 +40,7 @@
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-docs": "^10.6.0",
     "@storybook/addon-mcp": "^10.6.0",
+    "@storybook/addon-themes": "^10.6.8",
     "@storybook/addon-vitest": "^10.6.0",
     "@storybook/react-vite": "^10.6.0",
     "@types/jest-axe": "^3.5.9",
@@ -67,5 +68,9 @@
     "typescript-eslint": "^8.71.1",
     "vite": "^7.1.7",
     "vitest": "latest"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "gl@8.1.6": true
   }
 }
