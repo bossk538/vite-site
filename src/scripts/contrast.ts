@@ -17,7 +17,8 @@ const ratio = (a: string, b: string) => {
 const brands: Record<string, [ColorScale, ColorScale, ColorScale]> = {
   // brandA: [blue, violet, slate],
   brandA: [citadel.ultramarinesBlue.scale, citadel.lichePurple.scale, citadel.graveyardEarth.scale ],
-  brandB: [emerald, orange, stone],
+  //brandB: [emerald, orange, stone],
+  brandB: [ citadel.darkAngelsGreen.scale, citadel.bubonicBrown.scale, citadel.spaceWolfGrey.scale ],
 };
 
 let failed = false;

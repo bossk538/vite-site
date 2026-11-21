@@ -27,7 +27,8 @@ const brands: Record<Brand, BrandDefinition> = {
     controlRadius: '0.5rem',
   },
   brandB: {
-    palette: { primary: emerald, secondary: orange, neutral: stone },
+//    palette: { primary: emerald, secondary: orange, neutral: stone },
+    palette: { primary: citadel.darkAngelsGreen.scale, secondary: citadel.bubonicBrown.scale, neutral: citadel.spaceWolfGrey.scale },
     font: { family: '"IBM Plex Sans", system-ui, sans-serif', buttonWeight: '500' },
     controlRadius: '9999px', // pill-shaped buttons
   },
