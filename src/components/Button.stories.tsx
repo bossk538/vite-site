@@ -19,7 +19,7 @@ export const Primary: Story = {
 //    label: 'Click Me',
     intent: 'primary',
     size: 'large',
-    children: ['foo'],
+    children: ['Primary Large'],
   },
 };
 
@@ -29,6 +29,6 @@ export const Secondary: Story = {
 //    label: 'Cancel',
     intent: 'secondary',
     size: 'large',
-    children: ['nar'],
+    children: ['Secondary Large'],
   },
 };
