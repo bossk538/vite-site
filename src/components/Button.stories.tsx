@@ -15,14 +15,20 @@ type Story = StoryObj<typeof Button>;
 // 2. Named exports define individual component states (stories)
 export const Primary: Story = {
   args: {
-    primary: true,
-    label: 'Click Me',
+//    primary: true,
+//    label: 'Click Me',
+    intent: 'primary',
+    size: 'large',
+    children: ['foo'],
   },
 };
 
 export const Secondary: Story = {
   args: {
-    primary: false,
-    label: 'Cancel',
+//    primary: false,
+//    label: 'Cancel',
+    intent: 'secondary',
+    size: 'large',
+    children: ['nar'],
   },
 };
