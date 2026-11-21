@@ -1,6 +1,6 @@
 import { createTheme, styleVariants } from '@vanilla-extract/css';
 import { vars, type ColorScale } from './contract.css';
-import { blue, emerald, orange, slate, stone, violet } from './palettes';
+import { blue, emerald, orange, slate, stone, violet, citadel } from './palettes';
 
 /**
  * THEMES
@@ -21,7 +21,8 @@ interface BrandDefinition {
 
 const brands: Record<Brand, BrandDefinition> = {
   brandA: {
-    palette: { primary: blue, secondary: violet, neutral: slate },
+    //palette: { primary: blue, secondary: violet, neutral: slate },
+    palette: { primary: citadel.ultramarinesBlue.scale, secondary: citadel.lichePurple.scale, neutral: citadel.graveyardEarth.scale },
     font: { family: '"Inter", system-ui, sans-serif', buttonWeight: '600' },
     controlRadius: '0.5rem',
   },

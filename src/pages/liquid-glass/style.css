@@ -66,6 +66,8 @@
 .flex div {
   background-color: white;
   border-width: .4rem;
+  border-radius: 0.5rem;
+  border-color: red;
 }
 .border-none {
   border-style: none;
