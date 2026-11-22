@@ -1,4 +1,3 @@
-// src/components/Button.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from './Button';
 
@@ -15,8 +14,6 @@ type Story = StoryObj<typeof Button>;
 // 2. Named exports define individual component states (stories)
 export const Primary: Story = {
   args: {
-//    primary: true,
-//    label: 'Click Me',
     intent: 'primary',
     size: 'large',
     children: ['Primary Large'],
@@ -25,8 +22,6 @@ export const Primary: Story = {
 
 export const Secondary: Story = {
   args: {
-//    primary: false,
-//    label: 'Cancel',
     intent: 'secondary',
     size: 'large',
     children: ['Secondary Large'],
