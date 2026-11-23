@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
 import AudioPlayer from 'osmd-audio-player';
 import { RowPanel } from './RowPanel';
+import { Button } from '/src/components/Button';
 import './style.css';
 
 export default function MusicXMLPlayer() {
@@ -126,16 +127,16 @@ export default function MusicXMLPlayer() {
           />
           {fileName && <span>Loaded: <strong>{fileName}</strong></span>}
           {musicXmlData && (
-            <button onClick={handleDownload} >
+            <Button onClick={handleDownload} >
               Download .musicxml File
-            </button>
+            </Button>
           )}
         </div>
 
         {/* Audio controls */}
         {musicXmlData && (
           <div style={{ marginBottom: '15px' }}>
-            <button
+            <Button
               onClick={handlePlayPause}
               disabled={!isPlayerReady}
               style={{
@@ -150,7 +151,7 @@ export default function MusicXMLPlayer() {
               }}
             >
               {!isPlayerReady ? 'Loading Synthesizer...' : isPlaying ? 'Pause' : 'Play Audio'}
-            </button>
+            </Button>
           </div>
         )}
       </nav>

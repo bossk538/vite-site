@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button } from '/src/components/Button';
 
 const SAMPLE_RATE = 44100; // samples per second
 const DURATION_SECONDS = 3;
@@ -188,9 +189,7 @@ export default function SoundGenerator() {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <button type="button" onClick={handleGenerate}>
-          Generate
-        </button>
+        <Button onClick={handleGenerate}>Generate</Button>
       </div>
 
       {error && (

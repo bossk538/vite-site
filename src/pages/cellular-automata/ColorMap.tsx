@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { HexColor } from './types';
+import { Button } from '/src/components/Button';
 import './style.css';
 
 type ColorMapProps = {
@@ -26,6 +27,6 @@ export const ColorMap = ({ colorMap, handleUpdate, state, dispatch }) => {
 
   return (<div className="ColorMap">
     { draft.map((color, idx) => (<input key={idx} type="color" className={state.selectedColor === idx ? 'selected' : null } value={color} onChange={e => handleColorChange(e, idx)} onClick={() => handleColorSelection(idx)} />)) }
-    <button type="button" onClick={() => handleUpdate(draft)}>Update</button>
+    <Button onClick={() => handleUpdate(draft)}>Update</Button>
   </div>);
 };

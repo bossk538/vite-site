@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { extractVideoFrames } from '../../utils/extractVideoFrames';
 import { ColorMap } from './ColorMap';
 import type { Grid } from './types';
+import { Button } from '/src/components/Button';
 
 const randomMatrixN = (rows: number, columns: number, nColors: number): Grid => {
   return Array.from({ length: rows }, () =>
@@ -217,11 +218,11 @@ export const InitialStates = ({ state, dispatch, updateGrid, canvasRef, handleFi
       <ColorMap colorMap={localState.current.colorMap} handleUpdate={handleColorMapUpdate} state={state} dispatch={dispatch} />
     </div>
     <div>
-      <button type="button" onClick={handleCreateRandomGrid}>Create Random Grid</button>
-      <button type="button" onClick={handleCluster}>Cluster Colors</button>
-      <button type="button" onClick={handleClusterGenerate}>Cluster Colors Gradually</button>
-      <button type="button" onClick={handleGrayscale}>Create Grayscale</button>
-      <button type="button" onClick={handleCluster}>Cluster Colors</button>
+      <Button size="small" onClick={handleCreateRandomGrid}>Create Random Grid</Button>
+      <Button size="small" onClick={handleCluster}>Cluster Colors</Button>
+      <Button size="small" onClick={handleClusterGenerate}>Cluster Colors Gradually</Button>
+      <Button size="small" onClick={handleGrayscale}>Create Grayscale</Button>
+      <Button size="small" onClick={handleCluster}>Cluster Colors</Button>
     </div>
   </form>);
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { foo, noteLengths } from './utils';
 import { Row, chton } from './Row';
+import { Button } from '/src/components/Button';
 import './style.css';
 const NE = ({ len, handleNote, index, note }) => {
   const [type, setType] = useState(len.type)
@@ -37,7 +38,7 @@ const NE = ({ len, handleNote, index, note }) => {
         <input type="number" value={restDots} onChange={e => setRestDots(e.target.value)} />
       </label>
 
-      <button type="button" onClick={() => handleNote({ octave, type, dots, hasRest, restType, restDots, index })}>Set</button>
+      <Button size="small" onClick={() => handleNote({ octave, type, dots, hasRest, restType, restDots, index })}>Set</Button>
     </div>);
 };
 export const RowPanel = ({ generate }) => {
@@ -123,8 +124,8 @@ export const RowPanel = ({ generate }) => {
       <li><p>some random text</p></li>
       <li><label>Row2 (P,I,R,IR,RI + #):<input type="text" value={row2d} onChange={handleRow2} /></label></li>
       <li><label>Program:<input type="text" value={program} onChange={e => setProgram(e.target.value)} /></label></li>
-      <li><button type="button" onClick={handleNewRow}>New Row</button></li>
-      <li><button type="button" onClick={handleGenerate}>Generate</button></li>
+      <li><Button size="small" onClick={handleNewRow}>New Row</Button></li>
+      <li><Button size="small" onClick={handleGenerate}>Generate</Button></li>
       <li><label>N Measures:<input type="number" onChange={e => setNmeasures(e.target.value)} value={nmeasures} min={1} /></label></li>
       { lengths.map((len, i) => (<li key={i}><NE len={len} index={i} handleNote={handleNote} note={chton(row.row[i])} /></li>)) }
     </ul>

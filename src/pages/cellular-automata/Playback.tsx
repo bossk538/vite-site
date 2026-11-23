@@ -1,14 +1,15 @@
 import React from 'react';
 import type { HexColor } from './types';
+import { Button } from '/src/components/Button';
 
 export const Playback = ({ running, handleStart, handleStop, handleContinue, handleReset, handleAdvance }) => {
   return (
     <div className="Playback">
-      { running && <button type="button" onClick={handleStart}>Start Over</button> }
-      { !running && <button type="button" onClick={handleStart}>Start</button> }
-      { running && <button type="button" onClick={handleStop}>Pause</button> }
-      { !running && <button type="button" onClick={handleContinue}>Continue</button> }
-      { true && <button type="button" onClick={handleAdvance}>Advance</button> }
+      { running && <Button onClick={handleStart}>Start Over</Button> }
+      { !running && <Button onClick={handleStart}>Start</Button> }
+      { running && <Button onClick={handleStop}>Pause</Button> }
+      { !running && <Button onClick={handleContinue}>Continue</Button> }
+      { true && <Button onClick={handleAdvance}>Advance</Button> }
     </div>
   );
 };
